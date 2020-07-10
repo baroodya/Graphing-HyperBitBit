@@ -3,6 +3,7 @@ package main.java;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class Exact {
@@ -25,6 +26,7 @@ public class Exact {
         for (String x : stream) {
             hset.add(x);
             counts[i] = hset.size();
+            i++;
         }
         return counts;
     }
@@ -52,5 +54,7 @@ public class Exact {
         long total = total(stream);
         stream.resetStream();
         StdOut.println(fileName + " has " + total + " total lines and " + count(stream) + " of them are distinct.");
+        stream.resetStream();
+        StdOut.println("The array is below: " + Arrays.toString(countArray(stream)));
     }
 }

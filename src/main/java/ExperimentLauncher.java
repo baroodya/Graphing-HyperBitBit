@@ -2,8 +2,10 @@ package main.java;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Stopwatch;
 
 import java.io.FileNotFoundException;
+import java.time.Duration;
 
 public class ExperimentLauncher {
     protected CardinalityEstimationAlgorithm algorithm;
@@ -22,19 +24,21 @@ public class ExperimentLauncher {
     protected final int t;
     protected final int n;
     protected final int m;
+    protected final int[] cardinalities;
     protected final String alg;
     protected final double alpha;
 
     protected boolean syntheticData;
 
     public ExperimentLauncher(
-            String alg, int size, int m, int cardinality, double alpha, int trials, String input)
+            String alg, int size, int m, int[] cardinalities, double alpha, int trials, String input)
             throws FileNotFoundException {
         // Save the cardinality and trials to be used in other methods
         t = trials;
-        n = cardinality;
         this.m = m;
+        this.cardinalities = cardinalities;
         bigN = size;
+        n = cardinalities[bigN - 1];
         this.alg = alg;
         this.alpha = alpha;
         fileName = input;
@@ -55,12 +59,13 @@ public class ExperimentLauncher {
         runVariableMExperiment();
     }
 
-    public ExperimentLauncher(String alg, int size, int m, int cardinality, double alpha, int trials)
+    public ExperimentLauncher(String alg, int size, int m, int[] cardinalities, double alpha, int trials)
             throws FileNotFoundException {
         // Save the size, cardinality, and trials to be used in other methods
         bigN = size;
         t = trials;
-        n = cardinality;
+        this.cardinalities = cardinalities;
+        n = cardinalities[bigN - 1];
         this.m = m;
         this.alg = alg;
         this.alpha = alpha;
@@ -174,7 +179,7 @@ public class ExperimentLauncher {
         double[][] absErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < bigN; j++) {
-                absErrors[i][j] = Math.abs(estimates[i][j] - n);
+                absErrors[i][j] = Math.abs(estimates[i][j] - cardinalities[j]);
             }
         }
         return absErrors;
@@ -190,7 +195,7 @@ public class ExperimentLauncher {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(estimates[i][j] - n)) / n;
+                relErrors[i][j] = (Math.abs(estimates[i][j] - cardinalities[j])) / cardinalities[j];
             }
         }
         return relErrors;
@@ -209,7 +214,8 @@ public class ExperimentLauncher {
         // Take the regular estimates and normalize them
         // 0 means that the estimate is exactly correct
         double[] regEstimates = getAvgEstimates();
-        for (int i = 0; i < bigN; i++) returnThis[i] = (regEstimates[i] / n) - 1;
+        for (int i = 0; i < bigN; i++)
+            returnThis[i] = (regEstimates[i] / cardinalities[i]) - 1;
 
         // return the normalized estimates. This is a 1D array
         return returnThis;
@@ -221,7 +227,7 @@ public class ExperimentLauncher {
 
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < bigN; j++) {
-                returnThis[i][j] = (estimates[i][j] / n) - 1;
+                returnThis[i][j] = (estimates[i][j] / cardinalities[j]) - 1;
             }
         }
 
@@ -238,7 +244,7 @@ public class ExperimentLauncher {
         double[][] varyMAbsErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
-                varyMAbsErrors[i][j] = Math.abs(varyMEstimates[i][j] - algorithm.getSize());
+                varyMAbsErrors[i][j] = Math.abs(varyMEstimates[i][j] - n);
             }
         }
 
@@ -288,7 +294,7 @@ public class ExperimentLauncher {
 
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
-                returnThis[i][j] = (varyMEstimates[i][j] / j) - 1;
+                returnThis[i][j] = (varyMEstimates[i][j] / n) - 1;
             }
         }
 
@@ -298,7 +304,6 @@ public class ExperimentLauncher {
     public double[] getFinalTrial() {
         double[] returnThis = new double[t];
         for (int i = 0; i < t; i++) returnThis[i] = estimates[i][bigN - 1];
-        //    for (int i = 0; i < t; i++) returnThis[i] = (estimates[i][bigN - 1] / i) - 1;
         return returnThis;
     }
 
@@ -347,8 +352,9 @@ public class ExperimentLauncher {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String alg = "MC";
-        String file = "src/datasets/Curry2015-2016GameLogs.csv";
+        Stopwatch watch = new Stopwatch();
+        String alg = "PC";
+        String file = "mobydick.txt";
         boolean synthetic = false;
 
         int maxRead = 1000000;
@@ -358,21 +364,23 @@ public class ExperimentLauncher {
         int numberOfTrialsShown = 100;
 
         int size;
-        int cardinality;
+        int[] cardinalities;
         String input;
         String dataType = "";
         ExperimentLauncher launcher;
         if (synthetic) {
             input = "";
             dataType = "Synthetic";
-            size = cardinality = maxRead;
-            launcher = new ExperimentLauncher(alg, size, m, cardinality, alpha, trials);
+            size = maxRead;
+            cardinalities = new int[size];
+            for (int i = 0; i < size; i++) cardinalities[i] = i;
+            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials);
         } else {
-            input = file;
+            input = "src/datasets/" + file;
             dataType = "Real: " + input;
-            size = (int) Exact.total(input, maxRead);
-            cardinality = (int) Exact.count(input, maxRead);
-            launcher = new ExperimentLauncher(alg, size, m, cardinality, alpha, trials, input);
+            size = Exact.total(input, maxRead);
+            cardinalities = Exact.countArray(input, maxRead);
+            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials, input);
         }
 
         switch (alg) {
@@ -400,9 +408,12 @@ public class ExperimentLauncher {
         StdOut.println("Algorithm: " + alg);
         StdOut.println("Data type: " + dataType);
         StdOut.println("Size of Stream (N): " + size);
-        StdOut.println("Cardinality (n): " + cardinality);
+        StdOut.println("Cardinality (n): " + cardinalities[cardinalities.length - 1]);
         StdOut.println("Substreams (m): " + m);
         StdOut.println("Trials (T): " + trials);
         StdOut.println("𝛼: " + alphaString);
+
+        Duration duration = Duration.ofSeconds((long) Math.ceil(watch.elapsedTime()));
+        StdOut.println("\nThis experiment took " + duration.toHoursPart() + " hours, " + duration.toMinutesPart() + " minutes, and " + duration.toSecondsPart() + " seconds.");
     }
 }

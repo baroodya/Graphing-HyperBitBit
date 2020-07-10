@@ -201,9 +201,9 @@ public class ReportGenerator {
                 yAxis,
                 grapher.createTable(
                         xAxis,
-                        launcher.varyMs,
+                        manageArray(launcher.varyMs),
                         yAxis,
-                        launcher.getStdDevOfAllTrials()
+                        manageArray(launcher.getStdDevOfAllTrials())
                 ));
     }
 
@@ -257,7 +257,9 @@ public class ReportGenerator {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        ExperimentLauncher experiment = new ExperimentLauncher("MC", 100000, 256, 100000, 0.5, 100);
+        int[] cardinalities = new int[100000];
+        for (int i = 0; i < 100000; i++) cardinalities[i] = i;
+        ExperimentLauncher experiment = new ExperimentLauncher("MC", 100000, 256, cardinalities, 0.5, 100);
 
         ReportGenerator report = new ReportGenerator(experiment, 50);
         report.generateFullReport();
