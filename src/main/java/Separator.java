@@ -21,12 +21,16 @@ public class Separator {
         scanner.close();
 
         FileWriter writer = new FileWriter(fileName);
-        StdOut.print(sb.toString());
         writer.write(sb.toString());
         writer.close();
     }
 
     public static void main(String[] args) throws IOException {
-        Separator.separate("src/datasets/Curry2015-2016GameLogs.csv", ",");
+        String fileName = "src/datasets/mobydick.txt";
+        Separator.separate(fileName, " ");
+        StringStream stream = new StringStream(fileName, 1000000);
+        long total = Exact.total(stream);
+        stream.resetStream();
+        StdOut.println(fileName + " has " + total + " total lines and " + Exact.count(stream) + " of them are distinct.");
     }
 }

@@ -174,7 +174,7 @@ public class ExperimentLauncher {
         double[][] absErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < bigN; j++) {
-                absErrors[i][j] = Math.abs(estimates[i][j] - j);
+                absErrors[i][j] = Math.abs(estimates[i][j] - n);
             }
         }
         return absErrors;
@@ -190,7 +190,7 @@ public class ExperimentLauncher {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(estimates[i][j] - j)) / j;
+                relErrors[i][j] = (Math.abs(estimates[i][j] - n)) / n;
             }
         }
         return relErrors;
@@ -209,7 +209,7 @@ public class ExperimentLauncher {
         // Take the regular estimates and normalize them
         // 0 means that the estimate is exactly correct
         double[] regEstimates = getAvgEstimates();
-        for (int i = 0; i < bigN; i++) returnThis[i] = (regEstimates[i] / i) - 1;
+        for (int i = 0; i < bigN; i++) returnThis[i] = (regEstimates[i] / n) - 1;
 
         // return the normalized estimates. This is a 1D array
         return returnThis;
@@ -221,7 +221,7 @@ public class ExperimentLauncher {
 
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < bigN; j++) {
-                returnThis[i][j] = (estimates[i][j] / j) - 1;
+                returnThis[i][j] = (estimates[i][j] / n) - 1;
             }
         }
 
@@ -256,7 +256,7 @@ public class ExperimentLauncher {
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
                 varyMRelErrors[i][j] =
-                        (Math.abs(varyMEstimates[i][j] - algorithm.getSize())) / algorithm.getSize();
+                        (Math.abs(varyMEstimates[i][j] - n)) / n;
             }
         }
 
@@ -347,12 +347,13 @@ public class ExperimentLauncher {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String alg = "HBB";
+        String alg = "MC";
+        String file = "src/datasets/Curry2015-2016GameLogs.csv";
         boolean synthetic = false;
 
         int maxRead = 1000000;
-        int m = 64;
-        int trials = 500;
+        int m = 128;
+        int trials = 100;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
 
@@ -362,11 +363,12 @@ public class ExperimentLauncher {
         String dataType = "";
         ExperimentLauncher launcher;
         if (synthetic) {
+            input = "";
             dataType = "Synthetic";
             size = cardinality = maxRead;
             launcher = new ExperimentLauncher(alg, size, m, cardinality, alpha, trials);
         } else {
-            input = "src/datasets/Curry2015-2016GameLogs.csv";
+            input = file;
             dataType = "Real: " + input;
             size = (int) Exact.total(input, maxRead);
             cardinality = (int) Exact.count(input, maxRead);
