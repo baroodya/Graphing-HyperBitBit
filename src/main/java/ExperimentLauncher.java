@@ -1,5 +1,6 @@
 package main.java;
 
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.io.FileNotFoundException;
@@ -88,7 +89,7 @@ public class ExperimentLauncher {
     }
 
     private void resetReader() throws FileNotFoundException {
-        stream = new StringStream(fileName, bigN);
+        stream.resetStream();
     }
 
     private void runConstantMExperiment() throws FileNotFoundException {
@@ -112,7 +113,7 @@ public class ExperimentLauncher {
         for (int i = 0; i < t; i++) {
             j = 0;
             for (String element : stream) {
-                if (j >= bigN) break;
+                if (j > bigN) break;
                 readElement(element);
 
                 if (i == 0) sizes[j] = algorithm.getSize();
@@ -305,16 +306,20 @@ public class ExperimentLauncher {
         return arithmeticMean(getFinalTrial());
     }
 
-    public double getStdDevOfFinalTrials() {
-        double mean = getMeanOfFinalTrial();
-        double sumOfSquares = 0;
-        double[] values = getAvgNormalizedEstimates();
+    public double[] getStdDevOfAllTrials() {
+        double[] means = getAvgEstimatesVaryM();
+        double[] data = new double[m];
 
-        for (double x : values) {
-            sumOfSquares += Math.pow((x - mean), 2);
+        double sum;
+        for (int i = 0; i < m; i++) {
+            sum = 0;
+            for (int j = 0; j < t; j++) {
+                sum += Math.pow((means[i] - estimates[j][i]), 2);
+            }
+            data[i] = Math.sqrt(sum / i);
         }
 
-        return Math.sqrt((sumOfSquares) / (values.length - 1));
+        return data;
     }
 
     private double[] averageOverTrials(double[][] values, int arraySize) {
@@ -343,25 +348,59 @@ public class ExperimentLauncher {
 
     public static void main(String[] args) throws FileNotFoundException {
         String alg = "HBB";
-        int size = 100000;
-        int m = 512;
-        int cardinality = size;
+        boolean synthetic = false;
+
+        int maxRead = 1000000;
+        int m = 64;
         int trials = 500;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
 
-        String input = args[0];
+        int size;
+        int cardinality;
+        String input;
+        String dataType = "";
+        ExperimentLauncher launcher;
+        if (synthetic) {
+            dataType = "Synthetic";
+            size = cardinality = maxRead;
+            launcher = new ExperimentLauncher(alg, size, m, cardinality, alpha, trials);
+        } else {
+            input = "src/datasets/Curry2015-2016GameLogs.csv";
+            dataType = "Real: " + input;
+            size = (int) Exact.total(input, maxRead);
+            cardinality = (int) Exact.count(input, maxRead);
+            launcher = new ExperimentLauncher(alg, size, m, cardinality, alpha, trials, input);
+        }
 
-        //    ExperimentLauncher syntheticExperimenter =
-        //        new ExperimentLauncher(alg, size, m, cardinality, alpha, trials);
+        switch (alg) {
+            case "HBB":
+                alg = "HyperBitBit";
+                break;
+            case "PC":
+                alg = "Probabilistic Counting";
+                break;
+            case "MC":
+                alg = "MinCount";
+                break;
+            default:
+                alg = "Well, Well, Well. Somehow, you've broken the whole program. Congratulations! Feel free to email me (abaroody@princeton.edu) and we can talk about it!";
+                break;
+        }
 
-        //    ReportGenerator report = new ReportGenerator(syntheticExperimenter, numberOfTrialsShown);
-        //    report.generateBasicReport();
-
-        ExperimentLauncher realExperimenter =
-                new ExperimentLauncher(alg, size, m, cardinality, alpha, trials, input);
-
-        ReportGenerator report = new ReportGenerator(realExperimenter, numberOfTrialsShown);
+        ReportGenerator report = new ReportGenerator(launcher, numberOfTrialsShown);
         report.generateBasicReport();
+
+        String alphaString = "";
+        if (alg.equals("HBB")) alphaString += alpha;
+        else alphaString = "N/A";
+
+        StdOut.println("Algorithm: " + alg);
+        StdOut.println("Data type: " + dataType);
+        StdOut.println("Size of Stream (N): " + size);
+        StdOut.println("Cardinality (n): " + cardinality);
+        StdOut.println("Substreams (m): " + m);
+        StdOut.println("Trials (T): " + trials);
+        StdOut.println("𝛼: " + alphaString);
     }
 }

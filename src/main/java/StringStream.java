@@ -6,46 +6,47 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class StringStream implements Iterable<String> {
-  private final int N;
+    private final int N;
 
-  private File file;
-  private Scanner scanner;
+    private final File file;
+    private Scanner scanner;
 
-  public StringStream(String fileName, int N) throws FileNotFoundException {
-    this.N = N;
-    File file = new File(fileName);
-    scanner = new Scanner(file);
-  }
-
-  public Iterator<String> iterator() {
-    return new Reader();
-  }
-
-  private class Reader implements Iterator<String> {
-    int i = 0;
-
-    public boolean hasNext() {
-      return scanner.hasNextLine() && i < N;
+    public StringStream(String fileName, int N) throws FileNotFoundException {
+        this.N = N;
+        file = new File(fileName);
+        scanner = new Scanner(file);
     }
 
-    public String next() {
-      i++;
-      return scanner.nextLine();
+    public Iterator<String> iterator() {
+        return new Reader();
     }
 
-    public void remove() {}
-  }
+    private class Reader implements Iterator<String> {
+        int i = 0;
 
-  public void resetStream() throws FileNotFoundException {
-    scanner = new Scanner(file);
-  }
+        public boolean hasNext() {
+            return scanner.hasNextLine() && i < N;
+        }
 
-  public static void main(String[] args) throws FileNotFoundException {
-    String fileName = args[0];
-    int N = Integer.parseInt(args[1]);
-    StringStream stream = new StringStream(fileName, N);
-    for (String x : stream) System.out.println(x);
-    stream.resetStream();
-    for (String x : stream) System.out.println(x);
-  }
+        public String next() {
+            i++;
+            return scanner.nextLine();
+        }
+
+        public void remove() {
+        }
+    }
+
+    public void resetStream() throws FileNotFoundException {
+        scanner = new Scanner(file);
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        String fileName = args[0];
+        int N = Integer.parseInt(args[1]);
+        StringStream stream = new StringStream(fileName, N);
+        for (String x : stream) System.out.println(x);
+        stream.resetStream();
+        for (String x : stream) System.out.println(x);
+    }
 }

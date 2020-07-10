@@ -153,6 +153,7 @@ public class CustomGrapher {
         String[] headers = new String[data.length];
 
         int binRange = (2 * maxRange) / bins;
+        if (binRange <= 0) binRange = 1;
         for (int i = 0; i < bins; i++) xValues[i] = bigN - maxRange + (binRange * i);
 
         int i = 0;
@@ -176,10 +177,10 @@ public class CustomGrapher {
             i++;
         }
 
-        showDistributions(createTable(title, xValues, yValues, headers));
+        showDistributions(title, createTable(title, xValues, yValues, headers));
     }
 
-    private void showDistributions(Table table) {
+    private void showDistributions(String title, Table table) {
         List<String> columns = table.columnNames();
         int size = columns.size();
         Trace[] traces = new Trace[table.columnCount() - 1];
@@ -213,7 +214,7 @@ public class CustomGrapher {
                             .build();
         }
 
-        Layout layout = Layout.builder().title(table.name()).height(600).width(800).build();
+        Layout layout = Layout.builder().title(title).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
 

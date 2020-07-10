@@ -191,20 +191,6 @@ public class ReportGenerator {
     }
 
     private void showStdDev() {
-        xValues = launcher.varyMs;
-        double[] means = launcher.getAvgEstimatesVaryM();
-
-        double[] data = new double[launcher.m];
-
-        double sum;
-        for (int i = 0; i < launcher.m; i++) {
-            sum = 0;
-            for (int j = 0; j < launcher.t; j++) {
-                sum += Math.pow((means[i] - launcher.estimates[j][i]), 2);
-            }
-            data[i] = Math.sqrt(sum / i);
-        }
-
         title = "Standard Deviation of Estimates";
         xAxis = "Number of Substreams (m)";
         yAxis = "Standard Deviation of " + launcher.t + " Trials";
@@ -213,7 +199,12 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(xAxis, manageArray(xValues), yAxis, manageArray(data)));
+                grapher.createTable(
+                        xAxis,
+                        launcher.varyMs,
+                        yAxis,
+                        launcher.getStdDevOfAllTrials()
+                ));
     }
 
     public void showDistributions() {
@@ -229,9 +220,11 @@ public class ReportGenerator {
                     break;
                 case 1:
                     mValue = launcher.m / 8 - 1;
+                    if (mValue < 0) mValue = 1;
                     break;
                 default:
                     mValue = launcher.m - 1;
+                    if (mValue < 0) mValue = launcher.m - 1;
                     break;
             }
 
