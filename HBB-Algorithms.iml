@@ -13,7 +13,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="tech.tablesaw:tablesaw-core:0.37.3" level="project" />
-    <orderEntry type="library" name="tech.tablesaw:tablesaw-jsplot:0.25.2" level="project" />
     <orderEntry type="library" name="algs4" level="project" />
+    <orderEntry type="library" name="tech.tablesaw:tablesaw-jsplot:0.37.3" level="project" />
   </component>
 </module>
