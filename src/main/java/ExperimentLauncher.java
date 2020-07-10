@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
 
 import java.io.FileNotFoundException;
-import java.time.Duration;
+import java.io.IOException;
 
 public class ExperimentLauncher {
     protected CardinalityEstimationAlgorithm algorithm;
@@ -69,6 +69,8 @@ public class ExperimentLauncher {
         this.m = m;
         this.alg = alg;
         this.alpha = alpha;
+
+        stream = new StringStream("src/datasets/log.07.f3.txt", bigN);
 
         syntheticData = true;
 
@@ -351,17 +353,20 @@ public class ExperimentLauncher {
         return sum / values.length;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
-        String alg = "PC";
-        String file = "mobydick.txt";
-        boolean synthetic = false;
 
-        int maxRead = 1000000;
-        int m = 128;
-        int trials = 100;
+        String alg = "HBB";
+        String file = "mobydick.txt";
+        boolean synthetic = true;
+
+        int maxRead = 100000;
+        int m = 64;
+        int trials = 500;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
+
+        StdOut.println(TimingTracker.timing(alg, file, m, trials));
 
         int size;
         int[] cardinalities;
@@ -383,18 +388,19 @@ public class ExperimentLauncher {
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials, input);
         }
 
+        String algFull = "";
         switch (alg) {
             case "HBB":
-                alg = "HyperBitBit";
+                algFull = "HyperBitBit";
                 break;
             case "PC":
-                alg = "Probabilistic Counting";
+                algFull = "Probabilistic Counting";
                 break;
             case "MC":
-                alg = "MinCount";
+                algFull = "MinCount";
                 break;
             default:
-                alg = "Well, Well, Well. Somehow, you've broken the whole program. Congratulations! Feel free to email me (abaroody@princeton.edu) and we can talk about it!";
+                algFull = "Well, Well, Well. Somehow, you've broken the whole program. Congratulations! Feel free to email me (abaroody@princeton.edu) and we can talk about it!";
                 break;
         }
 
@@ -405,7 +411,7 @@ public class ExperimentLauncher {
         if (alg.equals("HBB")) alphaString += alpha;
         else alphaString = "N/A";
 
-        StdOut.println("Algorithm: " + alg);
+        StdOut.println("Algorithm: " + algFull);
         StdOut.println("Data type: " + dataType);
         StdOut.println("Size of Stream (N): " + size);
         StdOut.println("Cardinality (n): " + cardinalities[cardinalities.length - 1]);
@@ -413,7 +419,6 @@ public class ExperimentLauncher {
         StdOut.println("Trials (T): " + trials);
         StdOut.println("𝛼: " + alphaString);
 
-        Duration duration = Duration.ofSeconds((long) Math.ceil(watch.elapsedTime()));
-        StdOut.println("\nThis experiment took " + duration.toHoursPart() + " hours, " + duration.toMinutesPart() + " minutes, and " + duration.toSecondsPart() + " seconds.");
+        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, file, m, trials, watch.elapsedTime()));
     }
 }
