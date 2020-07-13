@@ -37,20 +37,20 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     }
 
     /* input methods */
+    // TODO: make this work
+    // TODO: if this works, remove hash instnace variable and all assignments
     public void readElement(String element) {
         // Increment the size of the experiment (N)
         size++;
 
-        hash.update(element.getBytes());
-        double random = hash.getValue();
+        long random = Bits.hash(element);
 
         boolean[] bits = new boolean[length];
-        long dd = Double.doubleToLongBits(random);
         long mask = 1L;
         long bitval;
         for (int i = 0; i < length; i++) {
-            bitval = dd & mask;
-            bits[length - 1 - i] = bitval != 0;
+            bitval = random & mask;
+            bits[length - 1 - i] = (bitval == 0);
             mask <<= 1;
         }
 
@@ -150,22 +150,15 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
         StdOut.print("\n");
 
-        //    // Read in the file
-        //    File inputFile = new File("src/datasets/mobydick.txt");
-        //    Scanner fileReader = new Scanner(inputFile);
-        //    StringBuilder sb = new StringBuilder();
-        //    while (fileReader.hasNextLine()) sb.append(fileReader.nextLine());
-        //    fileReader.close();
-        //    String[] words = sb.toString().split(" ");
-        //
-        //    String random = "";
-        //    for (int i = 0; i < size; i++) {
-        //      random = words[i];
-        //      counter.readElement(random);
-        //    }
+        // Read in the file
+        String inputFile = "src/datasets/mobydick.txt";
+        int N = 100000;
+        StringStream stream = new StringStream(inputFile, N);
 
-        double random = 0;
-        for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+        for (String line : stream) counter.readElement(line);
+
+//        double random = 0;
+//        for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
@@ -173,6 +166,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
                 "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
         StdOut.println(
                 "Rel. Error = "
-                        + ((counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
+                        + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
     }
 }

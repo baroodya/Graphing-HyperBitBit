@@ -355,9 +355,9 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "MC";
+        String alg = "HBB";
         String file = "mobydick.txt";
-        boolean synthetic = false;
+        boolean synthetic = true;
 
         int maxRead = 100000;
         int m = 64;

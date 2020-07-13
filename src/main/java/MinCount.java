@@ -33,12 +33,12 @@ public class MinCount implements CardinalityEstimationAlgorithm {
 
     /* input methods */
     // TODO: make this work
+    // TODO: if this works, remove hash instnace variable and all assignments
     public void readElement(String element) {
         // Increment the size of the experiment (N)
         size++;
 
-        hash.update(element.getBytes());
-        double random = hash.getValue() / (double) Long.MAX_VALUE;
+        double random = Bits.hash(element) / (double) Long.MAX_VALUE;
 
         // Calculate a new estimate for the cardinality of the stream
         estimate = newEstimate(random);
