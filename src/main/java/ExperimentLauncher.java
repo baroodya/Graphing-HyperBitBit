@@ -356,9 +356,9 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "HBB";
+        String alg = "MC";
         String file = "mobydick.txt";
-        boolean synthetic = true;
+        boolean synthetic = false;
 
         int maxRead = 100000;
         int m = 64;
@@ -366,22 +366,25 @@ public class ExperimentLauncher {
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
 
-        StdOut.println(TimingTracker.timing(alg, file, m, trials));
+        String input;
+        if (synthetic)
+            input = "src/datasets/" + file;
+        else
+            input = "synthetic";
+
+        StdOut.println(TimingTracker.timing(alg, input, m, trials));
 
         int size;
         int[] cardinalities;
-        String input;
         String dataType = "";
         ExperimentLauncher launcher;
         if (synthetic) {
-            input = "";
             dataType = "Synthetic";
             size = maxRead;
             cardinalities = new int[size];
             for (int i = 0; i < size; i++) cardinalities[i] = i;
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials);
         } else {
-            input = "src/datasets/" + file;
             dataType = "Real: " + input;
             size = Exact.total(input, maxRead);
             cardinalities = Exact.countArray(input, maxRead);
