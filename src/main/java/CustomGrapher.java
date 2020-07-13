@@ -21,7 +21,7 @@ public class CustomGrapher {
 
     public Table createTable(String xLabel, double[] xValues, double[][] data) {
         int size = data.length;
-        DoubleColumn[] columns = new DoubleColumn[size + 2];
+        DoubleColumn[] columns = new DoubleColumn[size + 1];
 
         String name = xLabel;
         columns[0] = DoubleColumn.create(name, xValues);
@@ -29,6 +29,26 @@ public class CustomGrapher {
         for (int i = 0; i < data.length; i++) {
             name = "Series" + (i + 1);
             columns[i + 1] = DoubleColumn.create(name, data[i]);
+        }
+
+        return Table.create("Table of Values", columns);
+    }
+
+    public Table createCompTable(String xLabel, double[] xValues, double[][] data) {
+        int size = data.length;
+        DoubleColumn[] columns = new DoubleColumn[size + 1];
+
+        String[] names = new String[5];
+        names[0] = xLabel;
+        names[1] = "MinCount";
+        names[2] = "ProbabilisticCounting";
+        names[3] = "HyperBitBit";
+        names[4] = "Your Algorithm";
+
+        columns[0] = DoubleColumn.create(names[0], xValues);
+
+        for (int i = 0; i < data.length; i++) {
+            columns[i + 1] = DoubleColumn.create(names[i + 1], data[i]);
         }
 
         return Table.create("Table of Values", columns);
@@ -129,6 +149,56 @@ public class CustomGrapher {
                         .showLegend(true)
                         .line(princetonOrange)
                         .name(columns.get(1))
+                        .build();
+
+        Layout layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
+        Plot.show(new Figure(layout, traces));
+    }
+
+    public void showCompLinePlot(String title, String xLabel, String yLabel, Table table) {
+        List<String> columns = table.columnNames();
+        int size = columns.size();
+        Trace[] traces = new Trace[size - 1];
+
+        Axis xAxis = Axis.builder().title(xLabel).build();
+        Axis yAxis = Axis.builder().title(yLabel).build();
+        Line grey = Line.builder().color("grey").build();
+        Line skyBlue = Line.builder().color("deepskyblue").build();
+        Line princetonOrange = Line.builder().color("darkorange").build();
+        Line purple = Line.builder().color("purple").build();
+        Line green = Line.builder().color("green").build();
+        for (int i = 1; i < size; i++) {
+            Line line;
+            switch (i % 3) {
+                case 0:
+                    line = purple;
+                    break;
+                case 1:
+                    line = skyBlue;
+                    break;
+                case 2:
+                    line = green;
+                    break;
+                default:
+                    line = grey;
+            }
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(i))
+                            .mode(ScatterTrace.Mode.LINE)
+                            .showLegend(true)
+                            .line(line)
+                            .opacity(0.25)
+                            .name(columns.get(i))
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(4))
+                        .mode(ScatterTrace.Mode.LINE)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(4))
                         .build();
 
         Layout layout =

@@ -8,172 +8,171 @@ import java.util.zip.CRC32;
 
 public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
-  protected int size;
-  protected int m;
-  protected final int n;
-  protected final int length;
+    protected int size;
+    protected int m;
+    protected final int n;
+    protected final int length;
 
-  protected double estimate;
+    protected double estimate;
 
-  protected final int lgM;
-  boolean[][] bitmaps;
-  int[] bitmapRhos;
+    protected final int lgM;
+    boolean[][] bitmaps;
+    int[] bitmapRhos;
 
-  protected CRC32 hash;
+    protected CRC32 hash;
 
-  public ProbabilisticCounting(int m, int cardinality, int bitstringLength) {
-    size = 0;
-    this.m = m;
-    n = cardinality;
-    length = bitstringLength;
+    public ProbabilisticCounting(int m, int cardinality) {
+        size = 0;
+        this.m = m;
+        n = cardinality;
+        length = 64;
 
-    estimate = 0;
+        estimate = 0;
 
-    lgM = (int) (Math.log(m) / Math.log(2));
-    bitmaps = new boolean[m][length - lgM + 1];
-    bitmapRhos = new int[m];
+        lgM = (int) (Math.log(m) / Math.log(2));
+        bitmaps = new boolean[m][length - lgM + 1];
+        bitmapRhos = new int[m];
 
-    hash = new CRC32();
-  }
-
-  /* input methods */
-  public void readElement(String element) {
-    // Increment the size of the experiment (N)
-    size++;
-
-    hash.update(element.getBytes());
-    double random = hash.getValue();
-
-    boolean[] bits = new boolean[length];
-    long dd = Double.doubleToLongBits(random);
-    long mask = 1L;
-    long bitval;
-    for (int i = 0; i < length; i++) {
-      bitval = dd & mask;
-      bits[length - 1 - i] = bitval != 0;
-      mask <<= 1;
+        hash = new CRC32();
     }
 
-    // Calculate a new estimate for the cardinality of the stream
-    estimate = newEstimate(bits);
-  }
+    /* input methods */
+    public void readElement(String element) {
+        // Increment the size of the experiment (N)
+        size++;
 
-  public void readSyntheticElement(double element) {
-    size++;
+        hash.update(element.getBytes());
+        double random = hash.getValue();
 
-    boolean[] randoms = new boolean[length];
+        boolean[] bits = new boolean[length];
+        long dd = Double.doubleToLongBits(random);
+        long mask = 1L;
+        long bitval;
+        for (int i = 0; i < length; i++) {
+            bitval = dd & mask;
+            bits[length - 1 - i] = bitval != 0;
+            mask <<= 1;
+        }
 
-    for (int i = 0; i < length; i++) randoms[i] = StdRandom.bernoulli();
-
-    estimate = newEstimate(randoms);
-  }
-
-  /* output methods */
-  public int getSize() { // exact number of calls to readElement()
-    return size;
-  }
-
-  public double getEstimateOfCardinality() { // get estimate of n *right now*
-    return estimate;
-  }
-
-  public void resetAlgorithm() {
-    size = 0;
-    estimate = 0;
-    bitmapRhos = new int[m];
-    bitmaps = new boolean[m][length - lgM + 1];
-  }
-
-  public void resetAlgorithm(int m) {
-    this.m = m;
-    resetAlgorithm();
-  }
-
-  // Helper method to perform the estimation
-  private double newEstimate(boolean[] hOfX) {
-    int j = lgM - 1;
-    int multiplier = 1;
-    int whichMap = 0;
-
-    // figure out which map to use based on the first lgM bits of the bitstring
-    while (j >= 0) {
-      if (hOfX[j]) whichMap += multiplier;
-      multiplier *= 2;
-      j--;
+        // Calculate a new estimate for the cardinality of the stream
+        estimate = newEstimate(bits);
     }
 
-    // update the proper bitmap and bitmap rho
-    bitmaps[whichMap][rho(hOfX, lgM)] = true;
+    public void readSyntheticElement(double element) {
+        size++;
 
-    bitmapRhos[whichMap] = rho(bitmaps[whichMap], 0);
+        boolean[] randoms = new boolean[length];
 
-    return (m * arithmeticMean(bitmapRhos));
-  }
+        for (int i = 0; i < length; i++) randoms[i] = StdRandom.bernoulli();
 
-  // Helper method to find leftmost 0 in array of random bits
-  private int rho(boolean[] bits, int start) {
-    for (int i = start; i < bits.length; i++) if (!bits[i]) return (i - start);
-    return (bits.length - start);
-  }
+        estimate = newEstimate(randoms);
+    }
 
-  // Helper method to calculate the harmonic mean
-  private double harmonicMean(int[] values) {
-    double reciprocalSum = 0;
-    for (int value : values) reciprocalSum += (1.0 / estimate(value));
+    /* output methods */
+    public int getSize() { // exact number of calls to readElement()
+        return size;
+    }
 
-    return (values.length / reciprocalSum);
-  }
+    public double getEstimateOfCardinality() { // get estimate of n *right now*
+        return estimate;
+    }
 
-  // Helper method to calculate the arithmetic mean
-  private double arithmeticMean(int[] values) {
-    double sum = 0;
-    for (int value : values) sum += estimate(value);
+    public void resetAlgorithm() {
+        size = 0;
+        estimate = 0;
+        bitmapRhos = new int[m];
+        bitmaps = new boolean[m][length - lgM + 1];
+    }
 
-    return sum / values.length;
-  }
+    public void resetAlgorithm(int m) {
+        this.m = m;
+        resetAlgorithm();
+    }
 
-  // Helper method to perform the estimation calculation to go from a bitmap index to a
-  // cardinality value
-  private double estimate(int p) {
-    double phi = 0.77351;
-    return (1.0 / phi) * Math.pow(2.0, p);
-  }
+    // Helper method to perform the estimation
+    private double newEstimate(boolean[] hOfX) {
+        int j = lgM - 1;
+        int multiplier = 1;
+        int whichMap = 0;
 
-  public static void main(String[] args) throws FileNotFoundException {
-    int size = 100000;
-    int m = 64;
-    int cardinality = size;
-    int length = 128;
+        // figure out which map to use based on the first lgM bits of the bitstring
+        while (j >= 0) {
+            if (hOfX[j]) whichMap += multiplier;
+            multiplier *= 2;
+            j--;
+        }
 
-    ProbabilisticCounting counter = new ProbabilisticCounting(m, cardinality, length);
+        // update the proper bitmap and bitmap rho
+        bitmaps[whichMap][rho(hOfX, lgM)] = true;
 
-    StdOut.println("Size = " + counter.getSize());
-    StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-    StdOut.print("\n");
+        bitmapRhos[whichMap] = rho(bitmaps[whichMap], 0);
 
-    //    // Read in the file
-    //    File inputFile = new File("src/datasets/mobydick.txt");
-    //    Scanner fileReader = new Scanner(inputFile);
-    //    StringBuilder sb = new StringBuilder();
-    //    while (fileReader.hasNextLine()) sb.append(fileReader.nextLine());
-    //    fileReader.close();
-    //    String[] words = sb.toString().split(" ");
-    //
-    //    String random = "";
-    //    for (int i = 0; i < size; i++) {
-    //      random = words[i];
-    //      counter.readElement(random);
-    //    }
+        return (m * arithmeticMean(bitmapRhos));
+    }
 
-    double random = 0;
-    for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+    // Helper method to find leftmost 0 in array of random bits
+    private int rho(boolean[] bits, int start) {
+        for (int i = start; i < bits.length; i++) if (!bits[i]) return (i - start);
+        return (bits.length - start);
+    }
 
-    StdOut.println("Size = " + counter.getSize());
-    StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-    StdOut.println(
-        "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
-    StdOut.println(
-        "Rel. Error = "
-            + ((counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
-  }
+    // Helper method to calculate the harmonic mean
+    private double harmonicMean(int[] values) {
+        double reciprocalSum = 0;
+        for (int value : values) reciprocalSum += (1.0 / estimate(value));
+
+        return (values.length / reciprocalSum);
+    }
+
+    // Helper method to calculate the arithmetic mean
+    private double arithmeticMean(int[] values) {
+        double sum = 0;
+        for (int value : values) sum += estimate(value);
+
+        return sum / values.length;
+    }
+
+    // Helper method to perform the estimation calculation to go from a bitmap index to a
+    // cardinality value
+    private double estimate(int p) {
+        double phi = 0.77351;
+        return (1.0 / phi) * Math.pow(2.0, p);
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        int size = 100000;
+        int m = 64;
+        int cardinality = size;
+
+        ProbabilisticCounting counter = new ProbabilisticCounting(m, cardinality);
+
+        StdOut.println("Size = " + counter.getSize());
+        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+        StdOut.print("\n");
+
+        //    // Read in the file
+        //    File inputFile = new File("src/datasets/mobydick.txt");
+        //    Scanner fileReader = new Scanner(inputFile);
+        //    StringBuilder sb = new StringBuilder();
+        //    while (fileReader.hasNextLine()) sb.append(fileReader.nextLine());
+        //    fileReader.close();
+        //    String[] words = sb.toString().split(" ");
+        //
+        //    String random = "";
+        //    for (int i = 0; i < size; i++) {
+        //      random = words[i];
+        //      counter.readElement(random);
+        //    }
+
+        double random = 0;
+        for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+
+        StdOut.println("Size = " + counter.getSize());
+        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+        StdOut.println(
+                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
+        StdOut.println(
+                "Rel. Error = "
+                        + ((counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
+    }
 }

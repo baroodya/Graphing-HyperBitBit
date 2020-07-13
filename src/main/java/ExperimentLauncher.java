@@ -12,7 +12,6 @@ public class ExperimentLauncher {
 
     protected StringStream stream;
     protected String fileName;
-    protected String[] words;
 
     protected final double[] sizes;
     protected final double[][] estimates;
@@ -103,13 +102,13 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ProbabilisticCounting(m, n, 32);
+                algorithm = new ProbabilisticCounting(m, n);
                 break;
             case "MC":
                 algorithm = new MinCount(m, n);
                 break;
             case "HBB":
-                algorithm = new HyperBitBit(alpha, m, 32);
+                algorithm = new HyperBitBit(alpha, m);
                 break;
             default:
                 throw new IllegalArgumentException("This type of Algorithm is not supported.");
@@ -137,13 +136,13 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ProbabilisticCounting(1, n, 32);
+                algorithm = new ProbabilisticCounting(1, n);
                 break;
             case "MC":
                 algorithm = new MinCount(1, n);
                 break;
             case "HBB":
-                algorithm = new HyperBitBit(alpha, 1, 32);
+                algorithm = new HyperBitBit(alpha, 1);
                 break;
             default:
                 throw new IllegalArgumentException("This type of Algorithm is not supported.");

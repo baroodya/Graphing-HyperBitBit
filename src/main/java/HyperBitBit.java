@@ -19,11 +19,11 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     protected HashSet<String> hset;
 
-    public HyperBitBit(double alpha, int m, int length) {
+    public HyperBitBit(double alpha, int m) {
         estimate = 0;
         this.alpha = alpha;
         this.m = m;
-        this.length = length;
+        this.length = 64;
         cnt = 0;
 
         sketch = sketch2 = 0;
@@ -99,9 +99,8 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         int N = 1000000;
         StringStream stream = new StringStream(fileName, N);
         int M = 64;
-        int length = 64;
         double alpha = 0.5;
-        HyperBitBit counter = new HyperBitBit(alpha, M, length);
+        HyperBitBit counter = new HyperBitBit(alpha, M);
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
