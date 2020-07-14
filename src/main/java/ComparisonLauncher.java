@@ -5,23 +5,25 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.io.FileNotFoundException;
 
 public class ComparisonLauncher {
+    // The four algorithms: three to compare the new one to
     protected CardinalityEstimationAlgorithm MinCount;
     protected CardinalityEstimationAlgorithm ProbabilisticCounting;
     protected CardinalityEstimationAlgorithm HyperBitBit;
     protected CardinalityEstimationAlgorithm newAlgorithm;
 
+    // The stream of input and the file from which it'll come
     protected StringStream stream;
     protected String fileName;
 
+    // A 1D array for the xValues
     protected final double[] sizes;
+    // 2D arrays for each alg to store the estimates (from which we can calculate errors)
     protected final double[][] MCEstimates;
     protected final double[][] PCEstimates;
     protected final double[][] HBBEstimates;
     protected final double[][] newAlgEstimates;
 
-    protected double[] varyMs;
-    protected double[][] varyMEstimates;
-
+    // Necessary Constants needed for computation
     protected final int bigN;
     protected final int t;
     protected final int n;
@@ -29,9 +31,11 @@ public class ComparisonLauncher {
     protected final int[] cardinalities;
     protected final double alpha;
 
+    // A boolean value to help the reader decide which type of input to read
     protected boolean syntheticData;
 
     public ComparisonLauncher(CardinalityEstimationAlgorithm alg, int size, int m, int[] cardinalities, double alpha, int trials, String input) throws FileNotFoundException {
+        // Copy Constants
         bigN = size;
         this.m = m;
         this.t = trials;
@@ -39,11 +43,13 @@ public class ComparisonLauncher {
         this.cardinalities = cardinalities;
         this.alpha = alpha;
 
+        // Initialize algorithms
         MinCount = new MinCount(m, n);
         ProbabilisticCounting = new ProbabilisticCounting(m, n);
         HyperBitBit = new HyperBitBit(alpha, m);
         newAlgorithm = alg;
 
+        // Determine type of input; create stream if necessary
         if (input.equals("synthetic")) syntheticData = true;
         else {
             syntheticData = false;
@@ -59,9 +65,11 @@ public class ComparisonLauncher {
         HBBEstimates = new double[t][bigN];
         newAlgEstimates = new double[t][bigN];
 
+        // Run the experiment (only a constant m experiment for now)
         runConstantMExperiment();
     }
 
+    // A helper method to read the appropriate type of data and pass it to each algorithm
     private void readElement(String word) {
         if (syntheticData) {
             double random = StdRandom.uniform();
@@ -77,12 +85,9 @@ public class ComparisonLauncher {
         }
     }
 
-    private void resetReader() throws FileNotFoundException {
-        stream.resetStream();
-    }
-
+    // A method to run an experiment with a constant value of m
     private void runConstantMExperiment() throws FileNotFoundException {
-        // Run trials and update 2D arrays
+        // Run 't' trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
             j = 0;
@@ -90,6 +95,7 @@ public class ComparisonLauncher {
                 while (j < bigN) {
                     readElement("");
 
+                    // Only fill the 1D array when i == 0 (saves work)
                     if (i == 0) sizes[j] = newAlgorithm.getSize();
 
                     MCEstimates[i][j] = MinCount.getEstimateOfCardinality();
@@ -112,14 +118,16 @@ public class ComparisonLauncher {
                     j++;
                 }
             }
+            // Reset the algorithms and the stream
             MinCount.resetAlgorithm();
             ProbabilisticCounting.resetAlgorithm();
             HyperBitBit.resetAlgorithm();
             newAlgorithm.resetAlgorithm();
-            if (!syntheticData) resetReader();
+            if (!syntheticData) stream.resetStream();
         }
     }
 
+    // A method that returns all the relative errors from MinCount
     public double[][] getAllMCRelativeErrors() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
@@ -130,12 +138,13 @@ public class ComparisonLauncher {
         return relErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns a pure estimate of the Relative Error after each new element is read
     public double[] getAvgMCRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllMCRelativeErrors(), bigN);
     }
 
+    // A method that returns all the relative errors from Probabilistic Counting
     public double[][] getAllPCRelativeErrors() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
@@ -146,28 +155,13 @@ public class ComparisonLauncher {
         return relErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns a pure estimate of the relative error after each new element is read
     public double[] getAvgPCRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllPCRelativeErrors(), bigN);
     }
 
-    public double[][] getAllNewAlgRelativeErrors() {
-        double[][] relErrors = new double[t][bigN];
-        for (int i = 0; i < t; i++) {
-            for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(newAlgEstimates[i][j] - cardinalities[j])) / cardinalities[j];
-            }
-        }
-        return relErrors;
-    }
-
-    // returns a pure estimate of the cardinality after each new element is read
-    public double[] getAvgNewAlgRelativeErrors() {
-        // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllNewAlgRelativeErrors(), bigN);
-    }
-
+    // A method that returns all the relative errors from HyperBitBit
     public double[][] getAllHBBRelativeErrors() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
@@ -178,12 +172,30 @@ public class ComparisonLauncher {
         return relErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns a pure estimate of the relative error after each new element is read
     public double[] getAvgHBBRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllHBBRelativeErrors(), bigN);
     }
 
+    // A method that returns all the relative errors from the new Algorithm
+    public double[][] getAllNewAlgRelativeErrors() {
+        double[][] relErrors = new double[t][bigN];
+        for (int i = 0; i < t; i++) {
+            for (int j = 0; j < bigN; j++) {
+                relErrors[i][j] = (Math.abs(newAlgEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            }
+        }
+        return relErrors;
+    }
+
+    // returns a pure estimate of the relative error after each new element is read
+    public double[] getAvgNewAlgRelativeErrors() {
+        // return the average of the trials for each element. This is a 1D array
+        return averageOverTrials(getAllNewAlgRelativeErrors(), bigN);
+    }
+
+    // Helper method to average a 2D array vertically
     private double[] averageOverTrials(double[][] values, int arraySize) {
         double[] returnThis = new double[arraySize];
 
@@ -210,18 +222,15 @@ public class ComparisonLauncher {
         double alpha = 0.5;
 
         String input;
-        String dataType;
         int size;
         int[] cardinalities;
         if (synthetic) {
             input = "synthetic";
-            dataType = "Synthetic";
             size = maxRead;
             cardinalities = new int[size];
             for (int i = 0; i < size; i++) cardinalities[i] = i;
         } else {
             input = "src/datasets/" + file;
-            dataType = "Real: " + input;
             size = Exact.total(input, maxRead);
             cardinalities = Exact.countArray(input, maxRead);
         }
