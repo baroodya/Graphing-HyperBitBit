@@ -37,6 +37,9 @@ public class ExperimentLauncher {
     // A boolean for determining the type of input data
     protected boolean syntheticData;
 
+    // A double for status updates
+    protected double percent;
+
     // A constructor for real data
     public ExperimentLauncher(
             String alg, int size, int m, int[] cardinalities, double alpha, int trials, String input)
@@ -53,6 +56,8 @@ public class ExperimentLauncher {
 
         // the data is real
         syntheticData = false;
+
+        percent = 0.0;
 
         // Read in the file
         stream = new StringStream(fileName, bigN);
@@ -86,6 +91,8 @@ public class ExperimentLauncher {
 
         // This data is synthetic
         syntheticData = true;
+
+        percent = 0.0;
 
         // Create 2D trial x size arrays to hold data points for each trial
         sizes = new double[bigN];
@@ -130,7 +137,8 @@ public class ExperimentLauncher {
         // Run trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
-            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ".");
+            percent = ((double) i / ((double) (m + 1) * t)) * 100;
+            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ". (" + percent + ")");
             j = 0;
             for (String element : stream) {
                 if (j > bigN) break;
@@ -168,7 +176,8 @@ public class ExperimentLauncher {
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ".");
+                percent = ((double) ((k + 1) * i) / ((double) (m + 1) * t)) * 100;
+                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (" + percent + ")");
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
