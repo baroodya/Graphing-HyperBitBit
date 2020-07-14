@@ -8,17 +8,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ExperimentLauncher {
+    // The algorithm on which the experiment is being performed
     protected CardinalityEstimationAlgorithm algorithm;
 
+    // The stream and the file from which the stream is created
     protected StringStream stream;
     protected String fileName;
 
+    // The number of inputs seen
     protected final double[] sizes;
+    // every estimate collected in all of the trials
     protected final double[][] estimates;
 
+    // The number of different m values tried
     protected double[] varyMs;
+    // Every estimate collected in all of the trials for each value of m (only the final value of each trial)
     protected double[][] varyMEstimates;
 
+    // Constants necessary for computation
     protected final int bigN;
     protected final int t;
     protected final int n;
@@ -27,12 +34,14 @@ public class ExperimentLauncher {
     protected final String alg;
     protected final double alpha;
 
+    // A boolean for determining the type of input data
     protected boolean syntheticData;
 
+    // A constructor for real data
     public ExperimentLauncher(
             String alg, int size, int m, int[] cardinalities, double alpha, int trials, String input)
             throws FileNotFoundException {
-        // Save the cardinality and trials to be used in other methods
+        // Save the constants to be used in other methods
         t = trials;
         this.m = m;
         this.cardinalities = cardinalities;
@@ -42,6 +51,7 @@ public class ExperimentLauncher {
         this.alpha = alpha;
         fileName = input;
 
+        // the data is real
         syntheticData = false;
 
         // Read in the file
@@ -54,13 +64,15 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
+        // run the experiments
         runConstantMExperiment();
         runVariableMExperiment();
     }
 
+    // A Constructor for Synthetic data
     public ExperimentLauncher(String alg, int size, int m, int[] cardinalities, double alpha, int trials)
             throws FileNotFoundException {
-        // Save the size, cardinality, and trials to be used in other methods
+        // Save the constants to be used in other methods
         bigN = size;
         t = trials;
         this.cardinalities = cardinalities;
@@ -69,8 +81,10 @@ public class ExperimentLauncher {
         this.alg = alg;
         this.alpha = alpha;
 
+        // Create a new stream of data
         stream = new StringStream("src/datasets/log.07.f3.txt", bigN);
 
+        // This data is synthetic
         syntheticData = true;
 
         // Create 2D trial x size arrays to hold data points for each trial
@@ -80,11 +94,13 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
+        // Run the experiments
         runConstantMExperiment();
         runVariableMExperiment();
+        StdOut.print("\r Producing Graphs. Almost done! \n");
     }
 
-    // TODO: figure out how this is going to work
+    // A helper method to read an element, no matter what kind
     private void readElement(String word) {
         if (syntheticData) {
             double random = StdRandom.uniform();
@@ -94,10 +110,7 @@ public class ExperimentLauncher {
         }
     }
 
-    private void resetReader() throws FileNotFoundException {
-        stream.resetStream();
-    }
-
+    // Helper method to run t trials of m = m
     private void runConstantMExperiment() throws FileNotFoundException {
         // Decide which algorithm to use
         switch (alg) {
@@ -117,6 +130,7 @@ public class ExperimentLauncher {
         // Run trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
+            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ".");
             j = 0;
             for (String element : stream) {
                 if (j > bigN) break;
@@ -128,10 +142,11 @@ public class ExperimentLauncher {
                 j++;
             }
             algorithm.resetAlgorithm();
-            resetReader();
+            stream.resetStream();
         }
     }
 
+    // Helper method to run t trials of m = 1, m = 2, ... , m = m
     private void runVariableMExperiment() throws FileNotFoundException {
         // Decide which algorithm to use
         switch (alg) {
@@ -153,6 +168,7 @@ public class ExperimentLauncher {
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
+                StdOut.print("\r Running Constant m = " + k + ". On trial " + i + "/" + t + ".");
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
@@ -160,7 +176,7 @@ public class ExperimentLauncher {
                 //        varyMRelErrors[i][k - 1] = algorithm.getRelativeError();
 
                 algorithm.resetAlgorithm(k + 1);
-                resetReader();
+                stream.resetStream();
             }
         }
     }
@@ -170,12 +186,13 @@ public class ExperimentLauncher {
         return sizes;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns an average estimate after each input is read
     public double[] getAvgEstimates() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(estimates, bigN);
     }
 
+    // returns all absolute errors for every estimate in every trial
     public double[][] getAllAbsoluteErrors() {
         double[][] absErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
@@ -186,12 +203,13 @@ public class ExperimentLauncher {
         return absErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns an average absolute error after each input is read
     public double[] getAvgAbsoluteErrors() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllAbsoluteErrors(), bigN);
     }
 
+    // returns all relative errors for every estimate in every trial
     public double[][] getAllRelativeErrors() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
@@ -202,13 +220,13 @@ public class ExperimentLauncher {
         return relErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns an average relative error after each input is read
     public double[] getAvgRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllRelativeErrors(), bigN);
     }
 
-    // returns a normalized estimate of the cardinality after each new element is read
+    // returns a average normalized estimate of the cardinality after each new element is read
     public double[] getAvgNormalizedEstimates() {
         double[] returnThis = new double[bigN];
 
@@ -235,12 +253,13 @@ public class ExperimentLauncher {
         return returnThis;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgEstimatesVaryM() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(varyMEstimates, m);
     }
 
+    // returns all absolute errors for every value of m in every trial
     public double[][] getAllAbsoluteErrorsVaryM() {
         double[][] varyMAbsErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
@@ -252,12 +271,13 @@ public class ExperimentLauncher {
         return varyMAbsErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns an average absolute error for the final cardinality for each value of m
     public double[] getAvgAbsoluteErrorsVaryM() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllAbsoluteErrorsVaryM(), m);
     }
 
+    // returns all relative errors for every value of m in every trial
     public double[][] getAllMRelativeErrorsVaryM() {
         double[][] varyMRelErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
@@ -270,13 +290,13 @@ public class ExperimentLauncher {
         return varyMRelErrors;
     }
 
-    // returns a pure estimate of the cardinality after each new element is read
+    // returns an average relative error for the final cardinality for each value of m
     public double[] getAvgRelativeErrorsVaryM() {
         // return the average of the trials for each element. This is a 1D array
         return averageOverTrials(getAllMRelativeErrorsVaryM(), m);
     }
 
-    // returns a normalized estimate of the cardinality after each new element is read
+    // returns a average normalized estimate of the cardinality after each new element is read
     public double[] getAvgNormalizedEstimatesVaryM() {
         double[] returnThis = new double[m];
 
@@ -302,16 +322,7 @@ public class ExperimentLauncher {
         return returnThis;
     }
 
-    public double[] getFinalTrial() {
-        double[] returnThis = new double[t];
-        for (int i = 0; i < t; i++) returnThis[i] = estimates[i][bigN - 1];
-        return returnThis;
-    }
-
-    public double getMeanOfFinalTrial() {
-        return arithmeticMean(getFinalTrial());
-    }
-
+    // Get the standard deviation of all trials in a 1D array
     public double[] getStdDevOfAllTrials() {
         double[] means = getAvgEstimatesVaryM();
         double[] data = new double[m];
@@ -328,6 +339,7 @@ public class ExperimentLauncher {
         return data;
     }
 
+    // Helper method to average a 2D array vertically
     private double[] averageOverTrials(double[][] values, int arraySize) {
         double[] returnThis = new double[arraySize];
 
@@ -342,14 +354,6 @@ public class ExperimentLauncher {
         }
 
         return returnThis;
-    }
-
-    // Helper method to calculate the arithmetic mean
-    private double arithmeticMean(double[] values) {
-        double sum = 0;
-        for (double value : values) sum += value;
-
-        return sum / values.length;
     }
 
     public static void main(String[] args) throws IOException {
@@ -390,7 +394,7 @@ public class ExperimentLauncher {
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials, input);
         }
 
-        String algFull = "";
+        String algFull;
         switch (alg) {
             case "HBB":
                 algFull = "HyperBitBit";
