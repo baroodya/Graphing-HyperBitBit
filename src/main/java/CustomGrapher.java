@@ -447,5 +447,14 @@ public class CustomGrapher {
         graph.showLinePlot("y = x", "x", "y", graph.createTable("x", xValues, avg, yValues));
         graph.showScatterPlot(
                 "y = x; y = x^2", headers[0], headers[1], graph.createTable("x", xValues, yValues, headers));
+        graph.showScatterPlot(
+                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x", xValues, yValues, headers), 1);
+        graph.showCompLinePlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
+        graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
+
+        graph.showHistogram("y = x", xValues, 6, 10);
+        graph.showScatterDistributions("y = x", graph.createTable("x", xValues, "y", yValues[0]));
+        graph.showScatterDistributions("y = x^2", graph.createTable("x", xValues, "y", yValues[0]));
     }
 }
+
