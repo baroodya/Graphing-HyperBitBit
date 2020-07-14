@@ -1,18 +1,21 @@
 package main.java;
 
 public interface CardinalityEstimationAlgorithm {
-  /* input methods */
-  public void readElement(String element);
+    /* input methods */
+    //Read a real element as a string
+    void readElement(String element);
 
-  public void readSyntheticElement(double element);
+    // Read a synthetic random double between 0 and 1
+    void readSyntheticElement(double element);
 
-  /* output methods */
-  public int getSize(); // exact number of calls to readElement()
+    /* output methods */
+    int getSize(); // exact number of calls to readElement()
 
-  public double getEstimateOfCardinality(); // get estimate of n *right now*
+    double getEstimateOfCardinality(); // get estimate of n *right now*
 
-  /* Helper Methods to carry out needed tasks */
-  public void resetAlgorithm();
+    /* Helper Methods to carry out needed tasks */
+    void resetAlgorithm();
 
-  public void resetAlgorithm(int m);
+    // Reset the algorithm such that this.m = m
+    void resetAlgorithm(int m);
 }
