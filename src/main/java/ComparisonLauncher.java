@@ -119,10 +119,10 @@ public class ComparisonLauncher {
                 }
             }
             // Reset the algorithms and the stream
-            MinCount.resetAlgorithm();
-            ProbabilisticCounting.resetAlgorithm();
-            HyperBitBit.resetAlgorithm();
-            newAlgorithm.resetAlgorithm();
+            MinCount.resetAlgorithm(m);
+            ProbabilisticCounting.resetAlgorithm(m);
+            HyperBitBit.resetAlgorithm(m);
+            newAlgorithm.resetAlgorithm(m);
             if (!syntheticData) stream.resetStream();
         }
     }

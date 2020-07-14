@@ -376,8 +376,8 @@ public class ExperimentLauncher {
         String file = "f0";
         boolean synthetic = false;
 
-        int maxRead = 200000;
-        int m = 128;
+        int maxRead = 100000;
+        int m = 256;
         int trials = 500;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
