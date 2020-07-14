@@ -4,23 +4,23 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.io.FileNotFoundException;
-import java.util.zip.CRC32;
 
 public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
-
+    // Constants for experiment
     protected int size;
     protected int m;
     protected final int n;
     protected final int length;
 
+    // Variable to hold the estimate of the cardinality
     protected double estimate;
 
+    // Variables for the algorithm
     protected final int lgM;
     boolean[][] bitmaps;
     int[] bitmapRhos;
 
-    protected CRC32 hash;
-
+    // Constructor initializes variables
     public ProbabilisticCounting(int m, int cardinality) {
         size = 0;
         this.m = m;
@@ -32,13 +32,9 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         lgM = (int) (Math.log(m) / Math.log(2));
         bitmaps = new boolean[m][length - lgM + 1];
         bitmapRhos = new int[m];
-
-        hash = new CRC32();
     }
 
-    /* input methods */
-    // TODO: make this work
-    // TODO: if this works, remove hash instnace variable and all assignments
+    // Reads a real element, hashes it, and turns it into a boolean array
     public void readElement(String element) {
         // Increment the size of the experiment (N)
         size++;
@@ -58,6 +54,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         estimate = newEstimate(bits);
     }
 
+    // Reads a random element and creates a random boolean array
     public void readSyntheticElement(double element) {
         size++;
 
@@ -68,7 +65,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         estimate = newEstimate(randoms);
     }
 
-    /* output methods */
+
     public int getSize() { // exact number of calls to readElement()
         return size;
     }
@@ -77,6 +74,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         return estimate;
     }
 
+    // Reset the algorithm for a new trial
     public void resetAlgorithm(int newM) {
         m = newM;
         size = 0;
@@ -112,14 +110,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         return (bits.length - start);
     }
 
-    // Helper method to calculate the harmonic mean
-    private double harmonicMean(int[] values) {
-        double reciprocalSum = 0;
-        for (int value : values) reciprocalSum += (1.0 / estimate(value));
-
-        return (values.length / reciprocalSum);
-    }
-
     // Helper method to calculate the arithmetic mean
     private double arithmeticMean(int[] values) {
         double sum = 0;
@@ -138,7 +128,8 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     public static void main(String[] args) throws FileNotFoundException {
         int size = 100000;
         int m = 64;
-        int cardinality = size;
+        int cardinality = 100000;
+        boolean synthetic = true;
 
         ProbabilisticCounting counter = new ProbabilisticCounting(m, cardinality);
 
@@ -147,14 +138,16 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         StdOut.print("\n");
 
         // Read in the file
-        String inputFile = "src/datasets/mobydick.txt";
-        int N = 100000;
-        StringStream stream = new StringStream(inputFile, N);
+        if (synthetic) {
+            String inputFile = "src/datasets/mobydick.txt";
+            int N = 100000;
+            StringStream stream = new StringStream(inputFile, N);
 
-        for (String line : stream) counter.readElement(line);
-
-//        double random = 0;
-//        for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+            for (String line : stream) counter.readElement(line);
+        } else {
+            double random = 0;
+            for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+        }
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
