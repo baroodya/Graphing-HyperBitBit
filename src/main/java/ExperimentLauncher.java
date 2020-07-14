@@ -168,7 +168,7 @@ public class ExperimentLauncher {
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                StdOut.print("\r Running Constant m = " + k + ". On trial " + i + "/" + t + ".");
+                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ".");
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
@@ -359,12 +359,12 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "MC";
-        String file = "mobydick.txt";
+        String alg = "HBB";
+        String file = "f0";
         boolean synthetic = false;
 
-        int maxRead = 100000;
-        int m = 64;
+        int maxRead = 200000;
+        int m = 128;
         int trials = 500;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
