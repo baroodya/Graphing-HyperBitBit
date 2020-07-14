@@ -357,11 +357,12 @@ public class CustomGrapher {
             i++;
         }
 
-        showLineDistributions(title, createTable(title, xValues, yValues, headers));
+        showLineDistributions(title, createTable(title, xValues, yValues, headers), maxRange);
     }
 
     // produces a plot with the distributions from above overlaid on each other
-    private void showLineDistributions(String title, Table table) {
+    private void showLineDistributions(String title, Table table, int maxX) {
+        Axis xAxis = Axis.builder().range(0, maxX).build();
         List<String> columns = table.columnNames();
         Trace[] traces = new Trace[columns.size() - 1];
 
@@ -394,12 +395,13 @@ public class CustomGrapher {
                             .build();
         }
 
-        Layout layout = Layout.builder().title(title).height(600).width(800).build();
+        Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
 
     // produces a plot with the distributions from above overlaid on each other
-    private void showScatterDistributions(String title, Table table) {
+    private void showScatterDistributions(String title, Table table, int maxX) {
+        Axis xAxis = Axis.builder().range(0, maxX).build();
         List<String> columns = table.columnNames();
         Trace[] traces = new Trace[columns.size() - 1];
 
@@ -432,7 +434,7 @@ public class CustomGrapher {
                             .build();
         }
 
-        Layout layout = Layout.builder().title(title).height(600).width(800).build();
+        Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
 
@@ -453,8 +455,8 @@ public class CustomGrapher {
         graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
 
         graph.showHistogram("y = x", xValues, 6, 10);
-        graph.showScatterDistributions("y = x", graph.createTable("x", xValues, "y", yValues[0]));
-        graph.showScatterDistributions("y = x^2", graph.createTable("x", xValues, "y", yValues[0]));
+        graph.showScatterDistributions("y = x", graph.createTable("x", xValues, "y", yValues[0]), 10);
+        graph.showScatterDistributions("y = x^2", graph.createTable("x", xValues, "y", yValues[0]), 30);
     }
 }
 
