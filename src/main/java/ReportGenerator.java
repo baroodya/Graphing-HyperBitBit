@@ -3,16 +3,18 @@ package main.java;
 import java.io.FileNotFoundException;
 
 public class ReportGenerator {
-
+    // variables for graphing
     protected final int numShown;
     protected double[] xValues;
     protected String title;
     protected String xAxis;
     protected String yAxis;
 
+    // launcher and grapher classes for collecting and outputting data
     protected ExperimentLauncher launcher;
     protected CustomGrapher grapher;
 
+    // Constructor initializes variables, sets first values of xValues
     public ReportGenerator(ExperimentLauncher launcher, int numberOfSingleTrialsShown) {
         this.launcher = launcher;
         numShown = numberOfSingleTrialsShown;
@@ -21,6 +23,7 @@ public class ReportGenerator {
         xValues = launcher.getSizes();
     }
 
+    // Produces every graph it can
     public void generateFullReport() {
         showEstCardinality();
         showNormEstCardinality();
@@ -34,6 +37,7 @@ public class ReportGenerator {
         showDistributions();
     }
 
+    // Produces a basic 7 graph report
     public void generateBasicReport() {
         showEstCardinality();
         showNormEstCardinality();
@@ -44,10 +48,7 @@ public class ReportGenerator {
         showDistributions();
     }
 
-    public void generateDistributionReport() {
-        showDistributions();
-    }
-
+    // shows the estimated cardinality graph
     public void showEstCardinality() {
         // Graph 1: Number of Inputs Seen vs. Estimated Cardinality ($N$ vs. $Z_n$)
         title = "Average Estimated Cardinality of Data Stream";
@@ -66,6 +67,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the normalized estimated cardinality graph
     public void showNormEstCardinality() {
         // Graph 2: Number of Inputs Seen vs. Normalized Estimated Cardinality
         title = "Average Normalized Estimated Cardinality of Data Stream";
@@ -84,6 +86,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the absolute error graph
     public void showAbsError() {
         // Graph 3: Number of Inputs Seen vs. Absolute Error ($N$ vs. $|Z_n - n|$)
         title = "Average Absolute Error";
@@ -102,6 +105,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the relative error graph
     public void showRelError() {
         // Graph 4: Number of Inputs Seen vs. Relative Error
         title = "Average Relative Error";
@@ -120,6 +124,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the estimated cardinality graph for m = 1 thru m = m
     public void showMEstCardinality() {
         // Graph 5: Number of Substreams vs. Estimated Cardinality ($N$ vs. $Z_n$)
 
@@ -137,6 +142,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the normalized estimated cardinality graph for m = 1 thru m = m
     public void showMNormEstCardinality() {
         // Graph 6: Number of Substreams vs. Normalized Estimated Cardinality
         title = "Average Normalized Estimated Cardinality of Data Stream";
@@ -155,6 +161,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the absolute error graph for m = 1 thru m = m
     public void showMAbsError() {
         // Graph 7: Number of Substreams vs. Absolute Error ($N$ vs. $|Z_n - n|$)
         title = "Average Absolute Error";
@@ -172,6 +179,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the relative error graph for m = 1 thru m = m
     public void showMRelError() {
         // Graph 8: Number of Substreams vs. Relative Error
         title = "Average Relative Error";
@@ -190,6 +198,7 @@ public class ReportGenerator {
                 numShown);
     }
 
+    // Shows the standard deviation of the trials as a function of m
     private void showStdDev() {
         title = "Standard Deviation of Estimates";
         xAxis = "Number of Substreams (m)";
@@ -207,6 +216,7 @@ public class ReportGenerator {
                 ));
     }
 
+    // Shows the distributions of the final estimates for three different values of m
     public void showDistributions() {
         title = "Distribution of Estimates";
 
@@ -236,17 +246,18 @@ public class ReportGenerator {
         grapher.showDistribution(title, data, launcher.bigN, launcher.m, launcher.bigN, launcher.t);
     }
 
+    // Helper method to truncate arrays and get rid of non-useful data
     private double[] manageArray(double[] array) {
         int newLength = array.length - (array.length / 50);
         double[] returnThis = new double[newLength];
 
-        for (int i = 0; i < newLength; i++) {
-            returnThis[i] = array[i + (array.length / 50)];
-        }
+        if (newLength >= 0)
+            System.arraycopy(array, (array.length / 50), returnThis, 0, newLength);
 
         return returnThis;
     }
 
+    // See above
     private double[][] manageArray(double[][] array) {
         int newLength = array[0].length - (array[0].length / 50);
         double[][] returnThis = new double[array.length][newLength];
