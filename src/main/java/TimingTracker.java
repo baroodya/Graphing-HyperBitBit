@@ -40,7 +40,7 @@ public class TimingTracker {
             String replace = id + " " + avg + " " + m;
 
             FileWriter writer = new FileWriter("src/timings.txt");
-            writer.write(sb.toString().replace(line, replace));
+            writer.write(sb.toString().replace("\n" + line, replace));
             writer.close();
         } else {
             line = id + " " + time + " " + 1;

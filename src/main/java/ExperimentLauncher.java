@@ -357,7 +357,7 @@ public class ExperimentLauncher {
 
         String alg = "HBB";
         String file = "mobydick.txt";
-        boolean synthetic = true;
+        boolean synthetic = false;
 
         int maxRead = 100000;
         int m = 64;
@@ -367,9 +367,9 @@ public class ExperimentLauncher {
 
         String input;
         if (synthetic)
-            input = "src/datasets/" + file;
-        else
             input = "synthetic";
+        else
+            input = "src/datasets/" + file;
 
         StdOut.println(TimingTracker.timing(alg, input, m, trials));
 

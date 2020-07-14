@@ -95,7 +95,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String fileName = "src/datasets/f0";
+        String fileName = "src/datasets/mobydick.txt";
         int N = 1000000;
         StringStream stream = new StringStream(fileName, N);
         int M = 64;
