@@ -379,7 +379,7 @@ public class ExperimentLauncher {
 
         int size;
         int[] cardinalities;
-        String dataType = "";
+        String dataType;
         ExperimentLauncher launcher;
         if (synthetic) {
             dataType = "Synthetic";
