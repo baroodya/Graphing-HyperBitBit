@@ -141,7 +141,7 @@ public class ExperimentLauncher {
                 estimates[i][j] = algorithm.getEstimateOfCardinality();
                 j++;
             }
-            algorithm.resetAlgorithm();
+            algorithm.resetAlgorithm(m);
             stream.resetStream();
         }
     }

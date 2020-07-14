@@ -3,22 +3,23 @@ package main.java;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
-import java.util.zip.CRC32;
-
 public class MinCount implements CardinalityEstimationAlgorithm {
 
+    // Constants  for experiment
     protected int size;
     protected int m;
     protected final int n;
 
+    // Variable to hold the current estimate of the cardinality
     protected double estimate;
 
+    // Double array to perform the algorithm
     protected double[] minSeen;
 
-    protected CRC32 hash;
-
+    // Magic Number
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
+    // Constructor initializes constants and sets all minSeen entries to INFINITY
     public MinCount(int m, int cardinality) {
         size = 0;
         this.m = m;
@@ -27,13 +28,9 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         estimate = 0;
         minSeen = new double[m];
         for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
-
-        hash = new CRC32();
     }
 
-    /* input methods */
-    // TODO: make this work
-    // TODO: if this works, remove hash instnace variable and all assignments
+    // Reads in a real element, hashes it, and calculates a new estimate
     public void readElement(String element) {
         // Increment the size of the experiment (N)
         size++;
@@ -44,6 +41,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         estimate = newEstimate(random);
     }
 
+    // Reads in a random synthetic element and calculates a new estimate
     public void readSyntheticElement(double element) {
         // Increment the size of the experiment (N)
         size++;
@@ -52,7 +50,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         estimate = newEstimate(element);
     }
 
-    /* output methods */
+
     public int getSize() { // exact number of calls to readElement()
         return size;
     }
@@ -61,15 +59,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         return estimate;
     }
 
-    /* derived methods from above */
-    public double getAbsoluteError() {
-        return Math.abs(estimate - size);
-    }
-
-    public double getRelativeError() {
-        return (getAbsoluteError() / size);
-    }
-
+    // Reset the algorithm for a new trial
     public void resetAlgorithm(int newM) {
         m = newM;
         size = 0;
@@ -78,6 +68,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
     }
 
+    // Calculate a new estimate based on the addition of a new random double
     private double newEstimate(double continuousRandom) {
         double random = m * continuousRandom;
         int j = (int) random;
@@ -97,7 +88,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     public static void main(String[] args) {
         int size = 100000;
         int m = 100;
-        int cardinality = size;
+        int cardinality = 100000;
         MinCount counter = new MinCount(m, cardinality);
 
         StdOut.println("Size = " + counter.getSize());
@@ -110,7 +101,12 @@ public class MinCount implements CardinalityEstimationAlgorithm {
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.println("Abs. Error = " + counter.getAbsoluteError());
-        StdOut.println("Rel. Error = " + counter.getRelativeError());
+        StdOut.println("Actual Cardinality = " + cardinality);
+        StdOut.println(
+                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
+        StdOut.println(
+                "Rel. Error = "
+                        + (Math.abs(counter.getEstimateOfCardinality() - cardinality)
+                        / cardinality));
     }
 }
