@@ -78,16 +78,12 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     }
 
     // Reset the algorithm for a new trial
-    public void resetAlgorithm() {
+    public void resetAlgorithm(int newM) {
+        m = newM;
         estimate = 0;
         sketch = sketch2 = 0;
         avg = 0;
         hset = new HashSet<>();
-    }
-
-    public void resetAlgorithm(int m) {
-        this.m = m;
-        resetAlgorithm();
     }
 
     // Helper method that returns the actual estimate of the cardinality

@@ -70,16 +70,12 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         return (getAbsoluteError() / size);
     }
 
-    public void resetAlgorithm() {
+    public void resetAlgorithm(int newM) {
+        m = newM;
         size = 0;
         estimate = 0;
         minSeen = new double[m];
         for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
-    }
-
-    public void resetAlgorithm(int m) {
-        this.m = m;
-        resetAlgorithm();
     }
 
     private double newEstimate(double continuousRandom) {

@@ -13,9 +13,6 @@ public interface CardinalityEstimationAlgorithm {
 
     double getEstimateOfCardinality(); // get estimate of n *right now*
 
-    /* Helper Methods to carry out needed tasks */
-    void resetAlgorithm();
-
     // Reset the algorithm such that this.m = m
-    void resetAlgorithm(int m);
+    void resetAlgorithm(int newM);
 }
