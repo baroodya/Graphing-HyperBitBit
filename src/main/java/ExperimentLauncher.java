@@ -138,9 +138,9 @@ public class ExperimentLauncher {
         int j;
         for (int i = 0; i < t; i++) {
             percent = ((double) i / ((double) (m + 1) * t)) * 100;
-            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ".");
+            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
             StdOut.printf("%5.2f", percent);
-            StdOut.print(")");
+            StdOut.print("%)");
             j = 0;
             for (String element : stream) {
                 if (j > bigN) break;
@@ -178,10 +178,10 @@ public class ExperimentLauncher {
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                percent = ((double) ((k + 1) * i) / ((double) (m + 1) * t)) * 100;
-                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ".");
+                percent = ((double) (k + 1) / (double) (m + 1)) * 100;
+                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
                 StdOut.printf("%5.2f", percent);
-                StdOut.print(")");
+                StdOut.print("%)");
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
