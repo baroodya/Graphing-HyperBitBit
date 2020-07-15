@@ -186,8 +186,6 @@ public class ExperimentLauncher {
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
-                //        varyMAbsErrors[i][k - 1] = algorithm.getAbsoluteError();
-                //        varyMRelErrors[i][k - 1] = algorithm.getRelativeError();
 
                 algorithm.resetAlgorithm(k + 1);
                 stream.resetStream();

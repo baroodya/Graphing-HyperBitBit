@@ -16,7 +16,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     protected double estimate;
 
     // Variables for the algorithm
-    protected final int lgM;
+    protected int lgM;
     boolean[][] bitmaps;
     int[] bitmapRhos;
 
@@ -77,10 +77,11 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // Reset the algorithm for a new trial
     public void resetAlgorithm(int newM) {
         m = newM;
+        lgM = (int) (Math.log(newM) / Math.log(2));
         size = 0;
         estimate = 0;
-        bitmapRhos = new int[m];
-        bitmaps = new boolean[m][length - lgM + 1];
+        bitmapRhos = new int[newM];
+        bitmaps = new boolean[newM][length - lgM + 1];
     }
 
     // Helper method to perform the estimation

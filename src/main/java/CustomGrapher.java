@@ -370,6 +370,7 @@ public class CustomGrapher {
         Line purple = Line.builder().color("purple").build();
         Line skyBlue = Line.builder().color("deepskyblue").build();
         Line princetonOrange = Line.builder().color("darkorange").build();
+        Line dashed = Line.builder().dash(Line.Dash.DASH).build();
 
         Line line;
         for (int i = 0; i < traces.length; i++) {

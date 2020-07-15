@@ -22,12 +22,13 @@ public class ComparisonGenerator {
 
     // Full report is kinda lame...may be updated in the future
     public void generateFullReport() {
-        showComparison();
+        showErrorComparison();
+        showVaryMComparison();
     }
 
-    // Shows the comparison of the new algorithm with the three old algorithms
-    public void showComparison() {
-        title = "Comparison of your Algorithm with PC, MC, and HBB";
+    // Shows the comparison of the error of the new algorithm with the error of the three old algorithms
+    public void showErrorComparison() {
+        title = "Comparison of the error of your Algorithm with PC, MC, and HBB";
         xAxis = "Number of Inputs Seen (N)";
         yAxis = "Relative Error (|Z_n - n|/n)";
 
@@ -36,6 +37,21 @@ public class ComparisonGenerator {
         data[1] = launcher.getAvgPCRelativeErrors();
         data[2] = launcher.getAvgHBBRelativeErrors();
         data[3] = launcher.getAvgNewAlgRelativeErrors();
+        // Pass the relevant data and Strings to CustomGrapher.java
+        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(xAxis, manageArray(xValues), manageArray(data)));
+    }
+
+    // Shows the comparison of the change in accuracy of the new algorithm with the three old algorithms
+    public void showVaryMComparison() {
+        title = "Comparison of the accuracy of your Algorithm with PC, MC, and HBB";
+        xAxis = "Number of Substreams (m)";
+        yAxis = "Estimated Cardinality (Z_n)";
+
+        double[][] data = new double[4][launcher.bigN];
+        data[0] = launcher.getAvgMCEstimatesVaryM();
+        data[1] = launcher.getAvgPCEstimatesVaryM();
+        data[2] = launcher.getAvgHBBEstimatesVaryM();
+        data[3] = launcher.getAvgNewAlgEstimatesVaryM();
         // Pass the relevant data and Strings to CustomGrapher.java
         grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(xAxis, manageArray(xValues), manageArray(data)));
     }
