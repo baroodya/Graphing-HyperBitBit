@@ -138,7 +138,7 @@ public class ExperimentLauncher {
         int j;
         for (int i = 0; i < t; i++) {
             percent = ((double) i / ((double) (m + 1) * t)) * 100;
-            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
+            StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
             StdOut.printf("%.2f", percent);
             StdOut.print("%)");
             j = 0;
@@ -180,7 +180,7 @@ public class ExperimentLauncher {
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
                 percent = ((double) (t + counter) / (double) ((m + 1) * t)) * 100;
-                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
+                StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
                 StdOut.printf("%.2f", percent);
                 StdOut.print("%)");
                 for (String element : stream) readElement(element);
@@ -377,7 +377,7 @@ public class ExperimentLauncher {
         boolean synthetic = false;
 
         int maxRead = 100000;
-        int m = 256;
+        int m = 64;
         int trials = 500;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;

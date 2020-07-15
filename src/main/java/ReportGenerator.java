@@ -243,7 +243,7 @@ public class ReportGenerator {
             }
         }
 
-        grapher.showDistribution(title, data, launcher.bigN, launcher.m, launcher.bigN, launcher.t);
+        grapher.showDistribution(title, data, launcher.bigN, launcher.m, launcher.n, launcher.t);
     }
 
     // Helper method to truncate arrays and get rid of non-useful data

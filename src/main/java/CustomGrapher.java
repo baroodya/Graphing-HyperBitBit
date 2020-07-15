@@ -357,7 +357,7 @@ public class CustomGrapher {
             i++;
         }
 
-        showLineDistributions(title, createTable(title, xValues, yValues, headers), maxRange);
+        showScatterDistributions(title, createTable(title, xValues, yValues, headers), 3 * maxRange);
     }
 
     // produces a plot with the distributions from above overlaid on each other
@@ -456,7 +456,7 @@ public class CustomGrapher {
         graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
 
         graph.showHistogram("y = x", xValues, 6, 10);
-        graph.showScatterDistributions("y = x", graph.createTable("x", xValues, "y", yValues[0]), 10);
+        graph.showLineDistributions("y = x", graph.createTable("x", xValues, "y", yValues[0]), 10);
         graph.showScatterDistributions("y = x^2", graph.createTable("x", xValues, "y", yValues[0]), 30);
     }
 }
