@@ -175,13 +175,13 @@ public class ExperimentLauncher {
 
         for (int k = 1; k <= m; k++) {
             varyMs[k - 1] = k;
-
+            percent = ((double) (k + 1) / (double) (m + 1)) * 100;
+            StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
+            StdOut.printf("%5.2f", percent);
+            StdOut.print("%)");
+            
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                percent = ((double) (k + 1) / (double) (m + 1)) * 100;
-                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
-                StdOut.printf("%5.2f", percent);
-                StdOut.print("%)");
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
