@@ -326,7 +326,7 @@ public class CustomGrapher {
     }
 
     // Shows a distribution of each row in data, split into bins sections
-    public void showDistribution(
+    public void showLineDistributions(
             String title, double[][] data, int bigN, int m, int t, int maxRange, int bins) {
         double[] xValues = new double[bins];
         double[][] yValues = new double[data.length][bins];
@@ -336,46 +336,40 @@ public class CustomGrapher {
         if (binRange <= 0) binRange = 1;
         for (int i = 0; i < bins; i++) xValues[i] = bigN - maxRange + (binRange * i);
 
-        int i = 0;
+        int s = 0;
         for (double[] datum : data) {
 
             for (double value : datum) {
-                if (((int) value / binRange) < bins) yValues[i][(int) value / binRange]++;
+                if (((int) value / binRange) < bins) yValues[s][(int) value / binRange]++;
             }
 
-            switch (i) {
+            switch (s) {
                 case 0:
-                    headers[i] = "m = 2";
+                    headers[s] = "m = 2";
                     break;
                 case 1:
-                    headers[i] = "m = " + m / 8;
+                    headers[s] = "m = " + m / 8;
                     break;
                 default:
-                    headers[i] = "m = " + m;
+                    headers[s] = "m = " + m;
             }
 
-            i++;
+            s++;
         }
 
         for (int j = 0; j < data.length; j++)
             for (int k = 0; k < bins; k++) yValues[j][k] = yValues[j][k] / t;
-        showLineDistributions(title, createTable(title, xValues, yValues, headers), 2 * maxRange);
-    }
 
-    // produces a plot with the distributions from above overlaid on each other
-    private void showLineDistributions(String title, Table table, int maxX) {
-        Axis xAxis = Axis.builder().range(0, maxX).build();
+        Table table = createTable(title, xValues, yValues, headers);
+        Axis xAxis = Axis.builder().range(0, 2 * maxRange).build();
         List<String> columns = table.columnNames();
-        Trace[] traces = new Trace[columns.size() - 1];
+        Trace[] traces = new Trace[columns.size()];
 
-        Line grey = Line.builder().color("grey").build();
-        Line purple = Line.builder().color("purple").build();
-        Line skyBlue = Line.builder().color("deepskyblue").build();
-        Line princetonOrange = Line.builder().color("darkorange").build();
-        Line dashed = Line.builder().dash(Line.Dash.DASH).build();
+        Marker smallMarker = Marker.builder().size(0.5).build();
+        Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
 
         Line line;
-        for (int i = 0; i < traces.length; i++) {
+        for (int i = 0; i < traces.length - 1; i++) {
             switch (i % 3) {
                 case 0:
                     line = purple;
@@ -394,27 +388,62 @@ public class CustomGrapher {
                             .mode(ScatterTrace.Mode.LINE)
                             .showLegend(true)
                             .line(line)
+                            .marker(smallMarker)
                             .name(columns.get(i + 1))
                             .build();
         }
+
+        // Create a dashed line to show the exact cardinality
+        DoubleColumn dashColX = DoubleColumn.create("DashColX", maxRange, maxRange);
+        DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, 1);
+        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + maxRange).build();
 
         Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
 
-    // produces a plot with the distributions from above overlaid on each other
-    private void showScatterDistributions(String title, Table table, int maxX) {
-        Axis xAxis = Axis.builder().range(0, maxX).build();
-        List<String> columns = table.columnNames();
-        Trace[] traces = new Trace[columns.size() - 1];
+    // Shows a distribution of each row in data, split into bins sections
+    public void showScatterDistributions(
+            String title, double[][] data, int bigN, int m, int t, int maxRange, int bins) {
+        double[] xValues = new double[bins];
+        double[][] yValues = new double[data.length][bins];
+        String[] headers = new String[data.length];
 
-        Line grey = Line.builder().color("grey").build();
-        Line purple = Line.builder().color("purple").build();
-        Line skyBlue = Line.builder().color("deepskyblue").build();
-        Line princetonOrange = Line.builder().color("darkorange").build();
+        int binRange = (2 * maxRange) / bins;
+        if (binRange <= 0) binRange = 1;
+        for (int i = 0; i < bins; i++) xValues[i] = bigN - maxRange + (binRange * i);
+
+        int s = 0;
+        for (double[] datum : data) {
+
+            for (double value : datum) {
+                if (((int) value / binRange) < bins) yValues[s][(int) value / binRange]++;
+            }
+
+            switch (s) {
+                case 0:
+                    headers[s] = "m = 2";
+                    break;
+                case 1:
+                    headers[s] = "m = " + m / 8;
+                    break;
+                default:
+                    headers[s] = "m = " + m;
+            }
+
+            s++;
+        }
+
+        for (int j = 0; j < data.length; j++)
+            for (int k = 0; k < bins; k++) yValues[j][k] = yValues[j][k] / t;
+
+        Table table = createTable(title, xValues, yValues, headers);
+        Axis xAxis = Axis.builder().range(0, 2 * maxRange).build();
+        List<String> columns = table.columnNames();
+        Trace[] traces = new Trace[columns.size()];
 
         Line line;
-        for (int i = 0; i < traces.length; i++) {
+        for (int i = 0; i < traces.length - 1; i++) {
             switch (i % 3) {
                 case 0:
                     line = purple;
@@ -437,6 +466,12 @@ public class CustomGrapher {
                             .build();
         }
 
+        // Create a dashed line to show the exact cardinality
+        DoubleColumn dashColX = DoubleColumn.create("DashColX", maxRange, maxRange);
+        DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, 1);
+        Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
+        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + maxRange).build();
+
         Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
@@ -445,6 +480,7 @@ public class CustomGrapher {
         double[] xValues = {0, 1, 2, 3, 4, 5};
 
         double[][] yValues = {{0, 1, 2, 3, 4, 5}, {0, 1, 4, 9, 16, 25}};
+        double[][] yValues2 = {{1, 2, 3, 4, 5}, {1, 8, 27, 64, 125}};
         double[] avg = {0, 1, 3, 6, 10, 15};
         String[] headers = {"x", "x^2"};
         CustomGrapher graph = new CustomGrapher();
@@ -458,8 +494,9 @@ public class CustomGrapher {
         graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
 
         graph.showHistogram("y = x", xValues, 6, 10);
-        graph.showLineDistributions("y = x", graph.createTable("x", xValues, "y", yValues[0]), 10);
-        graph.showScatterDistributions("y = x^2", graph.createTable("x", xValues, "y", yValues[0]), 30);
+        graph.showLineDistributions("y = x^2", yValues, 5, 4, 10, 6, 3);
+        graph.showScatterDistributions("y = x^2", yValues, 5, 4, 10, 6, 3);
+        graph.showScatterDistributions("y = x^3", yValues2, 5, 8, 5, 5, 2);
     }
 }
 

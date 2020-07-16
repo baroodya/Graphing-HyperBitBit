@@ -377,7 +377,7 @@ public class ExperimentLauncher {
         boolean synthetic = true;
 
         int maxRead = 10000;
-        int m = 128;
+        int m = 64;
         int trials = 250;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
@@ -438,6 +438,6 @@ public class ExperimentLauncher {
         StdOut.println("Trials (T): " + trials);
         StdOut.println("𝛼: " + alphaString);
 
-        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, input, m, trials, watch.elapsedTime()));
+        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
     }
 }
