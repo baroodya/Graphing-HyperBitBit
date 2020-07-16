@@ -26,7 +26,7 @@ public class TimingTracker {
         String next;
         while (sc.hasNextLine()) {
             next = sc.nextLine();
-            sb.append(next);
+            sb.append(next).append("\n");
             if (next.contains(id)) {
                 line = next;
                 seen = true;
@@ -45,7 +45,7 @@ public class TimingTracker {
             String replace = id + " " + avg + " " + m;
 
             FileWriter writer = new FileWriter("src/timings.txt");
-            writer.write(sb.toString().replace(line, "\n" + replace));
+            writer.write(sb.toString().replace(line, replace));
             writer.close();
         } // If it hasn't add it to the file
         else {
