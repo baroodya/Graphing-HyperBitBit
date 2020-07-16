@@ -1,5 +1,6 @@
 package main.java;
 
+import edu.princeton.cs.algs4.StdOut;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
@@ -357,8 +358,15 @@ public class CustomGrapher {
             s++;
         }
 
+        double temp;
+        double champ = 0;
         for (int j = 0; j < data.length; j++)
-            for (int k = 0; k < bins; k++) yValues[j][k] = yValues[j][k] / t;
+            for (int k = 0; k < bins; k++) {
+                temp = yValues[j][k] / t;
+                yValues[j][k] = temp;
+                if (temp > champ) champ = temp;
+                StdOut.print(champ + " ");
+            }
 
         Table table = createTable(title, xValues, yValues, headers);
         Axis xAxis = Axis.builder().range(0, 2 * maxRange).build();
@@ -395,7 +403,7 @@ public class CustomGrapher {
 
         // Create a dashed line to show the exact cardinality
         DoubleColumn dashColX = DoubleColumn.create("DashColX", maxRange, maxRange);
-        DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, 1);
+        DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, champ + 0.15);
         traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + maxRange).build();
 
         Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
@@ -434,8 +442,15 @@ public class CustomGrapher {
             s++;
         }
 
+        double temp;
+        double champ = 0;
         for (int j = 0; j < data.length; j++)
-            for (int k = 0; k < bins; k++) yValues[j][k] = yValues[j][k] / t;
+            for (int k = 0; k < bins; k++) {
+                temp = yValues[j][k] / t;
+                yValues[j][k] = temp;
+                if (temp > champ) champ = temp;
+                StdOut.print(champ + " ");
+            }
 
         Table table = createTable(title, xValues, yValues, headers);
         Axis xAxis = Axis.builder().range(0, 2 * maxRange).build();
@@ -468,9 +483,9 @@ public class CustomGrapher {
 
         // Create a dashed line to show the exact cardinality
         DoubleColumn dashColX = DoubleColumn.create("DashColX", maxRange, maxRange);
-        DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, 1);
+        DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, champ + 0.15);
         Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
-        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + maxRange).build();
+        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE_AND_TEXT).line(dashed).name("n = " + maxRange).build();
 
         Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));

@@ -373,11 +373,11 @@ public class ExperimentLauncher {
         Stopwatch watch = new Stopwatch();
 
         String alg = "MC";
-        String file = "f0";
-        boolean synthetic = true;
+        String file = "f7";
+        boolean synthetic = false;
 
-        int maxRead = 10000;
-        int m = 64;
+        int maxRead = 100000;
+        int m = 256;
         int trials = 250;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
@@ -388,7 +388,7 @@ public class ExperimentLauncher {
         else
             input = "src/datasets/" + file;
 
-        StdOut.println(TimingTracker.timing(alg, input, m, trials));
+        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials));
 
         int size;
         int[] cardinalities;
