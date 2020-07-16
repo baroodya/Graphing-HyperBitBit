@@ -372,13 +372,13 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "HBB";
+        String alg = "MC";
         String file = "f0";
-        boolean synthetic = false;
+        boolean synthetic = true;
 
-        int maxRead = 100000;
-        int m = 64;
-        int trials = 500;
+        int maxRead = 10000;
+        int m = 128;
+        int trials = 250;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
 
@@ -398,7 +398,7 @@ public class ExperimentLauncher {
             dataType = "Synthetic";
             size = maxRead;
             cardinalities = new int[size];
-            for (int i = 0; i < size; i++) cardinalities[i] = i;
+            for (int i = 0; i < size; i++) cardinalities[i] = i + 1;
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials);
         } else {
             dataType = "Real: " + input;
@@ -438,6 +438,6 @@ public class ExperimentLauncher {
         StdOut.println("Trials (T): " + trials);
         StdOut.println("𝛼: " + alphaString);
 
-        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, file, m, trials, watch.elapsedTime()));
+        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, input, m, trials, watch.elapsedTime()));
     }
 }

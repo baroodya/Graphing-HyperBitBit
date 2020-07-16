@@ -327,7 +327,7 @@ public class CustomGrapher {
 
     // Shows a distribution of each row in data, split into bins sections
     public void showDistribution(
-            String title, double[][] data, int bigN, int m, int maxRange, int bins) {
+            String title, double[][] data, int bigN, int m, int t, int maxRange, int bins) {
         double[] xValues = new double[bins];
         double[][] yValues = new double[data.length][bins];
         String[] headers = new String[data.length];
@@ -357,7 +357,9 @@ public class CustomGrapher {
             i++;
         }
 
-        showScatterDistributions(title, createTable(title, xValues, yValues, headers), 3 * maxRange);
+        for (int j = 0; j < data.length; j++)
+            for (int k = 0; k < bins; k++) yValues[j][k] = yValues[j][k] / t;
+        showLineDistributions(title, createTable(title, xValues, yValues, headers), 2 * maxRange);
     }
 
     // produces a plot with the distributions from above overlaid on each other

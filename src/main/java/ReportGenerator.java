@@ -39,12 +39,12 @@ public class ReportGenerator {
 
     // Produces a basic 7 graph report
     public void generateBasicReport() {
-        showEstCardinality();
-        showNormEstCardinality();
-        showAbsError();
-        showRelError();
-        showMEstCardinality();
-        showStdDev();
+//        showEstCardinality();
+//        showNormEstCardinality();
+//        showAbsError();
+//        showRelError();
+//        showMEstCardinality();
+//        showStdDev();
         showDistributions();
     }
 
@@ -243,7 +243,7 @@ public class ReportGenerator {
             }
         }
 
-        grapher.showDistribution(title, data, launcher.bigN, launcher.m, launcher.n, launcher.t);
+        grapher.showDistribution(title, data, launcher.bigN, launcher.m, launcher.t, launcher.n, launcher.t / 10);
     }
 
     // Helper method to truncate arrays and get rid of non-useful data

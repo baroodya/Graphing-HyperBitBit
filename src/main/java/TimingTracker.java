@@ -37,8 +37,8 @@ public class TimingTracker {
         // if it has, update the average in the file
         if (seen) {
             String[] parts = line.split(" ");
-            double avg = Double.parseDouble(parts[2]);
-            int m = Integer.parseInt(parts[3]);
+            double avg = Double.parseDouble(parts[1]);
+            int m = Integer.parseInt(parts[2]);
 
             avg = ((avg * m) + time) / (++m);
 
@@ -86,7 +86,7 @@ public class TimingTracker {
         // if you find it, return the appropriate estimate for timing
         if (seen) {
             String[] parts = line.split(" ");
-            double avg = Double.parseDouble(parts[2]);
+            double avg = Double.parseDouble(parts[1]);
             Duration duration = Duration.ofSeconds((long) Math.ceil(avg));
             return "This experiment will take about " + duration.toHoursPart() + " hours, " + duration.toMinutesPart() + " minutes, and " + duration.toSecondsPart() + " seconds.";
         } // if you don't, return an error statement
