@@ -373,10 +373,10 @@ public class ExperimentLauncher {
         Stopwatch watch = new Stopwatch();
 
         String alg = "HBB";
-        String file = "f7";
+        String file = "f0";
         boolean synthetic = false;
 
-        int maxRead = 100000;
+        int maxRead = 10000;
         int m = 128;
         int trials = 250;
         double alpha = 0.5;
