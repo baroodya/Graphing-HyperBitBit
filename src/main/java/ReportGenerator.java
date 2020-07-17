@@ -39,12 +39,12 @@ public class ReportGenerator {
 
     // Produces a basic 7 graph report
     public void generateBasicReport() {
-//        showEstCardinality();
-//        showNormEstCardinality();
-//        showAbsError();
-//        showRelError();
-//        showMEstCardinality();
-//        showStdDev();
+        showEstCardinality();
+        showNormEstCardinality();
+        showAbsError();
+        showRelError();
+        showMEstCardinality();
+        showStdDev();
         showDistributions();
     }
 

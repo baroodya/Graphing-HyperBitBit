@@ -1,6 +1,5 @@
 package main.java;
 
-import edu.princeton.cs.algs4.StdOut;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
@@ -365,7 +364,6 @@ public class CustomGrapher {
                 temp = yValues[j][k] / t;
                 yValues[j][k] = temp;
                 if (temp > champ) champ = temp;
-                StdOut.print(champ + " ");
             }
 
         Table table = createTable(title, xValues, yValues, headers);
@@ -449,7 +447,6 @@ public class CustomGrapher {
                 temp = yValues[j][k] / t;
                 yValues[j][k] = temp;
                 if (temp > champ) champ = temp;
-                StdOut.print(champ + " ");
             }
 
         Table table = createTable(title, xValues, yValues, headers);
