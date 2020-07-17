@@ -20,6 +20,9 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     boolean[][] bitmaps;
     int[] bitmapRhos;
 
+    // Hash function to produce reproducible randomness
+    protected Bits hasher;
+
     // Constructor initializes variables
     public ProbabilisticCounting(int m, int cardinality) {
         size = 0;
@@ -32,6 +35,8 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         lgM = (int) (Math.log(m) / Math.log(2));
         bitmaps = new boolean[m][length - lgM + 1];
         bitmapRhos = new int[m];
+
+        hasher = new Bits();
     }
 
     // Reads a real element, hashes it, and turns it into a boolean array
@@ -39,7 +44,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         // Increment the size of the experiment (N)
         size++;
 
-        long random = Bits.hash(element);
+        long random = hasher.hash(element);
 
         boolean[] bits = new boolean[length];
         long mask = 1L;
@@ -82,6 +87,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         estimate = 0;
         bitmapRhos = new int[newM];
         bitmaps = new boolean[newM][length - lgM + 1];
+        hasher.randomizeHash();
     }
 
     // Helper method to perform the estimation

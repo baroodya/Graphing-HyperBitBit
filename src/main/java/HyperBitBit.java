@@ -23,6 +23,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // Hash set for randomness
     protected HashSet<String> hset;
+    protected Bits hasher;
 
     public HyperBitBit(double alpha, int m) {
         // Initialize variables
@@ -36,6 +37,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         avg = 0;
 
         hset = new HashSet<>();
+        hasher = new Bits();
     }
 
     // Read in a real element
@@ -84,6 +86,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         sketch = sketch2 = 0;
         avg = 0;
         hset = new HashSet<>();
+        hasher.randomizeHash();
     }
 
     // Helper method that returns the actual estimate of the cardinality
@@ -95,8 +98,9 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // Helper method that manages the longs after each input so that an estimate can be made
     private double count(String s) {
-        if (Bits.r(Bits.hash(s)) > avg) sketch = sketch | (1L << Bits.hash2(s, m));
-        if (Bits.r(Bits.hash(s)) > avg + 1) sketch2 = sketch2 | (1L << Bits.hash2(s, m));
+        if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << Bits.hash2(s, m));
+        if (Bits.r(hasher.hash(s)) > avg + 1)
+            sketch2 = sketch2 | (1L << Bits.hash2(s, m));
         if (Bits.p(sketch) >= alpha * m) {
             sketch = sketch2;
             avg++;
