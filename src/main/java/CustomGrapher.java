@@ -110,6 +110,7 @@ public class CustomGrapher {
 
         Layout layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
+
         Plot.show(new Figure(layout, traces));
     }
 
@@ -348,7 +349,9 @@ public class CustomGrapher {
                     headers[s] = "m = 2";
                     break;
                 case 1:
-                    headers[s] = "m = " + m / 8;
+                    if (m / 8 != 2)
+                        headers[s] = "m = " + m / 8;
+                    else headers[s] = "m = " + 4;
                     break;
                 default:
                     headers[s] = "m = " + m;

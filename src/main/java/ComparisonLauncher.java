@@ -25,10 +25,7 @@ public class ComparisonLauncher {
     protected final double[][] newAlgEstimates;
 
     // The number of different m values tried
-    protected double[] varyMsMC;
-    protected double[] varyMsPC;
-    protected double[] varyMsHBB;
-    protected double[] varyMsNewAlg;
+    protected double[] varyMs;
     // Every estimate collected in all of the trials for each value of m (only the final value of each trial)
     protected double[][] varyMMCEstimates;
     protected double[][] varyMPCEstimates;
@@ -80,10 +77,7 @@ public class ComparisonLauncher {
         HBBEstimates = new double[t][bigN];
         newAlgEstimates = new double[t][bigN];
 
-        varyMsMC = new double[m];
-        varyMsPC = new double[m];
-        varyMsHBB = new double[m];
-        varyMsNewAlg = new double[m];
+        varyMs = new double[m];
 
         varyMMCEstimates = new double[t][m];
         varyMPCEstimates = new double[t][m];
@@ -95,6 +89,8 @@ public class ComparisonLauncher {
         // Run the comparison
         runConstantMExperiment();
         runVariableMExperiment();
+
+        StdOut.println();
     }
 
     // A helper method to read the appropriate type of data and pass it to each algorithm
@@ -167,10 +163,7 @@ public class ComparisonLauncher {
         newAlgorithm.resetAlgorithm(1);
         int counter = 0;
         for (int k = 1; k <= m; k++) {
-            varyMsMC[k - 1] = k;
-            varyMsPC[k - 1] = k;
-            varyMsHBB[k - 1] = k;
-            varyMsNewAlg[k - 1] = k;
+            varyMs[k - 1] = k;
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
@@ -321,8 +314,8 @@ public class ComparisonLauncher {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        String file = "mobydick.txt";
-        boolean synthetic = true;
+        String file = "f0";
+        boolean synthetic = false;
 
         int maxRead = 100000;
         int m = 64;

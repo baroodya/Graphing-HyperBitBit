@@ -39,6 +39,7 @@ public class ExperimentLauncher {
 
     // A double for status updates
     protected double percent;
+    protected double denom;
 
     // A constructor for real data
     public ExperimentLauncher(
@@ -58,6 +59,8 @@ public class ExperimentLauncher {
         syntheticData = false;
 
         percent = 0.0;
+        for (int i = 0; i < m; i++) denom += i;
+        denom *= (m + 1) * t;
 
         // Read in the file
         stream = new StringStream(fileName, bigN);
@@ -72,6 +75,8 @@ public class ExperimentLauncher {
         // run the experiments
         runConstantMExperiment();
         runVariableMExperiment();
+
+        StdOut.println();
     }
 
     // A Constructor for Synthetic data
@@ -137,7 +142,7 @@ public class ExperimentLauncher {
         // Run trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
-            percent = ((double) i / ((double) (m + 1) * t)) * 100;
+            percent = ((double) i / (denom) * 100);
             StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
             StdOut.printf("%.2f", percent);
             StdOut.print("%)");
@@ -179,7 +184,7 @@ public class ExperimentLauncher {
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                percent = ((double) (t + counter) / (double) ((m + 1) * t)) * 100;
+                percent = ((double) ((t + counter) * k) / (denom)) * 100;
                 StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
                 StdOut.printf("%.2f", percent);
                 StdOut.print("%)");
@@ -372,13 +377,13 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "HBB";
-        String file = "f0";
+        String alg = "PC";
+        String file = "f7";
         boolean synthetic = false;
 
-        int maxRead = 10000;
-        int m = 128;
-        int trials = 250;
+        int maxRead = 100000;
+        int m = 256;
+        int trials = 100;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
 

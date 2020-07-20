@@ -7,7 +7,7 @@ public class ComparisonGenerator {
     protected String xAxis; // Title of xAxis (see above)
     protected String yAxis; // Title of yAxis (see above)
 
-    protected final double[] xValues; // Array that holds 0-bigN
+    protected double[] xValues; // Array that holds 0-bigN
 
     protected final CustomGrapher grapher; // The class we will use to graph
     protected final ComparisonLauncher launcher; // The launcher we will get the data from
@@ -47,6 +47,8 @@ public class ComparisonGenerator {
         xAxis = "Number of Substreams (m)";
         yAxis = "Estimated Cardinality (Z_n)";
 
+        xValues = launcher.varyMs;
+
         double[][] data = new double[4][launcher.bigN];
         data[0] = launcher.getAvgMCEstimatesVaryM();
         data[1] = launcher.getAvgPCEstimatesVaryM();
@@ -81,7 +83,7 @@ public class ComparisonGenerator {
         int[] cardinalities = new int[10000];
         for (int i = 0; i < 10000; i++) cardinalities[i] = i;
         CardinalityEstimationAlgorithm hbb = new HyperBitBit(64, 10000);
-        ComparisonLauncher experiment = new ComparisonLauncher(hbb, 10000, 64, cardinalities, 0.5, 100, "synthetic");
+        ComparisonLauncher experiment = new ComparisonLauncher(hbb, 1000, 64, cardinalities, 0.5, 100, "synthetic");
 
         ComparisonGenerator report = new ComparisonGenerator(experiment);
         report.generateFullReport();
