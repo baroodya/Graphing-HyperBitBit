@@ -127,7 +127,7 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ProbabilisticCounting(m, n);
+                algorithm = new ProbabilisticCounting();
                 break;
             case "MC":
                 algorithm = new MinCount(m, n);
@@ -166,7 +166,7 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ProbabilisticCounting(1, n);
+                algorithm = new ProbabilisticCounting();
                 break;
             case "MC":
                 algorithm = new MinCount(1, n);
