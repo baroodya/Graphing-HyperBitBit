@@ -33,6 +33,7 @@ public class ExperimentLauncher {
     protected final int[] cardinalities;
     protected final String alg;
     protected final double alpha;
+    protected final double phi;
 
     // A boolean for determining the type of input data
     protected boolean syntheticData;
@@ -43,7 +44,7 @@ public class ExperimentLauncher {
 
     // A constructor for real data
     public ExperimentLauncher(
-            String alg, int size, int m, int[] cardinalities, double alpha, int trials, String input)
+            String alg, int size, int m, int[] cardinalities, double alpha, double phi, int trials, String input)
             throws FileNotFoundException {
         // Save the constants to be used in other methods
         t = trials;
@@ -53,6 +54,7 @@ public class ExperimentLauncher {
         n = cardinalities[bigN - 1];
         this.alg = alg;
         this.alpha = alpha;
+        this.phi = phi;
         fileName = input;
 
         // the data is real
@@ -80,7 +82,7 @@ public class ExperimentLauncher {
     }
 
     // A Constructor for Synthetic data
-    public ExperimentLauncher(String alg, int size, int m, int[] cardinalities, double alpha, int trials)
+    public ExperimentLauncher(String alg, int size, int m, int[] cardinalities, double alpha, double phi, int trials)
             throws FileNotFoundException {
         // Save the constants to be used in other methods
         bigN = size;
@@ -90,6 +92,7 @@ public class ExperimentLauncher {
         this.m = m;
         this.alg = alg;
         this.alpha = alpha;
+        this.phi = phi;
 
         // Create a new stream of data
         stream = new StringStream("src/datasets/log.07.f3.txt", bigN);
@@ -129,7 +132,7 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ClassicProbabilisticCounting(m);
+                algorithm = new ProbabilisticCounting(m, phi);
                 break;
             case "MC":
                 algorithm = new MinCount(m);
@@ -168,7 +171,7 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ClassicProbabilisticCounting(m);
+                algorithm = new ProbabilisticCounting(m, phi);
                 break;
             case "MC":
                 algorithm = new MinCount(1);
@@ -387,6 +390,7 @@ public class ExperimentLauncher {
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
+        double phi = 1;
         int numberOfTrialsShown = 100;
 
         String input;
@@ -406,12 +410,12 @@ public class ExperimentLauncher {
             size = maxRead;
             cardinalities = new int[size];
             for (int i = 0; i < size; i++) cardinalities[i] = i + 1;
-            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials);
+            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials);
         } else {
             dataType = "Real: " + input;
             size = Exact.total(input, maxRead);
             cardinalities = Exact.countArray(input, maxRead);
-            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, trials, input);
+            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
         }
 
         String algFull;

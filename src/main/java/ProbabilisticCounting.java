@@ -6,22 +6,24 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-public class ClassicProbabilisticCounting implements CardinalityEstimationAlgorithm {
+public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // Constants for calculation
     protected int size;
     protected final int bitmapLength;
     protected int m;
     protected int lgM;
+    protected final double phi;
 
     // Elements necessary for the algorithm
     protected boolean[][] bitmaps;
 
     // Constructor initializes variables
-    public ClassicProbabilisticCounting(int cardinality) {
+    public ProbabilisticCounting(int cardinality, double phi) {
         size = 0;
         m = cardinality;
         lgM = (int) Math.floor(Math.log(m) / Math.log(2));
         bitmapLength = 32;
+        this.phi = phi;
 
         bitmaps = new boolean[m][bitmapLength - lgM];
     }
@@ -53,12 +55,10 @@ public class ClassicProbabilisticCounting implements CardinalityEstimationAlgori
 
     // get estimate of n *right now*
     public double getEstimateOfCardinality() {
-        double PHI = 0.77351;
-
         int[] allPs = rho(bitmaps);
         double[] allEstimates = new double[m];
         for (int i = 0; i < allEstimates.length; i++)
-            allEstimates[i] = (1 / PHI) * Math.pow(2, (allPs[i] + lgM));
+            allEstimates[i] = (1 / phi) * Math.pow(2, (allPs[i] + lgM));
 
         return arithmeticMean(allEstimates);
     }
@@ -124,7 +124,7 @@ public class ClassicProbabilisticCounting implements CardinalityEstimationAlgori
         int m = 64;
         boolean real = false;
 
-        ClassicProbabilisticCounting counter = new ClassicProbabilisticCounting(m);
+        ProbabilisticCounting counter = new ProbabilisticCounting(m, 0.77351);
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
