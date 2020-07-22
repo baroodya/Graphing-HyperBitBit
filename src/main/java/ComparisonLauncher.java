@@ -57,7 +57,7 @@ public class ComparisonLauncher {
 
         // Initialize algorithms
         MinCount = new MinCount(m, n);
-        ProbabilisticCounting = new ProbabilisticCounting();
+        ProbabilisticCounting = new ClassicProbabilisticCounting(m);
         HyperBitBit = new HyperBitBit(alpha, m);
         newAlgorithm = alg;
 

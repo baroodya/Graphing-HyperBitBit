@@ -127,7 +127,7 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ProbabilisticCounting();
+                algorithm = new ClassicProbabilisticCounting(m);
                 break;
             case "MC":
                 algorithm = new MinCount(m, n);
@@ -166,7 +166,7 @@ public class ExperimentLauncher {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
-                algorithm = new ProbabilisticCounting();
+                algorithm = new ClassicProbabilisticCounting(m);
                 break;
             case "MC":
                 algorithm = new MinCount(1, n);
@@ -379,10 +379,10 @@ public class ExperimentLauncher {
 
         String alg = "PC";
         String file = "f7";
-        boolean synthetic = false;
+        boolean synthetic = true;
 
         int maxRead = 100000;
-        int m = 256;
+        int m = 64;
         int trials = 100;
         double alpha = 0.5;
         int numberOfTrialsShown = 100;
