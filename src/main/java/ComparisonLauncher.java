@@ -274,26 +274,50 @@ public class ComparisonLauncher {
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgMCEstimatesVaryM() {
+        double[][] relErrors = new double[t][bigN];
+        for (int i = 0; i < t; i++) {
+            for (int j = 0; j < bigN; j++) {
+                relErrors[i][j] = (Math.abs(MCEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            }
+        }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(varyMMCEstimates, m);
+        return averageOverTrials(relErrors, m);
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgPCEstimatesVaryM() {
+        double[][] relErrors = new double[t][bigN];
+        for (int i = 0; i < t; i++) {
+            for (int j = 0; j < bigN; j++) {
+                relErrors[i][j] = (Math.abs(PCEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            }
+        }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(varyMPCEstimates, m);
+        return averageOverTrials(relErrors, m);
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgHBBEstimatesVaryM() {
+        double[][] relErrors = new double[t][bigN];
+        for (int i = 0; i < t; i++) {
+            for (int j = 0; j < bigN; j++) {
+                relErrors[i][j] = (Math.abs(HBBEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            }
+        }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(varyMHBBEstimates, m);
+        return averageOverTrials(relErrors, m);
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgNewAlgEstimatesVaryM() {
+        double[][] relErrors = new double[t][bigN];
+        for (int i = 0; i < t; i++) {
+            for (int j = 0; j < bigN; j++) {
+                relErrors[i][j] = (Math.abs(newAlgEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            }
+        }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(varyMNewAlgEstimates, m);
+        return averageOverTrials(relErrors, m);
     }
 
     // Helper method to average a 2D array vertically
@@ -315,7 +339,7 @@ public class ComparisonLauncher {
 
     public static void main(String[] args) throws FileNotFoundException {
         String file = "f0";
-        boolean synthetic = false;
+        boolean synthetic = true;
 
         int maxRead = 100000;
         int m = 64;

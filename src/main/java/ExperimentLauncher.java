@@ -390,7 +390,7 @@ public class ExperimentLauncher {
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
-        double phi = 1;
+        double phi = 0.77351;
         int numberOfTrialsShown = 100;
 
         String input;

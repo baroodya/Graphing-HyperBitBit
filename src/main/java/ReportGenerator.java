@@ -270,7 +270,7 @@ public class ReportGenerator {
     public static void main(String[] args) throws FileNotFoundException {
         int[] cardinalities = new int[100000];
         for (int i = 0; i < 100000; i++) cardinalities[i] = i;
-        ExperimentLauncher experiment = new ExperimentLauncher("MC", 100000, 256, cardinalities, 0.5, 100);
+        ExperimentLauncher experiment = new ExperimentLauncher("MC", 100000, 256, cardinalities, 0.5, 0.77351, 100);
 
         ReportGenerator report = new ReportGenerator(experiment, 50);
         report.generateFullReport();

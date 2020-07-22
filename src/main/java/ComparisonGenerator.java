@@ -45,7 +45,7 @@ public class ComparisonGenerator {
     public void showVaryMComparison() {
         title = "Comparison of the accuracy of your Algorithm with PC, MC, and HBB";
         xAxis = "Number of Substreams (m)";
-        yAxis = "Estimated Cardinality (Z_n)";
+        yAxis = "Relative Error (|Z_n - n|/n)";
 
         xValues = launcher.varyMs;
 
