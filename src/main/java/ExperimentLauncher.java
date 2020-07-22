@@ -98,6 +98,8 @@ public class ExperimentLauncher {
         syntheticData = true;
 
         percent = 0.0;
+        for (int i = 0; i < m; i++) denom += i;
+        denom *= (m + 1) * t;
 
         // Create 2D trial x size arrays to hold data points for each trial
         sizes = new double[bigN];
@@ -130,7 +132,7 @@ public class ExperimentLauncher {
                 algorithm = new ClassicProbabilisticCounting(m);
                 break;
             case "MC":
-                algorithm = new MinCount(m, n);
+                algorithm = new MinCount(m);
                 break;
             case "HBB":
                 algorithm = new HyperBitBit(alpha, m);
@@ -142,7 +144,7 @@ public class ExperimentLauncher {
         // Run trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
-            percent = ((double) i / (denom) * 100);
+            percent = ((double) i / (denom)) * 100;
             StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
             StdOut.printf("%.2f", percent);
             StdOut.print("%)");
@@ -169,7 +171,7 @@ public class ExperimentLauncher {
                 algorithm = new ClassicProbabilisticCounting(m);
                 break;
             case "MC":
-                algorithm = new MinCount(1, n);
+                algorithm = new MinCount(1);
                 break;
             case "HBB":
                 algorithm = new HyperBitBit(alpha, 1);

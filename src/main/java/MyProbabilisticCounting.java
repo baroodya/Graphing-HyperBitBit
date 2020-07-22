@@ -53,12 +53,10 @@ public class MyProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
     // get estimate of n *right now*
     public double getEstimateOfCardinality() {
-        double PHI = 1;
-
         int[] allPs = rho(bitmaps);
         double[] allEstimates = new double[m];
         for (int i = 0; i < allEstimates.length; i++)
-            allEstimates[i] = (1 / PHI) * Math.pow(2, (allPs[i] + lgM));
+            allEstimates[i] = Math.pow(2, (allPs[i] + lgM));
 
         return arithmeticMean(allEstimates);
     }

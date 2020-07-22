@@ -8,7 +8,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     // Constants  for experiment
     protected int size;
     protected int m;
-    protected final int n;
 
     // Variable to hold the current estimate of the cardinality
     protected double estimate;
@@ -23,10 +22,9 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
     // Constructor initializes constants and sets all minSeen entries to INFINITY
-    public MinCount(int m, int cardinality) {
+    public MinCount(int m) {
         size = 0;
         this.m = m;
-        n = cardinality;
 
         estimate = 0;
         minSeen = new double[m];
@@ -95,7 +93,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         int size = 100000;
         int m = 100;
         int cardinality = 100000;
-        MinCount counter = new MinCount(m, cardinality);
+        MinCount counter = new MinCount(m);
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());

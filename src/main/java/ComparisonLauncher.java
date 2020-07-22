@@ -56,7 +56,7 @@ public class ComparisonLauncher {
         this.alpha = alpha;
 
         // Initialize algorithms
-        MinCount = new MinCount(m, n);
+        MinCount = new MinCount(m);
         ProbabilisticCounting = new ClassicProbabilisticCounting(m);
         HyperBitBit = new HyperBitBit(alpha, m);
         newAlgorithm = alg;
@@ -337,7 +337,7 @@ public class ComparisonLauncher {
         }
 
         // This is what will change for the "client"'s algorithm
-        CardinalityEstimationAlgorithm alg = new HyperBitBit(alpha, m);
+        CardinalityEstimationAlgorithm alg = new MyProbabilisticCounting(m);
 
         ComparisonLauncher launcher = new ComparisonLauncher(alg, size, m, cardinalities, alpha, trials, input);
 

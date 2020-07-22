@@ -53,7 +53,7 @@ public class ClassicProbabilisticCounting implements CardinalityEstimationAlgori
 
     // get estimate of n *right now*
     public double getEstimateOfCardinality() {
-        double PHI = 1;
+        double PHI = 0.77351;
 
         int[] allPs = rho(bitmaps);
         double[] allEstimates = new double[m];
