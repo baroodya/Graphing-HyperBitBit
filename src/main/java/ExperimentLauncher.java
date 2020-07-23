@@ -61,8 +61,7 @@ public class ExperimentLauncher {
         syntheticData = false;
 
         percent = 0.0;
-        for (int i = 0; i < m; i++) denom += i;
-        denom *= (m + 1) * t;
+        denom = t * m * ((m + 3.0) / 2.0);
 
         // Read in the file
         stream = new StringStream(fileName, bigN);
@@ -101,8 +100,7 @@ public class ExperimentLauncher {
         syntheticData = true;
 
         percent = 0.0;
-        for (int i = 0; i < m; i++) denom += i;
-        denom *= (m + 1) * t;
+        denom = t * m * ((m + 3.0) / 2.0);
 
         // Create 2D trial x size arrays to hold data points for each trial
         sizes = new double[bigN];
@@ -147,8 +145,8 @@ public class ExperimentLauncher {
         // Run trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
-            percent = ((double) i / (denom)) * 100;
-            StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
+            percent = ((double) (i * m) / (denom)) * 100;
+            StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + (i + 1) + "/" + t + ". (");
             StdOut.printf("%.2f", percent);
             StdOut.print("%)");
             j = 0;
@@ -183,14 +181,14 @@ public class ExperimentLauncher {
                 throw new IllegalArgumentException("This type of Algorithm is not supported.");
         }
 
-        int counter = 0;
+        int counter = m * t;
         for (int k = 1; k <= m; k++) {
             varyMs[k - 1] = k;
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                percent = ((double) ((t + counter) * k) / (denom)) * 100;
-                StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
+                percent = ((double) (counter + 1) / (denom)) * 100;
+                StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + (i + 1) + "/" + t + ". (");
                 StdOut.printf("%.2f", percent);
                 StdOut.print("%)");
                 for (String element : stream) readElement(element);
@@ -199,7 +197,7 @@ public class ExperimentLauncher {
 
                 algorithm.resetAlgorithm(k + 1);
                 stream.resetStream();
-                counter++;
+                counter += k;
             }
         }
     }
@@ -382,9 +380,9 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "PC";
+        String alg = "MC";
         String file = "f7";
-        boolean synthetic = true;
+        boolean synthetic = false;
 
         int maxRead = 100000;
         int m = 64;

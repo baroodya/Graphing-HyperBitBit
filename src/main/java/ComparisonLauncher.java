@@ -45,6 +45,7 @@ public class ComparisonLauncher {
 
     // A double for status updates
     protected double percent;
+    protected double denom;
 
     public ComparisonLauncher(CardinalityEstimationAlgorithm alg, int size, int m, int[] cardinalities, double alpha, int trials, String input) throws FileNotFoundException {
         // Copy Constants
@@ -85,6 +86,7 @@ public class ComparisonLauncher {
         varyMNewAlgEstimates = new double[t][m];
 
         percent = 0.0;
+        denom = t * m * ((m + 3.0) / 2.0);
 
         // Run the comparison
         runConstantMExperiment();
@@ -114,8 +116,8 @@ public class ComparisonLauncher {
         // Run 't' trials and update 2D arrays
         int j;
         for (int i = 0; i < t; i++) {
-            percent = ((double) i / ((double) (m + 1) * t)) * 100;
-            StdOut.print("\r Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
+            percent = ((double) (i * m) / (denom)) * 100;
+            StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
             StdOut.printf("%.2f", percent);
             StdOut.print("%)");
             j = 0;
@@ -161,14 +163,14 @@ public class ComparisonLauncher {
         ProbabilisticCounting.resetAlgorithm(1);
         HyperBitBit.resetAlgorithm(1);
         newAlgorithm.resetAlgorithm(1);
-        int counter = 0;
+        int counter = m * t;
         for (int k = 1; k <= m; k++) {
             varyMs[k - 1] = k;
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                percent = ((double) (t + counter) / (double) ((m + 1) * t)) * 100;
-                StdOut.print("\r Running Variable m = " + k + "/" + m + ". On trial " + i + "/" + t + ". (");
+                percent = ((double) (counter + 1) / (denom)) * 100;
+                StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + (i + 1) + "/" + t + ". (");
                 StdOut.printf("%.2f", percent);
                 StdOut.print("%)");
 
@@ -199,7 +201,7 @@ public class ComparisonLauncher {
                 HyperBitBit.resetAlgorithm(k + 1);
                 newAlgorithm.resetAlgorithm(k + 1);
                 if (!syntheticData) stream.resetStream();
-                counter++;
+                counter += k;
             }
         }
     }
@@ -276,8 +278,8 @@ public class ComparisonLauncher {
     public double[] getAvgMCEstimatesVaryM() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
-            for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(MCEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            for (int j = 0; j < m; j++) {
+                relErrors[i][j] = (Math.abs(varyMMCEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
@@ -288,8 +290,8 @@ public class ComparisonLauncher {
     public double[] getAvgPCEstimatesVaryM() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
-            for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(PCEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            for (int j = 0; j < m; j++) {
+                relErrors[i][j] = (Math.abs(varyMPCEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
@@ -300,8 +302,8 @@ public class ComparisonLauncher {
     public double[] getAvgHBBEstimatesVaryM() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
-            for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(HBBEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            for (int j = 0; j < m; j++) {
+                relErrors[i][j] = (Math.abs(varyMHBBEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
@@ -312,8 +314,8 @@ public class ComparisonLauncher {
     public double[] getAvgNewAlgEstimatesVaryM() {
         double[][] relErrors = new double[t][bigN];
         for (int i = 0; i < t; i++) {
-            for (int j = 0; j < bigN; j++) {
-                relErrors[i][j] = (Math.abs(newAlgEstimates[i][j] - cardinalities[j])) / cardinalities[j];
+            for (int j = 0; j < m; j++) {
+                relErrors[i][j] = (Math.abs(varyMNewAlgEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
@@ -339,7 +341,7 @@ public class ComparisonLauncher {
 
     public static void main(String[] args) throws FileNotFoundException {
         String file = "f0";
-        boolean synthetic = true;
+        boolean synthetic = false;
 
         int maxRead = 100000;
         int m = 64;
