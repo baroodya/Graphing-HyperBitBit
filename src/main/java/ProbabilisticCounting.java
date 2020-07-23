@@ -129,7 +129,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     public static void main(String[] args) throws FileNotFoundException {
         int size = 100000;
         int m = 64;
-        boolean real = false;
+        boolean synthetic = true;
 
         ProbabilisticCounting counter = new ProbabilisticCounting(m, 0.77351);
 
@@ -138,7 +138,18 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         StdOut.print("\n");
 
         // Read in the file
-        if (real) {
+        if (synthetic) {
+            double random = 0;
+            for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+
+            StdOut.println("Size = " + counter.getSize());
+            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+            StdOut.println(
+                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
+            StdOut.println(
+                    "Rel. Error = "
+                            + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
+        } else {
             String inputFile = "src/datasets/mobydick.txt";
             int N = 100000;
             StringStream stream = new StringStream(inputFile, N);
@@ -153,17 +164,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
             StdOut.println(
                     "Rel. Error = "
                             + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
-        } else {
-            double random = 0;
-            for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
-
-            StdOut.println("Size = " + counter.getSize());
-            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-            StdOut.println(
-                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
-            StdOut.println(
-                    "Rel. Error = "
-                            + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
         }
     }
 }
