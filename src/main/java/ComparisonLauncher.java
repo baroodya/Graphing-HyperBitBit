@@ -169,7 +169,7 @@ public class ComparisonLauncher {
 
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
-                percent = ((double) (counter + 1) / (denom)) * 100;
+                percent = ((double) (counter + k) / (denom)) * 100;
                 StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + (i + 1) + "/" + t + ". (");
                 StdOut.printf("%.2f", percent);
                 StdOut.print("%)");
