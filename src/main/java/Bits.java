@@ -2,18 +2,21 @@ package main.java;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import randomhash.RandomHashes;
 
 public class Bits {
     protected double a;
     protected double b;
+    protected randomhash.RandomHashes hasher;
 
     public Bits() {
         a = StdRandom.uniform();
         b = StdRandom.uniform();
+        hasher = new RandomHashes();
     }
 
     public long hash(String s) {
-        long x = (long) ((a * s.hashCode()) + b % (Integer.MAX_VALUE - 1));
+        long x = (long) ((a * hasher.hash(s)) + b % (Integer.MAX_VALUE - 1));
         return (x & 0xFFFFFFFFL) | (x << 32);
     }
 
@@ -22,8 +25,8 @@ public class Bits {
         b = StdRandom.uniform();
     }
 
-    public static int hash2(String s, int M) {
-        long x = s.hashCode();
+    public int hash2(String s, int M) {
+        long x = hasher.hash(s);
         return (int) ((x >> 22) & 0x3FFL) % M;
     }
 
