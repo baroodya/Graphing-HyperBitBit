@@ -20,7 +20,7 @@ public class RandomHashes {
 
 
     public RandomHashes() {
-        this((int) 1);
+        this(1);
     }
 
     public RandomHashes(int count) {
@@ -28,7 +28,7 @@ public class RandomHashes {
     }
 
     public RandomHashes(long seed) {
-        this(seed, (int) 1);
+        this(seed, 1);
     }
 
     public RandomHashes(long seed, int count) {
@@ -51,7 +51,7 @@ public class RandomHashes {
     }
 
     protected final static long affineTransform(long x, long a, long b) {
-        return (long) (((long) a) * x + b);
+        return ((a) * x + b);
     }
 
     protected final static long truncateLong(long value) {

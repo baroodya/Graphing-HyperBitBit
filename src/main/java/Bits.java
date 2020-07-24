@@ -56,13 +56,13 @@ public class Bits {
     }
 
     public static String toString(long x, int w) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < w; i++) {
-            if ((x & 1) == 0) s = '0' + s;
-            else s = '1' + s;
+            if ((x & 1) == 0) s.insert(0, '0');
+            else s.insert(0, '1');
             x = x >> 1;
         }
-        return s;
+        return s.toString();
     }
 
     public static void main(String[] args) {
