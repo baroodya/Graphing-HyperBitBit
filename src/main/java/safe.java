@@ -21,9 +21,10 @@ public class safe {
         Bits hasher = new Bits();
         for (String s : stream) {
             hset.add(s);
-            if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << Bits.hash2(s, M));
+            if (Bits.r(hasher.hash(s)) > avg)
+                sketch = sketch | (1L << hasher.hash2(s, M));
             if (Bits.r(hasher.hash(s)) > avg + 1)
-                sketch2 = sketch2 | (1L << Bits.hash2(s, M));
+                sketch2 = sketch2 | (1L << hasher.hash2(s, M));
             if (Bits.p(sketch) >= alpha * M) {
                 sketch = sketch2;
                 avg++;

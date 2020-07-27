@@ -20,29 +20,43 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // Hash Function to randomize the elements
     protected Bits hasher;
 
+    protected double maxRandom;
+    protected double minRandom;
+
     // Constructor initializes variables
     public ProbabilisticCounting(int cardinality, double phi) {
         size = 0;
         m = cardinality;
         lgM = (int) Math.floor(Math.log(m) / Math.log(2));
-        bitmapLength = 32;
+        bitmapLength = 128;
         this.phi = phi;
 
         bitmaps = new boolean[m][bitmapLength - lgM];
 
         hasher = new Bits();
+
+        maxRandom = 0;
+        minRandom = Double.POSITIVE_INFINITY;
     }
 
     // Reads a real element, hashes it, and turns it into a binary String
     public void readElement(String element) {
         size++;
 
-        count(Long.toBinaryString(hasher.hash(element)));
+        long hashed = hasher.hash(element);
+        double random = hashed / (double) Long.MAX_VALUE;
+        if (random > maxRandom) maxRandom = random;
+        if (random < minRandom) minRandom = random;
+
+        count(Long.toBinaryString(hashed));
     }
 
     // Reads a random element and creates a random boolean array
     public void readSyntheticElement(double element) {
         size++;
+
+        if (element > maxRandom) maxRandom = element;
+        if (element < minRandom) minRandom = element;
 
         StringBuilder newElement = new StringBuilder();
         for (int i = 0; i < bitmapLength; i++)
@@ -59,12 +73,20 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         return size;
     }
 
+    public double getMaxRandom() {
+        return maxRandom;
+    }
+
+    public double getMinRandom() {
+        return minRandom;
+    }
+
     // get estimate of n *right now*
     public double getEstimateOfCardinality() {
         int[] allPs = rho(bitmaps);
         double[] allEstimates = new double[m];
         for (int i = 0; i < allEstimates.length; i++)
-            allEstimates[i] = (1 / phi) * Math.pow(2, (allPs[i] + lgM));
+            allEstimates[i] = (1 / phi) * m * Math.pow(2, (allPs[i]));
 
         return arithmeticMean(allEstimates);
     }
@@ -76,6 +98,8 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         size = 0;
         bitmaps = new boolean[m][bitmapLength - lgM];
         hasher.randomizeHash();
+        maxRandom = 0;
+        minRandom = Double.POSITIVE_INFINITY;
     }
 
     // Helper method to manage a new element
@@ -98,7 +122,9 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // Helper method to perform the rho operation
     private int rho(String bitString, int start) {
         int index = bitString.indexOf('0', start) - start;
-        return Math.max(index, 0);
+        if (index < bitString.length())
+            return Math.max(index, 0);
+        else return bitString.length() - 1;
     }
 
     // Helper method to calculate a rho value for every bitMap
@@ -139,8 +165,8 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
         // Read in the file
         if (synthetic) {
-            double random = 0;
-            for (int i = 0; i < size; i++) counter.readSyntheticElement(random);
+            for (int i = 0; i < size; i++)
+                counter.readSyntheticElement(StdRandom.uniform());
 
             StdOut.println("Size = " + counter.getSize());
             StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());

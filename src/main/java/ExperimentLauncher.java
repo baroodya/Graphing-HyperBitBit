@@ -42,6 +42,10 @@ public class ExperimentLauncher {
     protected double percent;
     protected double denom;
 
+    private double maxRange;
+    private double minRange;
+    private double range;
+
     // A constructor for real data
     public ExperimentLauncher(
             String alg, int size, int m, int[] cardinalities, double alpha, double phi, int trials, String input)
@@ -73,11 +77,15 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
+        maxRange = 0;
+        minRange = Double.POSITIVE_INFINITY;
+
+
         // run the experiments
         runConstantMExperiment();
         runVariableMExperiment();
 
-        StdOut.println();
+        StdOut.print("\rProducing Graphs. Almost done! \n");
     }
 
     // A Constructor for Synthetic data
@@ -109,10 +117,14 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
+        maxRange = 0;
+        minRange = Double.POSITIVE_INFINITY;
+
         // Run the experiments
         runConstantMExperiment();
         runVariableMExperiment();
-        StdOut.print("\r Producing Graphs. Almost done! \n");
+
+        StdOut.print("\rProducing Graphs. Almost done! \n");
     }
 
     // A helper method to read an element, no matter what kind
@@ -159,6 +171,11 @@ public class ExperimentLauncher {
                 estimates[i][j] = algorithm.getEstimateOfCardinality();
                 j++;
             }
+            range = algorithm.getMaxRandom() - algorithm.getMinRandom();
+            if (range > maxRange)
+                maxRange = range;
+            if (range < minRange)
+                minRange = range;
             algorithm.resetAlgorithm(m);
             stream.resetStream();
         }
@@ -195,6 +212,11 @@ public class ExperimentLauncher {
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
 
+                range = algorithm.getMaxRandom() - algorithm.getMinRandom();
+                if (range > maxRange)
+                    maxRange = range;
+                if (range < minRange)
+                    minRange = range;
                 algorithm.resetAlgorithm(k + 1);
                 stream.resetStream();
                 counter += k;
@@ -388,7 +410,7 @@ public class ExperimentLauncher {
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
-        double phi = 0.77351;
+        double phi = 1 / 0.77351;
         int numberOfTrialsShown = 100;
 
         String input;
@@ -436,8 +458,11 @@ public class ExperimentLauncher {
         report.generateBasicReport();
 
         String alphaString = "";
+        String phiString = "";
         if (alg.equals("HBB")) alphaString += alpha;
         else alphaString = "N/A";
+        if (alg.equals("PC")) phiString += phi;
+        else phiString = "N/A";
 
         StdOut.println("Algorithm: " + algFull);
         StdOut.println("Data type: " + dataType);
@@ -446,7 +471,10 @@ public class ExperimentLauncher {
         StdOut.println("Substreams (m): " + m);
         StdOut.println("Trials (T): " + trials);
         StdOut.println("𝛼: " + alphaString);
+        StdOut.println("\uD835\uDF11: " + phiString);
 
         StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
+
+        StdOut.println("\nMax Range = " + launcher.maxRange + "\nMin Range= " + launcher.minRange);
     }
 }

@@ -25,6 +25,9 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     protected HashSet<String> hset;
     protected Bits hasher;
 
+    protected double maxRandom;
+    protected double minRandom;
+
     public HyperBitBit(double alpha, int m) {
         // Initialize variables
         estimate = 0;
@@ -38,10 +41,18 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
         hset = new HashSet<>();
         hasher = new Bits();
+
+        maxRandom = 0;
+        minRandom = Double.POSITIVE_INFINITY;
     }
 
     // Read in a real element
     public void readElement(String element) {
+        long hashed = hasher.hash(element);
+        double random = hashed / (double) Long.MAX_VALUE;
+        if (random > maxRandom) maxRandom = random;
+        if (random < minRandom) minRandom = random;
+
         hset.add(element);
         cnt++;
         estimate = count(element);
@@ -49,6 +60,10 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // REad in a synthetic element
     public void readSyntheticElement(double element) {
+
+        if (element > maxRandom) maxRandom = element;
+        if (element < minRandom) minRandom = element;
+
         StringBuilder randoms = new StringBuilder();
 
         // Create a random string of bits
@@ -69,6 +84,14 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         return cnt;
     }
 
+    public double getMaxRandom() {
+        return maxRandom;
+    }
+
+    public double getMinRandom() {
+        return minRandom;
+    }
+
     // Returns the actual cardinality (n) of the algorithm
     public int getCardinality() {
         return hset.size();
@@ -87,6 +110,8 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         avg = 0;
         hset = new HashSet<>();
         hasher.randomizeHash();
+        maxRandom = 0;
+        minRandom = Double.POSITIVE_INFINITY;
     }
 
     // Helper method that returns the actual estimate of the cardinality

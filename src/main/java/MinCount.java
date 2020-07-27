@@ -3,6 +3,8 @@ package main.java;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
+import java.io.FileNotFoundException;
+
 public class MinCount implements CardinalityEstimationAlgorithm {
 
     // Constants  for experiment
@@ -21,6 +23,9 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     // Magic Number
     private final double INFINITY = Double.POSITIVE_INFINITY;
 
+    protected double maxRandom;
+    protected double minRandom;
+
     // Constructor initializes constants and sets all minSeen entries to INFINITY
     public MinCount(int m) {
         size = 0;
@@ -31,6 +36,9 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
 
         hasher = new Bits();
+
+        maxRandom = 0;
+        minRandom = INFINITY;
     }
 
     // Reads in a real element, hashes it, and calculates a new estimate
@@ -39,6 +47,8 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         size++;
 
         double random = Math.abs(hasher.hash(element) / (double) Long.MAX_VALUE);
+        if (random > maxRandom) maxRandom = random;
+        if (random < minRandom) minRandom = random;
 
         // Calculate a new estimate for the cardinality of the stream
         estimate = newEstimate(random);
@@ -49,6 +59,8 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         // Increment the size of the experiment (N)
         size++;
 
+        if (element > maxRandom) maxRandom = element;
+        if (element < minRandom) minRandom = element;
         // Calculate a new estimate for the cardinality of the stream
         estimate = newEstimate(element);
     }
@@ -56,6 +68,14 @@ public class MinCount implements CardinalityEstimationAlgorithm {
 
     public int getSize() { // exact number of calls to readElement()
         return size;
+    }
+
+    public double getMaxRandom() {
+        return maxRandom;
+    }
+
+    public double getMinRandom() {
+        return minRandom;
     }
 
     public double getEstimateOfCardinality() { // get estimate of n *right now*
@@ -70,6 +90,9 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         minSeen = new double[m];
         for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
         hasher.randomizeHash();
+
+        maxRandom = 0;
+        minRandom = INFINITY;
     }
 
     // Calculate a new estimate based on the addition of a new random double
@@ -79,38 +102,56 @@ public class MinCount implements CardinalityEstimationAlgorithm {
 
         double sum = 0;
         double cardinality = estimate;
-        if (minSeen[j] > ((random) - (j))) {
-            minSeen[j] = random - (j);
+        if (minSeen[j] > (random - j)) {
+            minSeen[j] = random - j;
 
-            for (int k = 0; k < m; k++) if (minSeen[k] != INFINITY) sum += minSeen[k];
-            cardinality = (((m * (m - 1)) / sum)) - 1;
+            for (int k = 0; k < m; k++)
+                if (minSeen[k] != INFINITY)
+                    sum += minSeen[k];
+            cardinality = (((m * (m - 1)) / sum));
         }
 
         return cardinality;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         int size = 100000;
-        int m = 100;
-        int cardinality = 100000;
+        int m = 64;
+        boolean synthetic = false;
         MinCount counter = new MinCount(m);
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
         StdOut.print("\n");
 
-        for (int i = 0; i < size; i++) {
-            counter.readSyntheticElement(StdRandom.uniform());
-        }
+        // Read in the file
+        if (synthetic) {
+            for (int i = 0; i < size; i++)
+                counter.readSyntheticElement(StdRandom.uniform());
 
-        StdOut.println("Size = " + counter.getSize());
-        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.println("Actual Cardinality = " + cardinality);
-        StdOut.println(
-                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
-        StdOut.println(
-                "Rel. Error = "
-                        + (Math.abs(counter.getEstimateOfCardinality() - cardinality)
-                        / cardinality));
+            StdOut.println("Size = " + counter.getSize());
+            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+            StdOut.println(
+                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
+            StdOut.println(
+                    "Rel. Error = "
+                            + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
+        } else {
+            String inputFile = "src/datasets/mobydick.txt";
+            int N = 100000;
+            StringStream stream = new StringStream(inputFile, N);
+
+            for (String line : stream) counter.readElement(line);
+
+            int cardinality = Exact.count(stream);
+            StdOut.println("Size = " + counter.getSize());
+            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+            StdOut.println(
+                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
+            StdOut.println(
+                    "Rel. Error = "
+                            + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
+            StdOut.println("\nMax = " + counter.maxRandom + "\nMin = " + counter.minRandom + "\nRange = " + (counter.maxRandom - counter.minRandom));
+        }
     }
 }

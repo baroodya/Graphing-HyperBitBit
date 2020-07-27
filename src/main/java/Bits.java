@@ -10,8 +10,8 @@ public class Bits {
     protected randomhash.RandomHashes hasher;
 
     public Bits() {
-        a = StdRandom.uniform();
-        b = StdRandom.uniform();
+        a = 1;
+        b = 0;
         hasher = new RandomHashes();
     }
 
