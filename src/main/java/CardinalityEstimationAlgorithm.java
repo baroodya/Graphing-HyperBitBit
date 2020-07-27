@@ -11,8 +11,6 @@ public interface CardinalityEstimationAlgorithm {
     /* output methods */
     int getSize(); // exact number of calls to readElement()
 
-    double getRange();
-
     double getEstimateOfCardinality(); // get estimate of n *right now*
 
     // Reset the algorithm such that this.m = m

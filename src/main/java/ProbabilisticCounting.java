@@ -20,9 +20,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // Hash Function to randomize the elements
     protected Bits hasher;
 
-    protected double maxRandom;
-    protected double minRandom;
-
     // Constructor initializes variables
     public ProbabilisticCounting(int cardinality, double phi) {
         size = 0;
@@ -35,8 +32,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
         hasher = new Bits();
 
-        maxRandom = 0;
-        minRandom = Double.POSITIVE_INFINITY;
     }
 
     // Reads a real element, hashes it, and turns it into a binary String
@@ -44,9 +39,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         size++;
 
         long hashed = hasher.hash(element);
-        double random = Math.abs(hashed / (double) Long.MAX_VALUE);
-        if (random > maxRandom) maxRandom = random;
-        if (random < minRandom) minRandom = random;
 
         count(Long.toBinaryString(hashed));
     }
@@ -54,9 +46,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // Reads a random element and creates a random boolean array
     public void readSyntheticElement(double element) {
         size++;
-
-        if (element > maxRandom) maxRandom = element;
-        if (element < minRandom) minRandom = element;
 
         StringBuilder newElement = new StringBuilder();
         for (int i = 0; i < bitmapLength; i++)
@@ -71,10 +60,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     // exact number of calls to readElement()
     public int getSize() {
         return size;
-    }
-
-    public double getRange() {
-        return maxRandom - minRandom;
     }
 
     // get estimate of n *right now*
@@ -94,8 +79,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         size = 0;
         bitmaps = new boolean[m][bitmapLength - lgM];
         hasher.randomizeHash();
-        maxRandom = 0;
-        minRandom = Double.POSITIVE_INFINITY;
     }
 
     // Helper method to manage a new element
@@ -104,12 +87,16 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         int whichMap = 0;
 
         int i = lgM;
+        // element is a bitstring:
+        // 0...lgM......32
+        // First lgM bits: whichMap
         while (i > 0) {
             if (element.charAt(i - 1) == '1') whichMap += multiplier;
             multiplier *= 2;
             i--;
         }
 
+        // remaining bits: rho
         int rhoElement = rho(element, lgM);
 
         bitmaps[whichMap][rhoElement] = true;

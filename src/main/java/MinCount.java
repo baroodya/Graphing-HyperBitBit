@@ -20,11 +20,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     // Hash function to produce reproducible randomness
     protected Bits hasher;
 
-    // Magic Number
-    private final double INFINITY = Double.POSITIVE_INFINITY;
-
-    protected double maxRandom;
-    protected double minRandom;
 
     // Constructor initializes constants and sets all minSeen entries to INFINITY
     public MinCount(int m) {
@@ -33,12 +28,9 @@ public class MinCount implements CardinalityEstimationAlgorithm {
 
         estimate = 0;
         minSeen = new double[m];
-        for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
+        for (int i = 0; i < m; i++) minSeen[i] = 1;
 
         hasher = new Bits();
-
-        maxRandom = 0;
-        minRandom = INFINITY;
     }
 
     // Reads in a real element, hashes it, and calculates a new estimate
@@ -47,8 +39,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         size++;
 
         double random = Math.abs(hasher.hash(element) / (double) Long.MAX_VALUE);
-        if (random > maxRandom) maxRandom = random;
-        if (random < minRandom) minRandom = random;
 
         // Calculate a new estimate for the cardinality of the stream
         estimate = newEstimate(random);
@@ -59,8 +49,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         // Increment the size of the experiment (N)
         size++;
 
-        if (element > maxRandom) maxRandom = element;
-        if (element < minRandom) minRandom = element;
         // Calculate a new estimate for the cardinality of the stream
         estimate = newEstimate(element);
     }
@@ -68,10 +56,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
 
     public int getSize() { // exact number of calls to readElement()
         return size;
-    }
-
-    public double getRange() {
-        return maxRandom - minRandom;
     }
 
     public double getEstimateOfCardinality() { // get estimate of n *right now*
@@ -84,11 +68,8 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         size = 0;
         estimate = 0;
         minSeen = new double[m];
-        for (int i = 0; i < m; i++) minSeen[i] = INFINITY;
+        for (int i = 0; i < m; i++) minSeen[i] = 1;
         hasher.randomizeHash();
-
-        maxRandom = 0;
-        minRandom = INFINITY;
     }
 
     // Calculate a new estimate based on the addition of a new random double
@@ -102,8 +83,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
             minSeen[j] = random - j;
 
             for (int k = 0; k < m; k++)
-                if (minSeen[k] != INFINITY)
-                    sum += minSeen[k];
+                sum += minSeen[k];
             cardinality = (((m * (m - 1)) / sum));
         }
 
@@ -147,7 +127,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
             StdOut.println(
                     "Rel. Error = "
                             + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
-            StdOut.println("\nMax = " + counter.maxRandom + "\nMin = " + counter.minRandom + "\nRange = " + (counter.maxRandom - counter.minRandom));
         }
     }
 }

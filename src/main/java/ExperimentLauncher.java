@@ -402,11 +402,11 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "HBB";
+        String alg = "MC";
         String file = "f7";
         boolean synthetic = false;
 
-        int maxRead = 10000;
+        int maxRead = 100000;
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
