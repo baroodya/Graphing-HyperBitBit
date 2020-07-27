@@ -171,7 +171,7 @@ public class ExperimentLauncher {
                 estimates[i][j] = algorithm.getEstimateOfCardinality();
                 j++;
             }
-            range = algorithm.getMaxRandom() - algorithm.getMinRandom();
+            range = algorithm.getRange();
             if (range > maxRange)
                 maxRange = range;
             if (range < minRange)
@@ -212,7 +212,7 @@ public class ExperimentLauncher {
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
 
-                range = algorithm.getMaxRandom() - algorithm.getMinRandom();
+                range = algorithm.getRange();
                 if (range > maxRange)
                     maxRange = range;
                 if (range < minRange)
@@ -402,11 +402,11 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "MC";
+        String alg = "HBB";
         String file = "f7";
         boolean synthetic = false;
 
-        int maxRead = 100000;
+        int maxRead = 10000;
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
@@ -475,6 +475,6 @@ public class ExperimentLauncher {
 
         StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
 
-        StdOut.println("\nMax Range = " + launcher.maxRange + "\nMin Range= " + launcher.minRange);
+        StdOut.println("\nMax Range = " + launcher.maxRange + "\nMin Range = " + launcher.minRange);
     }
 }

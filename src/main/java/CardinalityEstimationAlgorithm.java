@@ -11,9 +11,7 @@ public interface CardinalityEstimationAlgorithm {
     /* output methods */
     int getSize(); // exact number of calls to readElement()
 
-    double getMaxRandom();
-
-    double getMinRandom();
+    double getRange();
 
     double getEstimateOfCardinality(); // get estimate of n *right now*
 

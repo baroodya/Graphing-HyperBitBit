@@ -70,12 +70,8 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         return size;
     }
 
-    public double getMaxRandom() {
-        return maxRandom;
-    }
-
-    public double getMinRandom() {
-        return minRandom;
+    public double getRange() {
+        return maxRandom - minRandom;
     }
 
     public double getEstimateOfCardinality() { // get estimate of n *right now*

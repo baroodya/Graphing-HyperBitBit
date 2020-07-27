@@ -49,7 +49,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     // Read in a real element
     public void readElement(String element) {
         long hashed = hasher.hash(element);
-        double random = hashed / (double) Long.MAX_VALUE;
+        double random = Math.abs(hashed / (double) Long.MAX_VALUE);
         if (random > maxRandom) maxRandom = random;
         if (random < minRandom) minRandom = random;
 
@@ -84,13 +84,10 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         return cnt;
     }
 
-    public double getMaxRandom() {
-        return maxRandom;
+    public double getRange() {
+        return maxRandom - minRandom;
     }
 
-    public double getMinRandom() {
-        return minRandom;
-    }
 
     // Returns the actual cardinality (n) of the algorithm
     public int getCardinality() {
