@@ -97,9 +97,9 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // Helper method that manages the longs after each input so that an estimate can be made
     protected double count(String s) {
-        if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << hasher.hash2(s, 8));
+        if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << hasher.hash2(s, m));
         if (Bits.r(hasher.hash(s)) > avg + 1)
-            sketch2 = sketch2 | (1L << hasher.hash2(s, 8));
+            sketch2 = sketch2 | (1L << hasher.hash2(s, m));
         if (Bits.p(sketch) >= alpha * m) {
             sketch = sketch2;
             avg++;
