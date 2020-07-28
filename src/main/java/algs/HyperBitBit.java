@@ -1,7 +1,10 @@
-package main.java; // Last checked by RS on June 29, 2020
+package main.java.algs; // Last checked by RS on June 29, 2020
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import main.java.Bits;
+import main.java.StringStream;
+import randomhash.RandomHashes;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -23,36 +26,20 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // Hash set for randomness
     protected HashSet<String> hset;
-    protected Bits hasher;
+    protected RandomHashes hasher;
 
     protected double maxRandom;
     protected double minRandom;
 
-    public HyperBitBit(double alpha, int m) {
+    public HyperBitBit(double alpha, int cardinality) {
         // Initialize variables
-        estimate = 0;
         this.alpha = alpha;
-        this.m = m;
         this.length = 64;
-        cnt = 0;
-
-        sketch = sketch2 = 0;
-        avg = 0;
-
-        hset = new HashSet<>();
-        hasher = new Bits();
-
-        maxRandom = 0;
-        minRandom = Double.POSITIVE_INFINITY;
+        resetAlgorithm(cardinality);
     }
 
     // Read in a real element
     public void readElement(String element) {
-        long hashed = hasher.hash(element);
-        double random = Math.abs(hashed / (double) Long.MAX_VALUE);
-        if (random > maxRandom) maxRandom = random;
-        if (random < minRandom) minRandom = random;
-
         hset.add(element);
         cnt++;
         estimate = count(element);
@@ -60,10 +47,6 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // REad in a synthetic element
     public void readSyntheticElement(double element) {
-
-        if (element > maxRandom) maxRandom = element;
-        if (element < minRandom) minRandom = element;
-
         StringBuilder randoms = new StringBuilder();
 
         // Create a random string of bits
@@ -84,11 +67,6 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         return cnt;
     }
 
-    public double getRange() {
-        return maxRandom - minRandom;
-    }
-
-
     // Returns the actual cardinality (n) of the algorithm
     public int getCardinality() {
         return hset.size();
@@ -103,26 +81,25 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     public void resetAlgorithm(int newM) {
         m = newM;
         estimate = 0;
+        cnt = 0;
         sketch = sketch2 = 0;
         avg = 0;
         hset = new HashSet<>();
-        hasher.randomizeHash();
-        maxRandom = 0;
-        minRandom = Double.POSITIVE_INFINITY;
+        hasher = new RandomHashes(1);
     }
 
     // Helper method that returns the actual estimate of the cardinality
-    private double estimate() {
+    protected double estimate() {
         double beta = 1.0 - 1.0 * Bits.p(sketch) / m;
         double bias = 2 * Math.log(1.0 / alpha) / 3.0 - 2 * Math.log(beta);
         return (Math.pow(2, avg) * m * bias);
     }
 
     // Helper method that manages the longs after each input so that an estimate can be made
-    private double count(String s) {
-        if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << hasher.hash2(s, m));
+    protected double count(String s) {
+        if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << hasher.hash2(s, 8));
         if (Bits.r(hasher.hash(s)) > avg + 1)
-            sketch2 = sketch2 | (1L << hasher.hash2(s, m));
+            sketch2 = sketch2 | (1L << hasher.hash2(s, 8));
         if (Bits.p(sketch) >= alpha * m) {
             sketch = sketch2;
             avg++;

@@ -1,5 +1,8 @@
 package main.java;
 
+import main.java.algs.CardinalityEstimationAlgorithm;
+import main.java.algs.HyperBitBit;
+
 import java.io.FileNotFoundException;
 
 public class ComparisonGenerator {

@@ -1,7 +1,10 @@
-package main.java;
+package main.java.algs;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import main.java.Exact;
+import main.java.StringStream;
+import randomhash.RandomHashes;
 
 import java.io.FileNotFoundException;
 
@@ -18,19 +21,12 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     protected double[] minSeen;
 
     // Hash function to produce reproducible randomness
-    protected Bits hasher;
+    protected RandomHashes hasher;
 
 
     // Constructor initializes constants and sets all minSeen entries to INFINITY
-    public MinCount(int m) {
-        size = 0;
-        this.m = m;
-
-        estimate = 0;
-        minSeen = new double[m];
-        for (int i = 0; i < m; i++) minSeen[i] = 1;
-
-        hasher = new Bits();
+    public MinCount(int cardinality) {
+        resetAlgorithm(cardinality);
     }
 
     // Reads in a real element, hashes it, and calculates a new estimate
@@ -69,11 +65,11 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         estimate = 0;
         minSeen = new double[m];
         for (int i = 0; i < m; i++) minSeen[i] = 1;
-        hasher.randomizeHash();
+        hasher = new RandomHashes(1);
     }
 
     // Calculate a new estimate based on the addition of a new random double
-    private double newEstimate(double continuousRandom) {
+    protected double newEstimate(double continuousRandom) {
         double random = m * continuousRandom;
         int j = (int) random;
 

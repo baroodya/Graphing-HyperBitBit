@@ -1,7 +1,8 @@
-package main.java;
+package main.java.algs;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import randomhash.RandomHashes;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -18,20 +19,13 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     protected boolean[][] bitmaps;
 
     // Hash Function to randomize the elements
-    protected Bits hasher;
+    protected RandomHashes hasher;
 
     // Constructor initializes variables
     public ProbabilisticCounting(int cardinality, double phi) {
-        size = 0;
-        m = cardinality;
-        lgM = (int) Math.floor(Math.log(m) / Math.log(2));
         bitmapLength = 128;
         this.phi = phi;
-
-        bitmaps = new boolean[m][bitmapLength - lgM];
-
-        hasher = new Bits();
-
+        resetAlgorithm(cardinality);
     }
 
     // Reads a real element, hashes it, and turns it into a binary String
@@ -78,11 +72,11 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         lgM = (int) Math.floor(Math.log(m) / Math.log(2));
         size = 0;
         bitmaps = new boolean[m][bitmapLength - lgM];
-        hasher.randomizeHash();
+        hasher = new RandomHashes(1);
     }
 
     // Helper method to manage a new element
-    private void count(String element) {
+    protected void count(String element) {
         int multiplier = 1;
         int whichMap = 0;
 
@@ -103,7 +97,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     }
 
     // Helper method to perform the rho operation
-    private int rho(String bitString, int start) {
+    protected int rho(String bitString, int start) {
         int index = bitString.indexOf('0', start) - start;
         if (index < bitString.length())
             return Math.max(index, 0);
@@ -111,7 +105,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     }
 
     // Helper method to calculate a rho value for every bitMap
-    private int[] rho(boolean[][] bitStrings) {
+    protected int[] rho(boolean[][] bitStrings) {
         int[] rhos = new int[bitStrings.length];
         Arrays.fill(rhos, bitStrings.length);
 
@@ -129,7 +123,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     }
 
     // Helper method to calculate the arithmetic mean of an array
-    private double arithmeticMean(double[] values) {
+    protected double arithmeticMean(double[] values) {
         double sum = 0;
         for (double value : values) sum += value;
         return sum / values.length;
@@ -161,11 +155,11 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         } else {
             String inputFile = "src/datasets/mobydick.txt";
             int N = 100000;
-            StringStream stream = new StringStream(inputFile, N);
+            main.java.StringStream stream = new main.java.StringStream(inputFile, N);
 
             for (String line : stream) counter.readElement(line);
 
-            int cardinality = Exact.count(stream);
+            int cardinality = main.java.Exact.count(stream);
             StdOut.println("Size = " + counter.getSize());
             StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
             StdOut.println(

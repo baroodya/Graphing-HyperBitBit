@@ -3,6 +3,10 @@ package main.java;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
+import main.java.algs.CardinalityEstimationAlgorithm;
+import main.java.algs.HyperBitBit;
+import main.java.algs.MinCount;
+import main.java.algs.ProbabilisticCounting;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +16,7 @@ public class ExperimentLauncher {
     protected CardinalityEstimationAlgorithm algorithm;
 
     // The stream and the file from which the stream is created
-    protected StringStream stream;
+    protected main.java.StringStream stream;
     protected String fileName;
 
     // The number of inputs seen
@@ -42,10 +46,6 @@ public class ExperimentLauncher {
     protected double percent;
     protected double denom;
 
-    private double maxRange;
-    private double minRange;
-    private double range;
-
     // A constructor for real data
     public ExperimentLauncher(
             String alg, int size, int m, int[] cardinalities, double alpha, double phi, int trials, String input)
@@ -68,7 +68,7 @@ public class ExperimentLauncher {
         denom = t * m * ((m + 3.0) / 2.0);
 
         // Read in the file
-        stream = new StringStream(fileName, bigN);
+        stream = new main.java.StringStream(fileName, bigN);
 
         // Create 2D trial x size arrays to hold data points for each trial
         sizes = new double[bigN];
@@ -76,10 +76,6 @@ public class ExperimentLauncher {
 
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
-
-        maxRange = 0;
-        minRange = Double.POSITIVE_INFINITY;
-
 
         // run the experiments
         runConstantMExperiment();
@@ -102,7 +98,7 @@ public class ExperimentLauncher {
         this.phi = phi;
 
         // Create a new stream of data
-        stream = new StringStream("src/datasets/log.07.f3.txt", bigN);
+        stream = new main.java.StringStream("src/datasets/log.07.f3.txt", bigN);
 
         // This data is synthetic
         syntheticData = true;
@@ -116,9 +112,6 @@ public class ExperimentLauncher {
 
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
-
-        maxRange = 0;
-        minRange = Double.POSITIVE_INFINITY;
 
         // Run the experiments
         runConstantMExperiment();
@@ -171,11 +164,6 @@ public class ExperimentLauncher {
                 estimates[i][j] = algorithm.getEstimateOfCardinality();
                 j++;
             }
-            range = algorithm.getRange();
-            if (range > maxRange)
-                maxRange = range;
-            if (range < minRange)
-                minRange = range;
             algorithm.resetAlgorithm(m);
             stream.resetStream();
         }
@@ -211,12 +199,6 @@ public class ExperimentLauncher {
                 for (String element : stream) readElement(element);
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
-
-                range = algorithm.getRange();
-                if (range > maxRange)
-                    maxRange = range;
-                if (range < minRange)
-                    minRange = range;
                 algorithm.resetAlgorithm(k + 1);
                 stream.resetStream();
                 counter += k;
@@ -419,7 +401,7 @@ public class ExperimentLauncher {
         else
             input = "src/datasets/" + file;
 
-        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials));
+        StdOut.println(main.java.TimingTracker.timing(alg, "'" + input + "'", m, trials));
 
         int size;
         int[] cardinalities;
@@ -433,8 +415,8 @@ public class ExperimentLauncher {
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials);
         } else {
             dataType = "Real: " + input;
-            size = Exact.total(input, maxRead);
-            cardinalities = Exact.countArray(input, maxRead);
+            size = main.java.Exact.total(input, maxRead);
+            cardinalities = main.java.Exact.countArray(input, maxRead);
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
         }
 
@@ -473,8 +455,6 @@ public class ExperimentLauncher {
         StdOut.println("𝛼: " + alphaString);
         StdOut.println("\uD835\uDF11: " + phiString);
 
-        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
-
-        StdOut.println("\nMax Range = " + launcher.maxRange + "\nMin Range = " + launcher.minRange);
+        StdOut.println("\nThis experiment took " + main.java.TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
     }
 }

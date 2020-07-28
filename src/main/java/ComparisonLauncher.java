@@ -2,6 +2,10 @@ package main.java;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import main.java.algs.CardinalityEstimationAlgorithm;
+import main.java.algs.HyperBitBit;
+import main.java.algs.MinCount;
+import main.java.algs.ProbabilisticCounting;
 
 import java.io.FileNotFoundException;
 
@@ -13,7 +17,7 @@ public class ComparisonLauncher {
     protected CardinalityEstimationAlgorithm newAlgorithm;
 
     // The stream of input and the file from which it'll come
-    protected StringStream stream;
+    protected main.java.StringStream stream;
     protected String fileName;
 
     // A 1D array for the xValues
@@ -68,7 +72,7 @@ public class ComparisonLauncher {
             syntheticData = false;
             fileName = input;
             // Read in the file
-            stream = new StringStream(fileName, bigN);
+            stream = new main.java.StringStream(fileName, bigN);
         }
 
         // Create 2D trial x size arrays to hold data points for each trial
@@ -359,12 +363,12 @@ public class ComparisonLauncher {
             for (int i = 0; i < size; i++) cardinalities[i] = i;
         } else {
             input = "src/datasets/" + file;
-            size = Exact.total(input, maxRead);
-            cardinalities = Exact.countArray(input, maxRead);
+            size = main.java.Exact.total(input, maxRead);
+            cardinalities = main.java.Exact.countArray(input, maxRead);
         }
 
         // This is what will change for the "client"'s algorithm
-        CardinalityEstimationAlgorithm alg = new ProbabilisticCounting(m, phi);
+        CardinalityEstimationAlgorithm alg = new main.java.algs.ProbabilisticCounting(m, phi);
 
         ComparisonLauncher launcher = new ComparisonLauncher(alg, size, m, cardinalities, alpha, trials, input);
 

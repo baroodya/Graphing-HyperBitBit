@@ -1,4 +1,4 @@
-package main.java;
+package main.java.algs;
 
 public interface CardinalityEstimationAlgorithm {
     /* input methods */
