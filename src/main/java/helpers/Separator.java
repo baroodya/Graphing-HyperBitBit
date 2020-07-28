@@ -32,7 +32,7 @@ public class Separator {
     public static void main(String[] args) throws IOException {
         String fileName = "src/datasets/mobydick.txt";
         Separator.separate(fileName, " ");
-        main.java.StringStream stream = new main.java.StringStream(fileName, 1000000);
+        StringStream stream = new StringStream(fileName, 1000000);
         long total = Exact.total(stream);
         stream.resetStream();
         StdOut.println(fileName + " has " + total + " total lines and " + Exact.count(stream) + " of them are distinct.");

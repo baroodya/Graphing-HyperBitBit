@@ -1,4 +1,4 @@
-package main.java;
+package main.java.helpers;
 
 import edu.princeton.cs.algs4.StdOut;
 

@@ -1,4 +1,4 @@
-package main.java;
+package main.java.helpers;
 
 import javax.annotation.Nonnull;
 import java.io.File;

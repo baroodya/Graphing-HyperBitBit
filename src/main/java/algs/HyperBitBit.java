@@ -2,9 +2,9 @@ package main.java.algs; // Last checked by RS on June 29, 2020
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
-import main.java.Bits;
-import main.java.StringStream;
-import randomhash.RandomHashes;
+import main.java.helpers.Bits;
+import main.java.helpers.StringStream;
+import main.java.randomhash.main.RandomHashes;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;

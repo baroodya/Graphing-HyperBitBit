@@ -2,7 +2,9 @@ package main.java.algs;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
-import randomhash.RandomHashes;
+import main.java.helpers.Exact;
+import main.java.helpers.StringStream;
+import main.java.randomhash.main.RandomHashes;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -155,11 +157,11 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         } else {
             String inputFile = "src/datasets/mobydick.txt";
             int N = 100000;
-            main.java.StringStream stream = new main.java.StringStream(inputFile, N);
+            StringStream stream = new StringStream(inputFile, N);
 
             for (String line : stream) counter.readElement(line);
 
-            int cardinality = main.java.Exact.count(stream);
+            int cardinality = Exact.count(stream);
             StdOut.println("Size = " + counter.getSize());
             StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
             StdOut.println(
