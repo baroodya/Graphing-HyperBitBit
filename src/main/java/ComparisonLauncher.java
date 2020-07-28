@@ -6,6 +6,8 @@ import main.java.algs.CardinalityEstimationAlgorithm;
 import main.java.algs.HyperBitBit;
 import main.java.algs.MinCount;
 import main.java.algs.ProbabilisticCounting;
+import main.java.helpers.Exact;
+import main.java.helpers.StringStream;
 
 import java.io.FileNotFoundException;
 
@@ -17,7 +19,7 @@ public class ComparisonLauncher {
     protected CardinalityEstimationAlgorithm newAlgorithm;
 
     // The stream of input and the file from which it'll come
-    protected main.java.StringStream stream;
+    protected StringStream stream;
     protected String fileName;
 
     // A 1D array for the xValues
@@ -72,7 +74,7 @@ public class ComparisonLauncher {
             syntheticData = false;
             fileName = input;
             // Read in the file
-            stream = new main.java.StringStream(fileName, bigN);
+            stream = new StringStream(fileName, bigN);
         }
 
         // Create 2D trial x size arrays to hold data points for each trial
@@ -363,8 +365,8 @@ public class ComparisonLauncher {
             for (int i = 0; i < size; i++) cardinalities[i] = i;
         } else {
             input = "src/datasets/" + file;
-            size = main.java.Exact.total(input, maxRead);
-            cardinalities = main.java.Exact.countArray(input, maxRead);
+            size = Exact.total(input, maxRead);
+            cardinalities = Exact.countArray(input, maxRead);
         }
 
         // This is what will change for the "client"'s algorithm

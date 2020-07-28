@@ -7,6 +7,9 @@ import main.java.algs.CardinalityEstimationAlgorithm;
 import main.java.algs.HyperBitBit;
 import main.java.algs.MinCount;
 import main.java.algs.ProbabilisticCounting;
+import main.java.helpers.Exact;
+import main.java.helpers.StringStream;
+import main.java.helpers.TimingTracker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +19,7 @@ public class ExperimentLauncher {
     protected CardinalityEstimationAlgorithm algorithm;
 
     // The stream and the file from which the stream is created
-    protected main.java.StringStream stream;
+    protected StringStream stream;
     protected String fileName;
 
     // The number of inputs seen
@@ -68,7 +71,7 @@ public class ExperimentLauncher {
         denom = t * m * ((m + 3.0) / 2.0);
 
         // Read in the file
-        stream = new main.java.StringStream(fileName, bigN);
+        stream = new StringStream(fileName, bigN);
 
         // Create 2D trial x size arrays to hold data points for each trial
         sizes = new double[bigN];
@@ -98,7 +101,7 @@ public class ExperimentLauncher {
         this.phi = phi;
 
         // Create a new stream of data
-        stream = new main.java.StringStream("src/datasets/log.07.f3.txt", bigN);
+        stream = new StringStream("src/datasets/log.07.f3.txt", bigN);
 
         // This data is synthetic
         syntheticData = true;
@@ -401,7 +404,7 @@ public class ExperimentLauncher {
         else
             input = "src/datasets/" + file;
 
-        StdOut.println(main.java.TimingTracker.timing(alg, "'" + input + "'", m, trials));
+        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials));
 
         int size;
         int[] cardinalities;
@@ -415,8 +418,8 @@ public class ExperimentLauncher {
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials);
         } else {
             dataType = "Real: " + input;
-            size = main.java.Exact.total(input, maxRead);
-            cardinalities = main.java.Exact.countArray(input, maxRead);
+            size = Exact.total(input, maxRead);
+            cardinalities = Exact.countArray(input, maxRead);
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
         }
 
@@ -455,6 +458,6 @@ public class ExperimentLauncher {
         StdOut.println("𝛼: " + alphaString);
         StdOut.println("\uD835\uDF11: " + phiString);
 
-        StdOut.println("\nThis experiment took " + main.java.TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
+        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
     }
 }

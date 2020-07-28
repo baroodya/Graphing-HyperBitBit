@@ -88,9 +88,10 @@ public class RandomHashes {
         return hash[0];
     }
 
-    public long hash2(String key, int k) {
+    public long hash2(String key, int m) {
+        int lgM = (int) Math.floor(Math.log(m) / Math.log(2));
         long firstKBits = 0;
-        for (int i = 1; i <= Math.pow(2, k); i *= 2) firstKBits += (i);
+        for (int i = 1; i <= Math.pow(2, lgM); i *= 2) firstKBits += (i);
 
         return (hash(key) & firstKBits);
     }
