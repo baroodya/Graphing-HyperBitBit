@@ -1,6 +1,6 @@
 package main.java.randomhash;
 
-import main.java.randomhash.main.RandomHashes;
+import main.java.randomhash.main.RandomHashFamily;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,10 +9,10 @@ import java.io.IOException;
 public class Example {
 
     public final static int count = 100;
-    public final static String INPUT_FILE = "data/normalized.txt";
+    public final static String INPUT_FILE = "src/main/java/randomhash/data/unique.txt";
 
     public static void main(String[] args) {
-        RandomHashes rh = new RandomHashes(count);
+        RandomHashFamily rh = new RandomHashFamily(count);
         UniformAudit ua = new UniformAudit(10, rh.MIN_VALUE, rh.MAX_VALUE);
 
         BufferedReader reader;

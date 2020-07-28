@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import main.java.helpers.Exact;
 import main.java.helpers.StringStream;
-import main.java.randomhash.main.RandomHashes;
+import main.java.randomhash.main.RandomHashFamily;
 
 import java.io.FileNotFoundException;
 
@@ -21,7 +21,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     protected double[] minSeen;
 
     // Hash function to produce reproducible randomness
-    protected RandomHashes hasher;
+    protected RandomHashFamily hasher;
 
 
     // Constructor initializes constants and sets all minSeen entries to INFINITY
@@ -34,7 +34,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         // Increment the size of the experiment (N)
         size++;
 
-        double random = Math.abs(hasher.hash(element) / (double) Long.MAX_VALUE);
+        double random = ((double) hasher.hash(element)) / (Math.pow(2, 32) - 1);
 
         // Calculate a new estimate for the cardinality of the stream
         estimate = newEstimate(random);
@@ -65,7 +65,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         estimate = 0;
         minSeen = new double[m];
         for (int i = 0; i < m; i++) minSeen[i] = 1;
-        hasher = new RandomHashes(1);
+        hasher = new RandomHashFamily(1);
     }
 
     // Calculate a new estimate based on the addition of a new random double

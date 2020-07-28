@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import main.java.helpers.Exact;
 import main.java.helpers.StringStream;
-import main.java.randomhash.main.RandomHashes;
+import main.java.randomhash.main.RandomHashFamily;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     protected boolean[][] bitmaps;
 
     // Hash Function to randomize the elements
-    protected RandomHashes hasher;
+    protected RandomHashFamily hasher;
 
     // Constructor initializes variables
     public ProbabilisticCounting(int cardinality, double phi) {
@@ -74,7 +74,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         lgM = (int) Math.floor(Math.log(m) / Math.log(2));
         size = 0;
         bitmaps = new boolean[m][bitmapLength - lgM];
-        hasher = new RandomHashes(1);
+        hasher = new RandomHashFamily(1);
     }
 
     // Helper method to manage a new element

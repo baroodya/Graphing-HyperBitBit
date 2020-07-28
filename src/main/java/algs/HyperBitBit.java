@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import main.java.helpers.Bits;
 import main.java.helpers.StringStream;
-import main.java.randomhash.main.RandomHashes;
+import main.java.randomhash.main.RandomHashFamily;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // Hash set for randomness
     protected HashSet<String> hset;
-    protected RandomHashes hasher;
+    protected RandomHashFamily hasher;
 
     protected double maxRandom;
     protected double minRandom;
@@ -85,7 +85,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         sketch = sketch2 = 0;
         avg = 0;
         hset = new HashSet<>();
-        hasher = new RandomHashes(1);
+        hasher = new RandomHashFamily(1);
     }
 
     // Helper method that returns the actual estimate of the cardinality
