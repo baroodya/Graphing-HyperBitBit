@@ -17,7 +17,7 @@
     <orderEntry type="library" name="tech.tablesaw:tablesaw-core:0.37.3" level="project" />
     <orderEntry type="library" name="algs4" level="project" />
     <orderEntry type="library" name="tech.tablesaw:tablesaw-jsplot:0.37.3" level="project" />
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library">
       <library name="JUnit5.4">
         <CLASSES>
           <root url="jar://$USER_HOME$/.m2/repository/org/junit/jupiter/junit-jupiter/5.4.2/junit-jupiter-5.4.2.jar!/" />

@@ -327,55 +327,63 @@ public class CustomGrapher {
     }
 
     // Shows a distribution of each row in data, split into bins sections
-    public void showLineDistributions(
-            String title, double[][] data, int bigN, int m, int t, int maxRange, int bins) {
+    public void showScatterDistributions(String title, double[][] data, int bins, int m, int trueCardinality) {
         double[] xValues = new double[bins];
-        double[][] yValues = new double[data.length][bins];
+        double[][] heights = new double[data.length][bins];
         String[] headers = new String[data.length];
 
-        int binRange = (2 * maxRange) / bins;
-        if (binRange <= 0) binRange = 1;
-        for (int i = 0; i < bins; i++) xValues[i] = bigN - maxRange + (binRange * i);
+        int trials = data[0].length;
 
-        int s = 0;
-        for (double[] datum : data) {
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+        for (double[] dataRow : data) {
+            for (double datum : dataRow) {
+                if (datum > max) max = datum + 1;
+                if (datum < min) min = datum - 1;
+            }
+        }
 
-            for (double value : datum) {
-                if (((int) value / binRange) < bins) yValues[s][(int) value / binRange]++;
+        double binRange = (max - min) / bins;
+
+        double temp;
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < trials; j++) {
+                if (i == 0 && j < bins) xValues[j] = (i * (binRange / 2)) / trials;
+                temp = Math.floor(data[i][j] / binRange);
+
+                heights[i][(int) temp]++;
             }
 
-            switch (s) {
+            switch (i) {
                 case 0:
-                    headers[s] = "m = 2";
+                    headers[i] = "m = 2";
                     break;
                 case 1:
                     if (m / 8 != 2)
-                        headers[s] = "m = " + m / 8;
-                    else headers[s] = "m = " + 4;
+                        headers[i] = "m = " + m / 8;
+                    else headers[i] = "m = " + 4;
                     break;
                 default:
-                    headers[s] = "m = " + m;
+                    headers[i] = "m = " + m;
             }
-
-            s++;
         }
 
-        double temp;
         double champ = 0;
         for (int j = 0; j < data.length; j++)
             for (int k = 0; k < bins; k++) {
-                temp = yValues[j][k] / t;
-                yValues[j][k] = temp;
+                temp = heights[j][k] / trials;
+                heights[j][k] = temp;
                 if (temp > champ) champ = temp;
             }
 
-        Table table = createTable(title, xValues, yValues, headers);
-        Axis xAxis = Axis.builder().range(0, 2 * maxRange).build();
+        Table table = createTable(title, xValues, heights, headers);
+        Axis xAxis = Axis.builder().range(min, max).build();
         List<String> columns = table.columnNames();
         Trace[] traces = new Trace[columns.size()];
 
         Marker smallMarker = Marker.builder().size(0.5).build();
         Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
+
 
         Line line;
         for (int i = 0; i < traces.length - 1; i++) {
@@ -403,59 +411,72 @@ public class CustomGrapher {
         }
 
         // Create a dashed line to show the exact cardinality
-        DoubleColumn dashColX = DoubleColumn.create("DashColX", maxRange, maxRange);
+        DoubleColumn dashColX = DoubleColumn.create("DashColX", trueCardinality, trueCardinality);
         DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, champ + 0.15);
-        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + maxRange).build();
+        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + trueCardinality).build();
 
         Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
 
     // Shows a distribution of each row in data, split into bins sections
-    public void showScatterDistributions(
-            String title, double[][] data, int bigN, int m, int t, int maxRange, int bins) {
+    public void showLineDistributions(String title, double[][] data, int bins, int m, int trueCardinality) {
         double[] xValues = new double[bins];
-        double[][] yValues = new double[data.length][bins];
+        double[][] heights = new double[data.length][bins];
         String[] headers = new String[data.length];
 
-        int binRange = (2 * maxRange) / bins;
-        if (binRange <= 0) binRange = 1;
-        for (int i = 0; i < bins; i++) xValues[i] = bigN - maxRange + (binRange * i);
+        int trials = data[0].length;
 
-        int s = 0;
-        for (double[] datum : data) {
-
-            for (double value : datum) {
-                if (((int) value / binRange) < bins) yValues[s][(int) value / binRange]++;
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+        for (double[] dataRow : data) {
+            for (double datum : dataRow) {
+                if (datum > max) max = datum + 1;
+                if (datum < min) min = datum - 1;
             }
-
-            switch (s) {
-                case 0:
-                    headers[s] = "m = 2";
-                    break;
-                case 1:
-                    headers[s] = "m = " + m / 8;
-                    break;
-                default:
-                    headers[s] = "m = " + m;
-            }
-
-            s++;
         }
 
+        double binRange = (max - min) / bins;
+
         double temp;
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < trials; j++) {
+                if (i == 0 && j < bins) xValues[j] = (i * (binRange / 2)) / trials;
+                temp = Math.floor(data[i][j] / binRange);
+
+                heights[i][(int) temp]++;
+            }
+
+            switch (i) {
+                case 0:
+                    headers[i] = "m = 2";
+                    break;
+                case 1:
+                    if (m / 8 != 2)
+                        headers[i] = "m = " + m / 8;
+                    else headers[i] = "m = " + 4;
+                    break;
+                default:
+                    headers[i] = "m = " + m;
+            }
+        }
+
         double champ = 0;
         for (int j = 0; j < data.length; j++)
             for (int k = 0; k < bins; k++) {
-                temp = yValues[j][k] / t;
-                yValues[j][k] = temp;
+                temp = heights[j][k] / trials;
+                heights[j][k] = temp;
                 if (temp > champ) champ = temp;
             }
 
-        Table table = createTable(title, xValues, yValues, headers);
-        Axis xAxis = Axis.builder().range(0, 2 * maxRange).build();
+        Table table = createTable(title, xValues, heights, headers);
+        Axis xAxis = Axis.builder().range(min, max).build();
         List<String> columns = table.columnNames();
         Trace[] traces = new Trace[columns.size()];
+
+        Marker smallMarker = Marker.builder().size(0.5).build();
+        Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
+
 
         Line line;
         for (int i = 0; i < traces.length - 1; i++) {
@@ -474,18 +495,18 @@ public class CustomGrapher {
             }
             traces[i] =
                     ScatterTrace.builder(table.column(0), table.column(i + 1))
-                            .mode(ScatterTrace.Mode.MARKERS)
+                            .mode(ScatterTrace.Mode.LINE)
                             .showLegend(true)
                             .line(line)
+                            .marker(smallMarker)
                             .name(columns.get(i + 1))
                             .build();
         }
 
         // Create a dashed line to show the exact cardinality
-        DoubleColumn dashColX = DoubleColumn.create("DashColX", maxRange, maxRange);
+        DoubleColumn dashColX = DoubleColumn.create("DashColX", trueCardinality, trueCardinality);
         DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, champ + 0.15);
-        Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
-        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE_AND_TEXT).line(dashed).name("n = " + maxRange).build();
+        traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.MARKERS).line(dashed).name("n = " + trueCardinality).build();
 
         Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
@@ -500,18 +521,18 @@ public class CustomGrapher {
         String[] headers = {"x", "x^2"};
         CustomGrapher graph = new CustomGrapher();
 
-        graph.showLinePlot("y = x", "x", "y", graph.createTable("x", xValues, avg, yValues));
-        graph.showScatterPlot(
-                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x", xValues, yValues, headers));
-        graph.showScatterPlot(
-                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x", xValues, yValues, headers), 1);
-        graph.showCompLinePlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
-        graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x", xValues, yValues, headers));
-
-        graph.showHistogram("y = x", xValues, 6, 10);
-        graph.showLineDistributions("y = x^2", yValues, 5, 4, 10, 6, 3);
-        graph.showScatterDistributions("y = x^2", yValues, 5, 4, 10, 6, 3);
-        graph.showScatterDistributions("y = x^3", yValues2, 5, 8, 5, 5, 2);
+//        graph.showLinePlot("y = x", "x", "y", graph.createTable("x", xValues, avg, yValues));
+//        graph.showScatterPlot(
+//                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x2", xValues, yValues, headers));
+//        graph.showScatterPlot(
+//                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x3", xValues, yValues, headers), 1);
+//        graph.showCompLinePlot("y = x; y = avg", headers[0], "avg", graph.createTable("x4", xValues, yValues, headers));
+//        graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x5", xValues, yValues, headers));
+//
+//        graph.showHistogram("y = x", xValues, 6, 10);
+        graph.showLineDistributions("y = x^2", yValues, 5, 4, 6);
+        graph.showScatterDistributions("y = x^2", yValues, 5, 4, 6);
+        graph.showScatterDistributions("y = x^3", yValues2, 5, 4, 9);
     }
 }
 

@@ -100,10 +100,10 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
     // Helper method to perform the rho operation
     protected int rho(String bitString, int start) {
-        int index = bitString.indexOf('0', start) - start;
-        if (index < bitString.length())
-            return Math.max(index, 0);
-        else return bitString.length() - 1;
+        int index = bitString.indexOf('0', start);
+        if (index < 0)
+            return bitString.length() - 1;
+        else return index - start;
     }
 
     // Helper method to calculate a rho value for every bitMap

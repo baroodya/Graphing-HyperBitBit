@@ -387,7 +387,7 @@ public class ExperimentLauncher {
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "PC";
+        String alg = "MC";
         String file = "f7";
         boolean synthetic = false;
 
