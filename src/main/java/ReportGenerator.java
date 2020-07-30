@@ -243,7 +243,7 @@ public class ReportGenerator {
             }
         }
 
-        grapher.showLineDistributions(title, data, launcher.t / 10, launcher.m, launcher.n);
+        grapher.showLineDistributions(title, data, launcher.t / 4, launcher.m, launcher.n);
     }
 
     // Helper method to truncate arrays and get rid of non-useful data
@@ -270,7 +270,7 @@ public class ReportGenerator {
     public static void main(String[] args) throws FileNotFoundException {
         int[] cardinalities = new int[100000];
         for (int i = 0; i < 100000; i++) cardinalities[i] = i;
-        ExperimentLauncher experiment = new ExperimentLauncher("MC", 100000, 256, cardinalities, 0.5, 0.77351, 100);
+        ExperimentLauncher experiment = new ExperimentLauncher("MC", 10000, 64, cardinalities, 0.5, 0.77351, 100);
 
         ReportGenerator report = new ReportGenerator(experiment, 50);
         report.generateFullReport();

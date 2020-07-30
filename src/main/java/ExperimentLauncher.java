@@ -352,23 +352,17 @@ public class ExperimentLauncher {
 
     // Get the standard deviation of all trials in a 1D array
     public double[] getStdDevOfAllTrials() {
-        double[] means = getAvgEstimatesVaryM();
         double[] data = new double[m];
 
-        double sum;
         for (int i = 0; i < m; i++) {
-            sum = 0;
-            for (int j = 0; j < t; j++) {
-                sum += Math.pow((means[i] - estimates[j][i]), 2);
-            }
-            data[i] = Math.sqrt(sum / i);
+            data[i] = getStdDev(varyMEstimates[i]);
         }
 
         return data;
     }
 
     // Helper method to average a 2D array vertically
-    private double[] averageOverTrials(double[][] values, int arraySize) {
+    protected double[] averageOverTrials(double[][] values, int arraySize) {
         double[] returnThis = new double[arraySize];
 
         // for each element i, average the trials
@@ -384,10 +378,26 @@ public class ExperimentLauncher {
         return returnThis;
     }
 
+    protected double getStdDev(double[] values) {
+        double mean = arithmeticMean(values);
+        double sum = 0;
+        for (double value : values) {
+            sum += Math.pow((value - mean), 2);
+        }
+        return Math.sqrt(sum / values.length);
+    }
+
+    // Helper method to calculate the arithmetic mean of an array
+    protected double arithmeticMean(double[] values) {
+        double sum = 0;
+        for (double value : values) sum += value;
+        return sum / values.length;
+    }
+
     public static void main(String[] args) throws IOException {
         Stopwatch watch = new Stopwatch();
 
-        String alg = "MC";
+        String alg = "HBB";
         String file = "f7";
         boolean synthetic = false;
 
