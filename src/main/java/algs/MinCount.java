@@ -34,10 +34,10 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         // Increment the size of the experiment (N)
         size++;
 
-        double random = ((double) hasher.hash(element)) / (Math.pow(2, 32) - 1);
+        double hashed = ((double) hasher.hash(element)) / (Math.pow(2, 32) - 1);
 
         // Calculate a new estimate for the cardinality of the stream
-        estimate = newEstimate(random);
+        count(hashed);
     }
 
     // Reads in a random synthetic element and calculates a new estimate
@@ -46,7 +46,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         size++;
 
         // Calculate a new estimate for the cardinality of the stream
-        estimate = newEstimate(element);
+        count(element);
     }
 
 
@@ -55,7 +55,11 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     }
 
     public double getEstimateOfCardinality() { // get estimate of n *right now*
-        return estimate;
+        double sum = 0;
+        for (int k = 0; k < m; k++)
+            sum += minSeen[k];
+        return (((m * (m - 1)) / sum));
+
     }
 
     // Reset the algorithm for a new trial
@@ -69,7 +73,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     }
 
     // Calculate a new estimate based on the addition of a new random double
-    protected double newEstimate(double continuousRandom) {
+    protected void count(double continuousRandom) {
         double random = m * continuousRandom;
         int j = (int) random;
 
@@ -77,13 +81,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         double cardinality = estimate;
         if (minSeen[j] > (random - j)) {
             minSeen[j] = random - j;
-
-            for (int k = 0; k < m; k++)
-                sum += minSeen[k];
-            cardinality = (((m * (m - 1)) / sum));
         }
-
-        return cardinality;
     }
 
     public static void main(String[] args) throws FileNotFoundException {

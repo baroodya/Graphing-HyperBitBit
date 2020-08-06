@@ -1,5 +1,6 @@
 package main.java.algs;
 
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.jupiter.api.Test;
 
@@ -63,16 +64,16 @@ class MinCountTest {
         algorithm.readSyntheticElement(0);
         assert algorithm.getSize() == 1;
 
-        algorithm.readSyntheticElement(1);
+        algorithm.readSyntheticElement(0.5);
         assert algorithm.getSize() == 2;
 
-        algorithm.readSyntheticElement(2);
+        algorithm.readSyntheticElement(0.25);
         assert algorithm.getSize() == 3;
 
-        algorithm.readSyntheticElement(3);
+        algorithm.readSyntheticElement(0.375);
         assert algorithm.getSize() == 4;
 
-        algorithm.readSyntheticElement(4);
+        algorithm.readSyntheticElement(0.75);
         assert algorithm.getSize() == 5;
 
         algorithm.readSyntheticElement(0.1);
@@ -88,16 +89,16 @@ class MinCountTest {
         algorithm.readSyntheticElement(-0.1);
         assert algorithm.getSize() == 10;
 
-        algorithm.readSyntheticElement(10000000000000000000000200000000.000);
+        algorithm.readSyntheticElement(0.00000000000000000000000000000001001);
         assert algorithm.getSize() == 11;
 
         algorithm.readSyntheticElement(0.0000000000000001);
         assert algorithm.getSize() == 12;
 
-        algorithm.readSyntheticElement(10e3);
+        algorithm.readSyntheticElement(10e-3);
         assert algorithm.getSize() == 13;
 
-        algorithm.readSyntheticElement(1654);
+        algorithm.readSyntheticElement(0.1654);
         assert algorithm.getSize() == 14;
         assert algorithm.getSize() == 14;
     }
@@ -178,9 +179,15 @@ class MinCountTest {
         assert algorithm.minSeen[8] == 0;
 
         algorithm.newEstimate(0.9);
-        assert algorithm.minSeen[14] == 0.4;
+        assert isCloseEnough(algorithm.minSeen[14], 0.4);
 
-        assert Math.round(algorithm.getEstimateOfCardinality()) == 18;
+        StdOut.println(algorithm.getEstimateOfCardinality());
+        assert isCloseEnough(algorithm.getEstimateOfCardinality(), 17.91044776119);
 
+    }
+
+    private boolean isCloseEnough(double guess, double target) {
+        double fivePercent = target * 0.05;
+        return (guess >= target - fivePercent && guess <= target + fivePercent);
     }
 }
