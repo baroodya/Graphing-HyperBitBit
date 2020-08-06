@@ -402,11 +402,11 @@ public class ExperimentLauncher {
     private static void readInputs() throws IOException {
         Scanner keyboardInput = new Scanner(System.in);
 
-        StdOut.println("Hello! Welcome to the Cardinality Estimation Algorithm Experiment Launcher!");
+        StdOut.print("Hello! Welcome to the Cardinality Estimation Algorithm Experiment Launcher! ");
         StdOut.println("The default values for each parameter are below.");
 
         String alg = "HBB";
-        String file = "f3";
+        String file = "f0";
         boolean synthetic = false;
 
         int maxRead = 100000;
@@ -416,6 +416,7 @@ public class ExperimentLauncher {
         double phi = 1;
         int numberOfTrialsShown = 100;
 
+        StdOut.println("------------------------------------------------");
         StdOut.println("Algorithm: " + alg);
         StdOut.println("file: " + file);
         StdOut.println("maxRead: " + maxRead);
@@ -425,6 +426,7 @@ public class ExperimentLauncher {
         StdOut.println("𝛼: " + alpha);
         StdOut.println("\uD835\uDF11: " + phi);
         StdOut.println("Number of Trials Shown: " + numberOfTrialsShown);
+        StdOut.println("------------------------------------------------");
 
         StdOut.println("\n" + "Do you want to change these values?");
         boolean newValues;
@@ -445,11 +447,11 @@ public class ExperimentLauncher {
             StdOut.print("\n" + "Enter Algorithm: ");
             s = keyboardInput.nextLine();
             if (!s.equals(""))
-                alg = keyboardInput.nextLine();
+                alg = s;
             StdOut.print("Enter file: ");
             s = keyboardInput.nextLine();
             if (!s.equals(""))
-                file = keyboardInput.nextLine();
+                file = s;
             StdOut.print("Enter max Read: ");
             s = keyboardInput.nextLine();
             if (!s.equals(""))
@@ -484,7 +486,7 @@ public class ExperimentLauncher {
                 numberOfTrialsShown = Integer.parseInt(s);
         }
 
-        StdOut.println("Running the Experiment with the following parameters:");
+        StdOut.println("\n" + "Running the Experiment with the following parameters:");
 
         createOutput(alg, file, synthetic, maxRead, m, alpha, phi, trials, numberOfTrialsShown);
     }
@@ -519,7 +521,8 @@ public class ExperimentLauncher {
                 algFull = "MinCount";
                 break;
             default:
-                algFull = "Well, Well, Well. Somehow, you've broken the whole program. Congratulations! Feel free to email me (abaroody@princeton.edu) and we can talk about it!";
+                StdOut.println();
+                algFull = "Algorithm = " + alg + "\n" + "Well, Well, Well. Somehow, you've broken the whole program. Congratulations! Feel free to email me (abaroody@princeton.edu) and we can talk about it!";
                 break;
         }
 
@@ -530,6 +533,7 @@ public class ExperimentLauncher {
         if (alg.equals("PC")) phiString += phi;
         else phiString = "N/A";
 
+        StdOut.println("------------------------------------------------");
         StdOut.println("Algorithm: " + algFull);
         StdOut.println("Data type: " + dataType);
         StdOut.println("Size of Stream (N): " + size);
@@ -538,6 +542,8 @@ public class ExperimentLauncher {
         StdOut.println("Trials (T): " + trials);
         StdOut.println("𝛼: " + alphaString);
         StdOut.println("\uD835\uDF11: " + phiString);
+        StdOut.println("------------------------------------------------");
+        StdOut.println();
 
         runExperiments(alg, input, synthetic, size, m, cardinalities, alpha, phi, trials, numberOfTrialsShown);
     }
@@ -546,7 +552,7 @@ public class ExperimentLauncher {
         Stopwatch watch = new Stopwatch();
 
 
-        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials));
+        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials) + "\n");
 
         ExperimentLauncher launcher;
         if (synthetic)
