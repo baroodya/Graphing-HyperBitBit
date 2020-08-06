@@ -81,9 +81,7 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
-        // run the experiments
-        runConstantMExperiment();
-        runVariableMExperiment();
+        runExperiments();
 
         StdOut.print("\rProducing Graphs. Almost done! \n");
     }
@@ -116,10 +114,8 @@ public class ExperimentLauncher {
 
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
-
-        // Run the experiments
-        runConstantMExperiment();
-        runVariableMExperiment();
+        
+        runExperiments();
 
         StdOut.print("\rProducing Graphs. Almost done! \n");
     }
@@ -134,47 +130,8 @@ public class ExperimentLauncher {
         }
     }
 
-    // Helper method to run t trials of m = m
-    private void runConstantMExperiment() throws FileNotFoundException {
-        // Decide which algorithm to use
-        switch (alg) {
-            case "PC":
-                algorithm = new ProbabilisticCounting(m, phi);
-                break;
-            case "MC":
-                algorithm = new MinCount(m);
-                break;
-            case "HBB":
-                algorithm = new HyperBitBit(alpha, m);
-                break;
-            default:
-                throw new IllegalArgumentException("This type of Algorithm is not supported.");
-        }
-
-        // Run trials and update 2D arrays
-        int j;
-        for (int i = 0; i < t; i++) {
-            percent = ((double) (i * m) / (denom)) * 100;
-            StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + (i + 1) + "/" + t + ". (");
-            StdOut.printf("%.2f", percent);
-            StdOut.print("%)");
-            j = 0;
-            for (String element : stream) {
-                if (j > bigN) break;
-                readElement(element);
-
-                if (i == 0) sizes[j] = algorithm.getSize();
-
-                estimates[i][j] = algorithm.getEstimateOfCardinality();
-                j++;
-            }
-            algorithm.resetAlgorithm(m);
-            stream.resetStream();
-        }
-    }
-
     // Helper method to run t trials of m = 1, m = 2, ... , m = m
-    private void runVariableMExperiment() throws FileNotFoundException {
+    private void runExperiments() throws FileNotFoundException {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
@@ -200,7 +157,18 @@ public class ExperimentLauncher {
                 StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + (i + 1) + "/" + t + ". (");
                 StdOut.printf("%.2f", percent);
                 StdOut.print("%)");
-                for (String element : stream) readElement(element);
+                int j = 0;
+                for (String element : stream) {
+                    readElement(element);
+
+                    if (k == m) {
+                        if (j > bigN) break;
+                        if (i == 0) sizes[j] = algorithm.getSize();
+
+                        estimates[i][j] = algorithm.getEstimateOfCardinality();
+                        j++;
+                    }
+                }
 
                 varyMEstimates[i][k - 1] = algorithm.getEstimateOfCardinality();
                 algorithm.resetAlgorithm(k + 1);
