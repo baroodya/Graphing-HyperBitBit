@@ -1,7 +1,7 @@
 package main.java.algs;
 
-import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import main.java.HelperMethods;
 import org.junit.jupiter.api.Test;
 
 class MinCountTest {
@@ -86,7 +86,7 @@ class MinCountTest {
         algorithm.readSyntheticElement(0.4);
         assert algorithm.getSize() == 9;
 
-        algorithm.readSyntheticElement(-0.1);
+        algorithm.readSyntheticElement(0.999);
         assert algorithm.getSize() == 10;
 
         algorithm.readSyntheticElement(0.00000000000000000000000000000001001);
@@ -167,27 +167,21 @@ class MinCountTest {
     }
 
     @Test
-    void newEstimate() {
+    void count() {
         algorithm.resetAlgorithm(16);
         assert algorithm.getSize() == 0;
         for (double value : algorithm.minSeen) assert value == 1.0;
 
-        algorithm.newEstimate(0);
+        algorithm.count(0);
         assert algorithm.minSeen[0] == 0;
 
-        algorithm.newEstimate(0.5);
+        algorithm.count(0.5);
         assert algorithm.minSeen[8] == 0;
 
-        algorithm.newEstimate(0.9);
-        assert isCloseEnough(algorithm.minSeen[14], 0.4);
+        algorithm.count(0.9);
+        assert HelperMethods.withinFivePercent(algorithm.minSeen[14], 0.4);
 
-        StdOut.println(algorithm.getEstimateOfCardinality());
-        assert isCloseEnough(algorithm.getEstimateOfCardinality(), 17.91044776119);
+        assert HelperMethods.withinFivePercent(algorithm.getEstimateOfCardinality(), 17.91044776119);
 
-    }
-
-    private boolean isCloseEnough(double guess, double target) {
-        double fivePercent = target * 0.05;
-        return (guess >= target - fivePercent && guess <= target + fivePercent);
     }
 }
