@@ -13,6 +13,7 @@ import main.java.helpers.TimingTracker;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class ExperimentLauncher {
     // The algorithm on which the experiment is being performed
@@ -398,43 +399,112 @@ public class ExperimentLauncher {
         return sum / values.length;
     }
 
-    public static void main(String[] args) throws IOException {
-        Stopwatch watch = new Stopwatch();
+    private static void readInputs() throws IOException {
+        Scanner keyboardInput = new Scanner(System.in);
+
+        StdOut.println("Hello! Welcome to the Cardinality Estimation Algorithm Experiment Launcher!");
+        StdOut.println("The default values for each parameter are below.");
 
         String alg = "HBB";
-        String file = "f7";
+        String file = "f3";
         boolean synthetic = false;
 
         int maxRead = 100000;
-        int m = 128;
+        int m = 64;
         int trials = 100;
         double alpha = 0.5;
         double phi = 1;
         int numberOfTrialsShown = 100;
 
-        String input;
-        if (synthetic)
-            input = "synthetic";
-        else
-            input = "src/datasets/" + file;
+        StdOut.println("Algorithm: " + alg);
+        StdOut.println("file: " + file);
+        StdOut.println("maxRead: " + maxRead);
+        StdOut.println("Synthetic?: " + false);
+        StdOut.println("Substreams (m): " + m);
+        StdOut.println("Trials (T): " + trials);
+        StdOut.println("𝛼: " + alpha);
+        StdOut.println("\uD835\uDF11: " + phi);
+        StdOut.println("Number of Trials Shown: " + numberOfTrialsShown);
 
-        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials));
+        StdOut.println("\n" + "Do you want to change these values?");
+        boolean newValues;
+        String s = keyboardInput.nextLine();
+        switch (s) {
+            case "Y":
+            case "yes":
+            case "Yes":
+            case "YES":
+                newValues = true;
+                break;
+            default:
+                newValues = Boolean.parseBoolean(s);
+                break;
+        }
 
+        if (newValues) {
+            StdOut.print("\n" + "Enter Algorithm: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                alg = keyboardInput.nextLine();
+            StdOut.print("Enter file: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                file = keyboardInput.nextLine();
+            StdOut.print("Enter max Read: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                maxRead = Integer.parseInt(s);
+            StdOut.print("Enter Synthetic?: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                if (s.equals("Y")) synthetic = true;
+                else if (s.equals("Yes")) synthetic = true;
+                else if (s.equals("yes")) synthetic = true;
+                else if (s.equals("YES")) synthetic = true;
+                else synthetic = Boolean.parseBoolean(s);
+            StdOut.print("Enter Substreams (m): ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                m = Integer.parseInt(s);
+            StdOut.print("Enter Trials (T): ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                trials = Integer.parseInt(s);
+            StdOut.print("Enter 𝛼: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                alpha = Double.parseDouble(s);
+            StdOut.print("Enter \uD835\uDF11: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                phi = Double.parseDouble(s);
+            StdOut.print("Enter Number of Trials Shown: ");
+            s = keyboardInput.nextLine();
+            if (!s.equals(""))
+                numberOfTrialsShown = Integer.parseInt(s);
+        }
+
+        StdOut.println("Running the Experiment with the following parameters:");
+
+        createOutput(alg, file, synthetic, maxRead, m, alpha, phi, trials, numberOfTrialsShown);
+    }
+
+    private static void createOutput(String alg, String file, boolean synthetic, int maxRead, int m, double alpha, double phi, int trials, int numberOfTrialsShown) throws IOException {
         int size;
         int[] cardinalities;
+        String input;
         String dataType;
-        ExperimentLauncher launcher;
         if (synthetic) {
+            input = "synthetic";
             dataType = "Synthetic";
             size = maxRead;
             cardinalities = new int[size];
             for (int i = 0; i < size; i++) cardinalities[i] = i + 1;
-            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials);
         } else {
+            input = "src/datasets/" + file;
             dataType = "Real: " + input;
             size = Exact.total(input, maxRead);
             cardinalities = Exact.countArray(input, maxRead);
-            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
         }
 
         String algFull;
@@ -453,9 +523,6 @@ public class ExperimentLauncher {
                 break;
         }
 
-        ReportGenerator report = new ReportGenerator(launcher, numberOfTrialsShown);
-        report.generateBasicReport();
-
         String alphaString = "";
         String phiString = "";
         if (alg.equals("HBB")) alphaString += alpha;
@@ -472,6 +539,28 @@ public class ExperimentLauncher {
         StdOut.println("𝛼: " + alphaString);
         StdOut.println("\uD835\uDF11: " + phiString);
 
+        runExperiments(alg, input, synthetic, size, m, cardinalities, alpha, phi, trials, numberOfTrialsShown);
+    }
+
+    private static void runExperiments(String alg, String input, boolean synthetic, int size, int m, int[] cardinalities, double alpha, double phi, int trials, int numberOfTrialsShown) throws IOException {
+        Stopwatch watch = new Stopwatch();
+
+
+        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials));
+
+        ExperimentLauncher launcher;
+        if (synthetic)
+            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials);
+        else
+            launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
+
+        ReportGenerator report = new ReportGenerator(launcher, numberOfTrialsShown);
+        report.generateBasicReport();
+
         StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
+    }
+
+    public static void main(String[] args) throws IOException {
+        readInputs();
     }
 }
