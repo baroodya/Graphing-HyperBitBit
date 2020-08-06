@@ -11,74 +11,74 @@ class ExperimentLauncherTest {
     ExperimentLauncherTest() throws FileNotFoundException {
         launcher = new ExperimentLauncher("MC", 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 0.77351, 100);
     }
-
-    @Test
-    void getSizes() {
-    }
-
-    @Test
-    void getAvgEstimates() {
-    }
-
-    @Test
-    void getAllAbsoluteErrors() {
-    }
-
-    @Test
-    void getAvgAbsoluteErrors() {
-    }
-
-    @Test
-    void getAllRelativeErrors() {
-    }
-
-    @Test
-    void getAvgRelativeErrors() {
-    }
-
-    @Test
-    void getAvgNormalizedEstimates() {
-    }
-
-    @Test
-    void getAllNormalizedEstimates() {
-    }
-
-    @Test
-    void getAvgEstimatesVaryM() {
-    }
-
-    @Test
-    void getAllAbsoluteErrorsVaryM() {
-    }
-
-    @Test
-    void getAvgAbsoluteErrorsVaryM() {
-    }
-
-    @Test
-    void getAllMRelativeErrorsVaryM() {
-    }
-
-    @Test
-    void getAvgRelativeErrorsVaryM() {
-    }
-
-    @Test
-    void getAvgNormalizedEstimatesVaryM() {
-    }
-
-    @Test
-    void getAllNormalizedEstimatesVaryM() {
-    }
-
-    @Test
-    void getStdDevOfAllTrials() {
-    }
-
-    @Test
-    void averageOverTrials() {
-    }
+//
+//    @Test
+//    void getSizes() {
+//    }
+//
+//    @Test
+//    void getAvgEstimates() {
+//    }
+//
+//    @Test
+//    void getAllAbsoluteErrors() {
+//    }
+//
+//    @Test
+//    void getAvgAbsoluteErrors() {
+//    }
+//
+//    @Test
+//    void getAllRelativeErrors() {
+//    }
+//
+//    @Test
+//    void getAvgRelativeErrors() {
+//    }
+//
+//    @Test
+//    void getAvgNormalizedEstimates() {
+//    }
+//
+//    @Test
+//    void getAllNormalizedEstimates() {
+//    }
+//
+//    @Test
+//    void getAvgEstimatesVaryM() {
+//    }
+//
+//    @Test
+//    void getAllAbsoluteErrorsVaryM() {
+//    }
+//
+//    @Test
+//    void getAvgAbsoluteErrorsVaryM() {
+//    }
+//
+//    @Test
+//    void getAllMRelativeErrorsVaryM() {
+//    }
+//
+//    @Test
+//    void getAvgRelativeErrorsVaryM() {
+//    }
+//
+//    @Test
+//    void getAvgNormalizedEstimatesVaryM() {
+//    }
+//
+//    @Test
+//    void getAllNormalizedEstimatesVaryM() {
+//    }
+//
+//    @Test
+//    void getStdDevOfAllTrials() {
+//    }
+//
+//    @Test
+//    void averageOverTrials() {
+//    }
 
     @Test
     void getStdDev() {
@@ -210,12 +210,12 @@ class ExperimentLauncherTest {
                 977035365,
                 999022651
         };
-
-        assert Math.round(launcher.getStdDev(values)) == 27576183.0;
+        
+        assert Math.round(launcher.getStdDev(values)) == 275761833.0;
         ;
     }
-
-    @Test
-    void arithmeticMean() {
-    }
+//
+//    @Test
+//    void arithmeticMean() {
+//    }
 }
