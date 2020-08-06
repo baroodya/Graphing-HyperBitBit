@@ -352,13 +352,17 @@ public class ExperimentLauncher {
 
     // Get the standard deviation of all trials in a 1D array
     public double[] getStdDevOfAllTrials() {
-        double[] data = new double[m];
-
-        for (int i = 0; i < m; i++) {
-            data[i] = getStdDev(varyMEstimates[i]);
+        double[][] data = new double[m][t];
+        double[] returned = new double[m];
+        for (int i = 0; i < t; i++) {
+            for (int j = 0; j < m; j++) {
+                data[j][i] = varyMEstimates[i][j];
+            }
         }
 
-        return data;
+        for (int i = 0; i < m; i++) returned[i] = getStdDev(data[i]);
+
+        return returned;
     }
 
     // Helper method to average a 2D array vertically
@@ -402,7 +406,7 @@ public class ExperimentLauncher {
         boolean synthetic = false;
 
         int maxRead = 100000;
-        int m = 64;
+        int m = 128;
         int trials = 100;
         double alpha = 0.5;
         double phi = 1;
