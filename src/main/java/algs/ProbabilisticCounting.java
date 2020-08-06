@@ -36,7 +36,14 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
         long hashed = hasher.hash(element);
 
-        count(Long.toBinaryString(hashed));
+        String binString = Long.toBinaryString(hashed);
+        if (32 - binString.length() > 0) {
+            binString += "0".repeat(32 - binString.length());
+        }
+
+        if (binString.length() != 32)
+            StdOut.println("Uh oh! Something went wrong with the hash function! The error is at ProbabilisticCounting.java line 34-44");
+        count(binString);
     }
 
     // Reads a random element and creates a random boolean array
@@ -134,7 +141,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     public static void main(String[] args) throws FileNotFoundException {
         int size = 100000;
         int m = 64;
-        boolean synthetic = true;
+        boolean synthetic = false;
 
         ProbabilisticCounting counter = new ProbabilisticCounting(m, 0.77351);
 

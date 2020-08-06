@@ -88,12 +88,16 @@ public class RandomHashFamily {
         return hash[0];
     }
 
-    public long hash2(String key, int m) {
+    public int hash2(String key, int m) {
         int lgM = (int) Math.floor(Math.log(m) / Math.log(2));
-        long firstKBits = 0;
-        for (int i = 1; i <= Math.pow(2, lgM); i *= 2) firstKBits += (i);
-
-        return (hash(key) & firstKBits);
+        long x = hash(key);
+//        StdOut.println("New Binary:  " + Long.toBinaryString(x));
+        return (int) ((x >> 32 - lgM) & 0x3FFL) % m;
+//        long firstLgMBits = 0;
+//        for (int i = 1; i < Math.pow(2, lgM); i *= 2) firstLgMBits += (i);
+//
+////        StdOut.println(Long.toBinaryString(hash(key)));
+//        return (int) (hash(key) & firstLgMBits);
     }
 
 }

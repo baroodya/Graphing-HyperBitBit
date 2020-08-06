@@ -10,6 +10,7 @@ public class Bits {
 
     public static int hash2(String s, int M) {
         long x = s.hashCode();
+        StdOut.println("Bits Binary: " + Long.toBinaryString(x));
         return (int) ((x >> 22) & 0x3FFL) % M;
     }
 
