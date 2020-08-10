@@ -43,7 +43,7 @@ public class ReportGenerator {
         showNormEstCardinality();
         showAbsError();
         showRelError();
-        showMEstCardinality();
+        showMRelError();
         showStdDev();
         showDistributions();
     }

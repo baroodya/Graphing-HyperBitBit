@@ -20,7 +20,7 @@ public class RandomHashFamily {
 
 
     public RandomHashFamily() {
-        this((int) 1);
+        this(1);
     }
 
     public RandomHashFamily(int count) {
@@ -28,7 +28,7 @@ public class RandomHashFamily {
     }
 
     public RandomHashFamily(long seed) {
-        this(seed, (int) 1);
+        this(seed, 1);
     }
 
     public RandomHashFamily(long seed, int count) {
@@ -50,11 +50,11 @@ public class RandomHashFamily {
         return 2 * Integer.toUnsignedLong(prng.nextInt()) + 1;
     }
 
-    protected final static long affineTransform(long x, long a, long b) {
-        return (long) (((long) a) * x + b);
+    protected static long affineTransform(long x, long a, long b) {
+        return ((a) * x + b);
     }
 
-    protected final static long truncateLong(long value) {
+    protected static long truncateLong(long value) {
         // remove the upper 32 bits by shifting
         return Integer.toUnsignedLong((int) value);
     }
