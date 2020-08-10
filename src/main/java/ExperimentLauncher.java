@@ -11,6 +11,7 @@ import main.java.helpers.Exact;
 import main.java.helpers.StringStream;
 import main.java.helpers.TimingTracker;
 
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
@@ -114,7 +115,7 @@ public class ExperimentLauncher {
 
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
-        
+
         runExperiments();
 
         StdOut.print("\rProducing Graphs. Almost done! \n");
@@ -381,7 +382,7 @@ public class ExperimentLauncher {
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
-        double phi = 1;
+        double phi = 0.77351;
         int numberOfTrialsShown = 100;
 
         StdOut.println("------------------------------------------------");
@@ -528,6 +529,7 @@ public class ExperimentLauncher {
         else
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
 
+        Toolkit.getDefaultToolkit().beep();
         ReportGenerator report = new ReportGenerator(launcher, numberOfTrialsShown);
         report.generateBasicReport();
 

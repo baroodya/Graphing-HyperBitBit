@@ -25,11 +25,11 @@ public class Exact {
         int[] counts = new int[total(stream)];
         stream.resetStream();
         HashSet<String> hset = new HashSet<>();
-        int i = 0;
+        int t = 0;
         for (String x : stream) {
             hset.add(x);
-            counts[i] = hset.size();
-            i++;
+            counts[t] = hset.size();
+            t++;
         }
         return counts;
     }
