@@ -1,7 +1,5 @@
 package main.java.helpers;
 
-import edu.princeton.cs.algs4.StdOut;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,14 +25,5 @@ public class Separator {
         FileWriter writer = new FileWriter(fileName);
         writer.write(sb.toString());
         writer.close();
-    }
-
-    public static void main(String[] args) throws IOException {
-        String fileName = "src/datasets/mobydick.txt";
-        Separator.separate(fileName, " ");
-        StringStream stream = new StringStream(fileName, 1000000);
-        long total = Exact.total(stream);
-        stream.resetStream();
-        StdOut.println(fileName + " has " + total + " total lines and " + Exact.count(stream) + " of them are distinct.");
     }
 }

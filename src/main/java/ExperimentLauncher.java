@@ -82,9 +82,20 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
-        runExperiments();
-
-        StdOut.print("\rProducing Graphs. Almost done! \n");
+        // Decide which algorithm to use
+        switch (alg) {
+            case "PC":
+                algorithm = new ProbabilisticCounting(m, phi);
+                break;
+            case "MC":
+                algorithm = new MinCount(1);
+                break;
+            case "HBB":
+                algorithm = new HyperBitBit(alpha, 1);
+                break;
+            default:
+                throw new IllegalArgumentException("This type of Algorithm is not supported.");
+        }
     }
 
     // A Constructor for Synthetic data
@@ -116,23 +127,6 @@ public class ExperimentLauncher {
         varyMs = new double[m];
         varyMEstimates = new double[t][m];
 
-        runExperiments();
-
-        StdOut.print("\rProducing Graphs. Almost done! \n");
-    }
-
-    // A helper method to read an element, no matter what kind
-    private void readElement(String word) {
-        if (syntheticData) {
-            double random = StdRandom.uniform();
-            algorithm.readSyntheticElement(random);
-        } else {
-            algorithm.readElement(word);
-        }
-    }
-
-    // Helper method to run t trials of m = 1, m = 2, ... , m = m
-    private void runExperiments() throws FileNotFoundException {
         // Decide which algorithm to use
         switch (alg) {
             case "PC":
@@ -147,7 +141,20 @@ public class ExperimentLauncher {
             default:
                 throw new IllegalArgumentException("This type of Algorithm is not supported.");
         }
+    }
 
+    // A helper method to read an element, no matter what kind
+    protected void readElement(String word) {
+        if (syntheticData) {
+            double random = StdRandom.uniform();
+            algorithm.readSyntheticElement(random);
+        } else {
+            algorithm.readElement(word);
+        }
+    }
+
+    // Helper method to run t trials of m = 1, m = 2, ... , m = m
+    protected void runExperiments() throws FileNotFoundException {
         int counter = m * t;
         for (int k = 1; k <= m; k++) {
             varyMs[k - 1] = k;
@@ -187,7 +194,7 @@ public class ExperimentLauncher {
     // returns an average estimate after each input is read
     public double[] getAvgEstimates() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(estimates, bigN);
+        return averageOverTrials(estimates, bigN, t);
     }
 
     // returns all absolute errors for every estimate in every trial
@@ -204,7 +211,7 @@ public class ExperimentLauncher {
     // returns an average absolute error after each input is read
     public double[] getAvgAbsoluteErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllAbsoluteErrors(), bigN);
+        return averageOverTrials(getAllAbsoluteErrors(), bigN, t);
     }
 
     // returns all relative errors for every estimate in every trial
@@ -221,7 +228,7 @@ public class ExperimentLauncher {
     // returns an average relative error after each input is read
     public double[] getAvgRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllRelativeErrors(), bigN);
+        return averageOverTrials(getAllRelativeErrors(), bigN, t);
     }
 
     // returns a average normalized estimate of the cardinality after each new element is read
@@ -254,7 +261,7 @@ public class ExperimentLauncher {
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgEstimatesVaryM() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(varyMEstimates, m);
+        return averageOverTrials(varyMEstimates, m, t);
     }
 
     // returns all absolute errors for every value of m in every trial
@@ -272,11 +279,11 @@ public class ExperimentLauncher {
     // returns an average absolute error for the final cardinality for each value of m
     public double[] getAvgAbsoluteErrorsVaryM() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllAbsoluteErrorsVaryM(), m);
+        return averageOverTrials(getAllAbsoluteErrorsVaryM(), m, t);
     }
 
     // returns all relative errors for every value of m in every trial
-    public double[][] getAllMRelativeErrorsVaryM() {
+    public double[][] getAllRelativeErrorsVaryM() {
         double[][] varyMRelErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
@@ -291,7 +298,7 @@ public class ExperimentLauncher {
     // returns an average relative error for the final cardinality for each value of m
     public double[] getAvgRelativeErrorsVaryM() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllMRelativeErrorsVaryM(), m);
+        return averageOverTrials(getAllRelativeErrorsVaryM(), m, t);
     }
 
     // returns a average normalized estimate of the cardinality after each new element is read
@@ -336,16 +343,16 @@ public class ExperimentLauncher {
     }
 
     // Helper method to average a 2D array vertically
-    protected double[] averageOverTrials(double[][] values, int arraySize) {
+    protected double[] averageOverTrials(double[][] values, int arraySize, int trials) {
         double[] returnThis = new double[arraySize];
 
         // for each element i, average the trials
         double sum = 0;
         for (int i = 0; i < arraySize; i++) {
-            for (int j = 0; j < t; j++) {
+            for (int j = 0; j < trials; j++) {
                 sum += values[j][i];
             }
-            returnThis[i] = sum / t;
+            returnThis[i] = sum / trials;
             sum = 0;
         }
 
@@ -521,7 +528,7 @@ public class ExperimentLauncher {
         Stopwatch watch = new Stopwatch();
 
 
-        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials) + "\n");
+        StdOut.println(TimingTracker.timing(alg, "'" + input + "'", m, trials, "src/timings.txt") + "\n");
 
         ExperimentLauncher launcher;
         if (synthetic)
@@ -529,11 +536,14 @@ public class ExperimentLauncher {
         else
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
 
+        launcher.runExperiments();
         Toolkit.getDefaultToolkit().beep();
+        StdOut.println("\rProducing Graphs. Almost done!");
+
         ReportGenerator report = new ReportGenerator(launcher, numberOfTrialsShown);
         report.generateBasicReport();
 
-        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime()));
+        StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime(), "src/timings.txt"));
     }
 
     public static void main(String[] args) throws IOException {

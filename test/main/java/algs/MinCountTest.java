@@ -1,7 +1,7 @@
 package main.java.algs;
 
-import edu.princeton.cs.algs4.StdRandom;
 import main.java.HelperMethods;
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.jupiter.api.Test;
 
 class MinCountTest {

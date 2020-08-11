@@ -1,7 +1,5 @@
 package main.java.helpers;
 
-import edu.princeton.cs.algs4.StdOut;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -11,9 +9,9 @@ import java.util.Scanner;
 
 public class TimingTracker {
     // Static method to add a time to the file
-    public static String add(String alg, String fileName, int substreams, int t, double time) throws IOException {
+    public static String add(String alg, String fileName, int substreams, int t, double time, String targetFile) throws IOException {
         // Initialize the scanner
-        File file = new File("src/timings.txt");
+        File file = new File(targetFile);
         Scanner sc = new Scanner(file);
 
         // Create an id for the experiment
@@ -44,13 +42,13 @@ public class TimingTracker {
 
             String replace = id + " " + avg + " " + m;
 
-            FileWriter writer = new FileWriter("src/timings.txt");
+            FileWriter writer = new FileWriter(targetFile);
             writer.write(sb.toString().replace(line, replace));
             writer.close();
         } // If it hasn't add it to the file
         else {
             line = id + " " + time + " " + "1";
-            FileWriter writer = new FileWriter("src/timings.txt", true);
+            FileWriter writer = new FileWriter(targetFile, true);
             writer.write("\n" + line);
             writer.close();
         }
@@ -61,9 +59,9 @@ public class TimingTracker {
     }
 
     // Static Method to fetch a timing from the file
-    public static String timing(String alg, String fileName, int m, int t) throws FileNotFoundException {
+    public static String timing(String alg, String fileName, int m, int t, String targetFile) throws FileNotFoundException {
         // Initialize the scanner
-        File file = new File("src/timings.txt");
+        File file = new File(targetFile);
         Scanner sc = new Scanner(file);
 
         // Create an id for the experiment
@@ -92,11 +90,5 @@ public class TimingTracker {
         } // if you don't, return an error statement
         else
             return "This specific experiment has not been run before. I'm too lazy to give you an estimate.";
-    }
-
-    public static void main(String[] args) throws IOException {
-        StdOut.println(timing("HBB", "test.txt", 4, 1));
-        StdOut.println(add("HBB", "test.txt", 2, 4, 1));
-        StdOut.println(timing("HBB", "test.txt", 4, 1));
     }
 }

@@ -1,6 +1,7 @@
 package main.java.algs;
 
 import edu.princeton.cs.algs4.StdRandom;
+import main.java.algs.ProbabilisticCounting;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

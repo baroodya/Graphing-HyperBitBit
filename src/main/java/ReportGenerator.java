@@ -194,7 +194,7 @@ public class ReportGenerator {
                         xAxis,
                         xValues,
                         launcher.getAvgRelativeErrorsVaryM(),
-                        launcher.getAllMRelativeErrorsVaryM()),
+                        launcher.getAllRelativeErrorsVaryM()),
                 numShown);
     }
 
