@@ -1,9 +1,9 @@
 package main.java.algs;
 
 import edu.princeton.cs.algs4.StdRandom;
-import main.java.algs.ProbabilisticCounting;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 class ProbabilisticCountingTest {
@@ -367,5 +367,11 @@ class ProbabilisticCountingTest {
                 131454160};
 
         assert algorithm.arithmeticMean(values) == -67198045.06;
+    }
+
+    @Test
+    void main() throws FileNotFoundException {
+        String[] args = new String[1];
+        ProbabilisticCounting.main(args);
     }
 }

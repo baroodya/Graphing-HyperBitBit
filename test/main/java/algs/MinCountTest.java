@@ -1,8 +1,10 @@
 package main.java.algs;
 
-import main.java.HelperMethods;
 import edu.princeton.cs.algs4.StdRandom;
+import main.java.HelperMethods;
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
 
 class MinCountTest {
     private final MinCount algorithm = new MinCount(16);
@@ -182,6 +184,11 @@ class MinCountTest {
         assert HelperMethods.withinFivePercent(algorithm.minSeen[14], 0.4);
 
         assert HelperMethods.withinFivePercent(algorithm.getEstimateOfCardinality(), 17.91044776119);
+    }
 
+    @Test
+    void main() throws FileNotFoundException {
+        String[] args = new String[1];
+        MinCount.main(args);
     }
 }

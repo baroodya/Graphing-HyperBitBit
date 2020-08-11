@@ -3,6 +3,7 @@ package main.java.algs; // Last checked by RS on June 29, 2020
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import main.java.helpers.Bits;
+import main.java.helpers.Exact;
 import main.java.helpers.StringStream;
 import main.java.randomhash.main.RandomHashFamily;
 
@@ -11,7 +12,6 @@ import java.util.HashSet;
 
 public class HyperBitBit implements CardinalityEstimationAlgorithm {
     // Values to be returned/changed throughout the experiment
-    protected double estimate;
     protected int m;
     protected int cnt;
 
@@ -28,8 +28,6 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     protected HashSet<String> hset;
     protected RandomHashFamily hasher;
 
-    protected double maxRandom;
-    protected double minRandom;
 
     public HyperBitBit(double alpha, int cardinality) {
         // Initialize variables
@@ -42,7 +40,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
     public void readElement(String element) {
         hset.add(element);
         cnt++;
-        estimate = count(element);
+        count(element);
     }
 
     // REad in a synthetic element
@@ -59,7 +57,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
         hset.add(randoms.toString());
         cnt++;
-        estimate = count(randoms.toString());
+        count(randoms.toString());
     }
 
     // Returns the current size (bigN) of the algorithm
@@ -67,20 +65,14 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         return cnt;
     }
 
-    // Returns the actual cardinality (n) of the algorithm
-    public int getCardinality() {
-        return hset.size();
-    }
-
     // Returns the estimated cardinality of the algorithm
     public double getEstimateOfCardinality() {
-        return estimate;
+        return estimate();
     }
 
     // Reset the algorithm for a new trial
     public void resetAlgorithm(int newM) {
         m = newM;
-        estimate = 0;
         cnt = 0;
         sketch = sketch2 = 0;
         avg = 0;
@@ -90,13 +82,13 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
     // Helper method that returns the actual estimate of the cardinality
     protected double estimate() {
-        double beta = 1.0 - 1.0 * Bits.p(sketch) / m;
-        double bias = 2 * Math.log(1.0 / alpha) / 3.0 - 2 * Math.log(beta);
+        double beta = 1.0 - 1.0 * Bits.p(sketch) / m; // 1
+        double bias = 2 * Math.log(1.0 / alpha) / 3.0 - 2 * Math.log(beta); //
         return (Math.pow(2, avg) * m * bias);
     }
 
     // Helper method that manages the longs after each input so that an estimate can be made
-    protected double count(String s) {
+    protected void count(String s) {
         if (Bits.r(hasher.hash(s)) > avg) sketch = sketch | (1L << hasher.hash2(s, m));
         if (Bits.r(hasher.hash(s)) > avg + 1)
             sketch2 = sketch2 | (1L << hasher.hash2(s, m));
@@ -105,7 +97,6 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
             avg++;
             sketch2 = 0;
         }
-        return estimate();
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -122,7 +113,7 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
         for (String x : stream) counter.readElement(x);
 
-        int actualCardinality = counter.getCardinality();
+        int actualCardinality = Exact.count(stream);
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
         StdOut.println("Actual Cardinality = " + actualCardinality);
