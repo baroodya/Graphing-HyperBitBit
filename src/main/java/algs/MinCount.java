@@ -87,7 +87,6 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     public static void main(String[] args) throws FileNotFoundException {
         int size = 100000;
         int m = 64;
-        boolean synthetic = false;
         MinCount counter = new MinCount(m);
 
         StdOut.println("Size = " + counter.getSize());
@@ -95,32 +94,31 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         StdOut.print("\n");
 
         // Read in the file
-        if (synthetic) {
-            for (int i = 0; i < size; i++)
-                counter.readSyntheticElement(StdRandom.uniform());
+        for (int i = 0; i < size; i++)
+            counter.readSyntheticElement(StdRandom.uniform());
 
-            StdOut.println("Size = " + counter.getSize());
-            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-            StdOut.println(
-                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
-            StdOut.println(
-                    "Rel. Error = "
-                            + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
-        } else {
-            String inputFile = "src/datasets/mobydick.txt";
-            int N = 100000;
-            StringStream stream = new StringStream(inputFile, N);
+        StdOut.println("Size = " + counter.getSize());
+        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+        StdOut.println(
+                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
+        StdOut.println(
+                "Rel. Error = "
+                        + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
 
-            for (String line : stream) counter.readElement(line);
+        counter.resetAlgorithm(m);
+        String inputFile = "src/datasets/mobydick.txt";
+        int N = 100000;
+        StringStream stream = new StringStream(inputFile, N);
 
-            int cardinality = Exact.count(stream);
-            StdOut.println("Size = " + counter.getSize());
-            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-            StdOut.println(
-                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
-            StdOut.println(
-                    "Rel. Error = "
-                            + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
-        }
+        for (String line : stream) counter.readElement(line);
+
+        int cardinality = Exact.count(stream);
+        StdOut.println("Size = " + counter.getSize());
+        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+        StdOut.println(
+                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
+        StdOut.println(
+                "Rel. Error = "
+                        + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
     }
 }
