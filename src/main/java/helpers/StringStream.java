@@ -46,13 +46,4 @@ public class StringStream implements Iterable<String> {
     public void resetStream() throws FileNotFoundException {
         scanner = new Scanner(file);
     }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        String fileName = args[0];
-        int N = Integer.parseInt(args[1]);
-        StringStream stream = new StringStream(fileName, N);
-        for (String x : stream) System.out.println(x);
-        stream.resetStream();
-        for (String x : stream) System.out.println(x);
-    }
 }

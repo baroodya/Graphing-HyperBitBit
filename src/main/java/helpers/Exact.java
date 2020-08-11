@@ -1,9 +1,6 @@
 package main.java.helpers;
 
-import edu.princeton.cs.algs4.StdOut;
-
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.HashSet;
 
 public class Exact {
@@ -51,16 +48,5 @@ public class Exact {
     public static int total(String fileName, int maxRead) throws FileNotFoundException {
         StringStream stream = new StringStream(fileName, maxRead);
         return total(stream);
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        String fileName = "src/datasets/f0";
-        int N = 1000000;
-        StringStream stream = new StringStream(fileName, N);
-        long total = total(stream);
-        stream.resetStream();
-        StdOut.println(fileName + " has " + total + " total lines and " + count(stream) + " of them are distinct.");
-        stream.resetStream();
-        StdOut.println("The array is below: " + Arrays.toString(countArray(stream)));
     }
 }
