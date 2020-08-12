@@ -1,7 +1,5 @@
 package main.java;
 
-import java.io.FileNotFoundException;
-
 public class ReportGenerator {
     // variables for graphing
     protected final int numShown;
@@ -51,6 +49,7 @@ public class ReportGenerator {
     // shows the estimated cardinality graph
     public void showEstCardinality() {
         // Graph 1: Number of Inputs Seen vs. Estimated Cardinality ($N$ vs. $Z_n$)
+        xValues = launcher.getSizes();
         title = "Average Estimated Cardinality of Data Stream";
         xAxis = "Number of Inputs Seen (N)";
         yAxis = "Estimated Cardinality (Z_n)";
@@ -70,6 +69,7 @@ public class ReportGenerator {
     // Shows the normalized estimated cardinality graph
     public void showNormEstCardinality() {
         // Graph 2: Number of Inputs Seen vs. Normalized Estimated Cardinality
+        xValues = launcher.getSizes();
         title = "Average Normalized Estimated Cardinality of Data Stream";
         xAxis = "Number of Inputs Seen (N)";
         yAxis = "Normalized Estimated Cardinality ((Z_n / n) - 1)";
@@ -89,6 +89,7 @@ public class ReportGenerator {
     // Shows the absolute error graph
     public void showAbsError() {
         // Graph 3: Number of Inputs Seen vs. Absolute Error ($N$ vs. $|Z_n - n|$)
+        xValues = launcher.getSizes();
         title = "Average Absolute Error";
         xAxis = "Number of Inputs Seen (N)";
         yAxis = "Absolute Error (|Z_n - n|)";
@@ -108,6 +109,7 @@ public class ReportGenerator {
     // Shows the relative error graph
     public void showRelError() {
         // Graph 4: Number of Inputs Seen vs. Relative Error
+        xValues = launcher.getSizes();
         title = "Average Relative Error";
         xAxis = "Number of Inputs Seen (N)";
         yAxis = "Relative Error (|Z_n - n|/n)";
@@ -127,7 +129,6 @@ public class ReportGenerator {
     // Shows the estimated cardinality graph for m = 1 thru m = m
     public void showMEstCardinality() {
         // Graph 5: Number of Substreams vs. Estimated Cardinality ($N$ vs. $Z_n$)
-
         xValues = launcher.varyMs;
         title = "Average Estimated Cardinality of Data Stream";
         xAxis = "Number of Substreams (m)";
@@ -145,9 +146,10 @@ public class ReportGenerator {
     // Shows the normalized estimated cardinality graph for m = 1 thru m = m
     public void showMNormEstCardinality() {
         // Graph 6: Number of Substreams vs. Normalized Estimated Cardinality
+        xValues = launcher.varyMs;
         title = "Average Normalized Estimated Cardinality of Data Stream";
         xAxis = "Number of Substreams (m)";
-        yAxis = "Normalized Estimated Cardinality (Z_n)";
+        yAxis = "Normalized Estimated Cardinality ((Z_n / n) - 1)";
 
         grapher.showLinePlot(
                 title,
@@ -164,7 +166,9 @@ public class ReportGenerator {
     // Shows the absolute error graph for m = 1 thru m = m
     public void showMAbsError() {
         // Graph 7: Number of Substreams vs. Absolute Error ($N$ vs. $|Z_n - n|$)
+        xValues = launcher.varyMs;
         title = "Average Absolute Error";
+        xAxis = "Number of Substreams (m)";
         yAxis = "Absolute Error (|Z_n - n|)";
 
         grapher.showLinePlot(
@@ -182,6 +186,7 @@ public class ReportGenerator {
     // Shows the relative error graph for m = 1 thru m = m
     public void showMRelError() {
         // Graph 8: Number of Substreams vs. Relative Error
+        xValues = launcher.varyMs;
         title = "Average Relative Error";
         xAxis = "Number of Substreams (m)";
         yAxis = "Relative Error (|Z_n - n|/n)";
@@ -199,7 +204,8 @@ public class ReportGenerator {
     }
 
     // Shows the standard deviation of the trials as a function of m
-    private void showStdDev() {
+    protected void showStdDev() {
+        xValues = launcher.varyMs;
         title = "Standard Deviation of Estimates";
         xAxis = "Number of Substreams (m)";
         yAxis = "Standard Deviation of " + launcher.t + " Trials";
@@ -247,7 +253,7 @@ public class ReportGenerator {
     }
 
     // Helper method to truncate arrays and get rid of non-useful data
-    private double[] manageArray(double[] array) {
+    protected double[] manageArray(double[] array) {
         int newLength = array.length - (array.length / 50);
         double[] returnThis = new double[newLength];
 
@@ -258,21 +264,12 @@ public class ReportGenerator {
     }
 
     // See above
-    private double[][] manageArray(double[][] array) {
+    protected double[][] manageArray(double[][] array) {
         int newLength = array[0].length - (array[0].length / 50);
         double[][] returnThis = new double[array.length][newLength];
 
         for (int i = 0; i < array.length; i++) returnThis[i] = manageArray(array[i]);
 
         return returnThis;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        int[] cardinalities = new int[100000];
-        for (int i = 0; i < 100000; i++) cardinalities[i] = i;
-        ExperimentLauncher experiment = new ExperimentLauncher("MC", 10000, 64, cardinalities, 0.5, 0.77351, 100);
-
-        ReportGenerator report = new ReportGenerator(experiment, 50);
-        report.generateFullReport();
     }
 }
