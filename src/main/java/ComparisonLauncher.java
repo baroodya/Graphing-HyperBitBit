@@ -67,6 +67,7 @@ public class ComparisonLauncher {
         ProbabilisticCounting = new ProbabilisticCounting(m, 0.77351);
         HyperBitBit = new HyperBitBit(alpha, m);
         newAlgorithm = alg;
+        newAlgorithm.resetAlgorithm(m);
 
         // Determine type of input; create stream if necessary
         if (input.equals("synthetic")) syntheticData = true;
@@ -94,15 +95,11 @@ public class ComparisonLauncher {
         percent = 0.0;
         denom = t * m * ((m + 3.0) / 2.0);
 
-        // Run the comparison
-        runConstantMExperiment();
-        runVariableMExperiment();
-
         StdOut.println();
     }
 
     // A helper method to read the appropriate type of data and pass it to each algorithm
-    private void readElement(String word) {
+    protected void readElement(String word) {
         if (syntheticData) {
             double random = StdRandom.uniform();
             MinCount.readSyntheticElement(random);
@@ -117,54 +114,8 @@ public class ComparisonLauncher {
         }
     }
 
-    // A method to run an experiment with a constant value of m
-    private void runConstantMExperiment() throws FileNotFoundException {
-        // Run 't' trials and update 2D arrays
-        int j;
-        for (int i = 0; i < t; i++) {
-            percent = ((double) (i * m) / (denom)) * 100;
-            StdOut.print("\r" + "Running Constant m = " + m + ". On trial " + i + "/" + t + ". (");
-            StdOut.printf("%.2f", percent);
-            StdOut.print("%)");
-            j = 0;
-            if (syntheticData) {
-                while (j < bigN) {
-                    readElement("");
-
-                    // Only fill the 1D array when i == 0 (saves work)
-                    if (i == 0) sizes[j] = newAlgorithm.getSize();
-
-                    MCEstimates[i][j] = MinCount.getEstimateOfCardinality();
-                    PCEstimates[i][j] = ProbabilisticCounting.getEstimateOfCardinality();
-                    HBBEstimates[i][j] = HyperBitBit.getEstimateOfCardinality();
-                    newAlgEstimates[i][j] = newAlgorithm.getEstimateOfCardinality();
-                    j++;
-                }
-            } else {
-                for (String element : stream) {
-                    if (j > bigN) break;
-                    readElement(element);
-
-                    if (i == 0) sizes[j] = newAlgorithm.getSize();
-
-                    MCEstimates[i][j] = MinCount.getEstimateOfCardinality();
-                    PCEstimates[i][j] = ProbabilisticCounting.getEstimateOfCardinality();
-                    HBBEstimates[i][j] = HyperBitBit.getEstimateOfCardinality();
-                    newAlgEstimates[i][j] = newAlgorithm.getEstimateOfCardinality();
-                    j++;
-                }
-            }
-            // Reset the algorithms and the stream
-            MinCount.resetAlgorithm(m);
-            ProbabilisticCounting.resetAlgorithm(m);
-            HyperBitBit.resetAlgorithm(m);
-            newAlgorithm.resetAlgorithm(m);
-            if (!syntheticData) stream.resetStream();
-        }
-    }
-
     // Helper method to run t trials of m = 1, m = 2, ... , m = m
-    private void runVariableMExperiment() throws FileNotFoundException {
+    protected void runExperiments() throws FileNotFoundException {
         MinCount.resetAlgorithm(1);
         ProbabilisticCounting.resetAlgorithm(1);
         HyperBitBit.resetAlgorithm(1);
@@ -185,21 +136,37 @@ public class ComparisonLauncher {
                     while (j < bigN) {
                         readElement("");
 
-                        varyMMCEstimates[i][k - 1] = MinCount.getEstimateOfCardinality();
-                        varyMPCEstimates[i][k - 1] = ProbabilisticCounting.getEstimateOfCardinality();
-                        varyMHBBEstimates[i][k - 1] = HyperBitBit.getEstimateOfCardinality();
-                        varyMNewAlgEstimates[i][k - 1] = newAlgorithm.getEstimateOfCardinality();
+                        if (k == m) {
+                            if (i == 0) sizes[j] = MinCount.getSize();
 
+                            MCEstimates[i][j] = MinCount.getEstimateOfCardinality();
+                            PCEstimates[i][j] = ProbabilisticCounting.getEstimateOfCardinality();
+                            HBBEstimates[i][j] = HyperBitBit.getEstimateOfCardinality();
+                            newAlgEstimates[i][j] = newAlgorithm.getEstimateOfCardinality();
+                        }
                         j++;
                     }
-                } else {
-                    for (String element : stream) readElement(element);
 
-                    varyMMCEstimates[i][k - 1] = MinCount.getEstimateOfCardinality();
-                    varyMPCEstimates[i][k - 1] = ProbabilisticCounting.getEstimateOfCardinality();
-                    varyMHBBEstimates[i][k - 1] = HyperBitBit.getEstimateOfCardinality();
-                    varyMNewAlgEstimates[i][k - 1] = newAlgorithm.getEstimateOfCardinality();
+                } else {
+                    for (String element : stream) {
+                        readElement(element);
+
+                        if (k == m) {
+                            if (i == 0) sizes[j] = MinCount.getSize();
+
+                            MCEstimates[i][j] = MinCount.getEstimateOfCardinality();
+                            PCEstimates[i][j] = ProbabilisticCounting.getEstimateOfCardinality();
+                            HBBEstimates[i][j] = HyperBitBit.getEstimateOfCardinality();
+                            newAlgEstimates[i][j] = newAlgorithm.getEstimateOfCardinality();
+                        }
+                        j++;
+                    }
+
                 }
+                varyMMCEstimates[i][k - 1] = MinCount.getEstimateOfCardinality();
+                varyMPCEstimates[i][k - 1] = ProbabilisticCounting.getEstimateOfCardinality();
+                varyMHBBEstimates[i][k - 1] = HyperBitBit.getEstimateOfCardinality();
+                varyMNewAlgEstimates[i][k - 1] = newAlgorithm.getEstimateOfCardinality();
 
                 // reset the algorithm and the stream
                 MinCount.resetAlgorithm(k + 1);
@@ -226,7 +193,7 @@ public class ComparisonLauncher {
     // returns a pure estimate of the Relative Error after each new element is read
     public double[] getAvgMCRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllMCRelativeErrors(), bigN);
+        return averageOverTrials(getAllMCRelativeErrors());
     }
 
     // A method that returns all the relative errors from Probabilistic Counting
@@ -243,7 +210,7 @@ public class ComparisonLauncher {
     // returns a pure estimate of the relative error after each new element is read
     public double[] getAvgPCRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllPCRelativeErrors(), bigN);
+        return averageOverTrials(getAllPCRelativeErrors());
     }
 
     // A method that returns all the relative errors from HyperBitBit
@@ -260,7 +227,7 @@ public class ComparisonLauncher {
     // returns a pure estimate of the relative error after each new element is read
     public double[] getAvgHBBRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllHBBRelativeErrors(), bigN);
+        return averageOverTrials(getAllHBBRelativeErrors());
     }
 
     // A method that returns all the relative errors from the new Algorithm
@@ -277,68 +244,70 @@ public class ComparisonLauncher {
     // returns a pure estimate of the relative error after each new element is read
     public double[] getAvgNewAlgRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllNewAlgRelativeErrors(), bigN);
+        return averageOverTrials(getAllNewAlgRelativeErrors());
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgMCEstimatesVaryM() {
-        double[][] relErrors = new double[t][bigN];
+        double[][] relErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
                 relErrors[i][j] = (Math.abs(varyMMCEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(relErrors, m);
+        return averageOverTrials(relErrors);
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgPCEstimatesVaryM() {
-        double[][] relErrors = new double[t][bigN];
+        double[][] relErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
                 relErrors[i][j] = (Math.abs(varyMPCEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(relErrors, m);
+        return averageOverTrials(relErrors);
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgHBBEstimatesVaryM() {
-        double[][] relErrors = new double[t][bigN];
+        double[][] relErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
                 relErrors[i][j] = (Math.abs(varyMHBBEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(relErrors, m);
+        return averageOverTrials(relErrors);
     }
 
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgNewAlgEstimatesVaryM() {
-        double[][] relErrors = new double[t][bigN];
+        double[][] relErrors = new double[t][m];
         for (int i = 0; i < t; i++) {
             for (int j = 0; j < m; j++) {
                 relErrors[i][j] = (Math.abs(varyMNewAlgEstimates[i][j] - cardinalities[bigN - 1])) / cardinalities[bigN - 1];
             }
         }
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(relErrors, m);
+        return averageOverTrials(relErrors);
     }
 
     // Helper method to average a 2D array vertically
-    private double[] averageOverTrials(double[][] values, int arraySize) {
+    protected double[] averageOverTrials(double[][] values) {
+        int trials = values.length;
+        int arraySize = values[0].length;
         double[] returnThis = new double[arraySize];
 
         // for each element i, average the trials
         double sum = 0;
         for (int i = 0; i < arraySize; i++) {
-            for (int j = 0; j < t; j++) {
-                sum += values[j][i];
+            for (double[] value : values) {
+                sum += value[i];
             }
-            returnThis[i] = sum / t;
+            returnThis[i] = sum / trials;
             sum = 0;
         }
 
@@ -347,7 +316,7 @@ public class ComparisonLauncher {
 
     public static void main(String[] args) throws FileNotFoundException {
         String file = "f0";
-        boolean synthetic = false;
+        boolean synthetic = Boolean.parseBoolean(args[0]);
 
         int maxRead = 100000;
         int m = 64;
@@ -373,6 +342,7 @@ public class ComparisonLauncher {
         CardinalityEstimationAlgorithm alg = new main.java.algs.ProbabilisticCounting(m, phi);
 
         ComparisonLauncher launcher = new ComparisonLauncher(alg, size, m, cardinalities, alpha, trials, input);
+        launcher.runExperiments();
 
         ComparisonGenerator report = new ComparisonGenerator(launcher);
         report.generateFullReport();

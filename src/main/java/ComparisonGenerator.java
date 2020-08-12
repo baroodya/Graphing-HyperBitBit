@@ -1,10 +1,5 @@
 package main.java;
 
-import main.java.algs.CardinalityEstimationAlgorithm;
-import main.java.algs.HyperBitBit;
-
-import java.io.FileNotFoundException;
-
 public class ComparisonGenerator {
     protected String title; // Title of the graph (should be updated in each method)
     protected String xAxis; // Title of xAxis (see above)
@@ -19,8 +14,6 @@ public class ComparisonGenerator {
     public ComparisonGenerator(ComparisonLauncher launcher) {
         this.launcher = launcher;
         grapher = new CustomGrapher();
-
-        xValues = launcher.sizes;
     }
 
     // Full report is kinda lame...may be updated in the future
@@ -34,6 +27,7 @@ public class ComparisonGenerator {
         title = "Comparison of the error of your Algorithm with PC, MC, and HBB";
         xAxis = "Number of Inputs Seen (N)";
         yAxis = "Relative Error (|Z_n - n|/n)";
+        xValues = launcher.sizes;
 
         double[][] data = new double[4][launcher.bigN];
         data[0] = launcher.getAvgMCRelativeErrors();
@@ -49,10 +43,9 @@ public class ComparisonGenerator {
         title = "Comparison of the accuracy of your Algorithm with PC, MC, and HBB";
         xAxis = "Number of Substreams (m)";
         yAxis = "Relative Error (|Z_n - n|/n)";
-
         xValues = launcher.varyMs;
 
-        double[][] data = new double[4][launcher.bigN];
+        double[][] data = new double[4][launcher.m];
         data[0] = launcher.getAvgMCEstimatesVaryM();
         data[1] = launcher.getAvgPCEstimatesVaryM();
         data[2] = launcher.getAvgHBBEstimatesVaryM();
@@ -62,7 +55,7 @@ public class ComparisonGenerator {
     }
 
     // A helper method to get rid of data that messes with the display window
-    private double[] manageArray(double[] array) {
+    protected double[] manageArray(double[] array) {
         int newLength = array.length - (array.length / 50);
         double[] returnThis = new double[newLength];
 
@@ -73,22 +66,12 @@ public class ComparisonGenerator {
     }
 
     // See above, but for 2D arrays
-    private double[][] manageArray(double[][] array) {
+    protected double[][] manageArray(double[][] array) {
         int newLength = array[0].length - (array[0].length / 50);
         double[][] returnThis = new double[array.length][newLength];
 
         for (int i = 0; i < array.length; i++) returnThis[i] = manageArray(array[i]);
 
         return returnThis;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        int[] cardinalities = new int[10000];
-        for (int i = 0; i < 10000; i++) cardinalities[i] = i;
-        CardinalityEstimationAlgorithm hbb = new HyperBitBit(64, 10000);
-        ComparisonLauncher experiment = new ComparisonLauncher(hbb, 1000, 64, cardinalities, 0.5, 100, "synthetic");
-
-        ComparisonGenerator report = new ComparisonGenerator(experiment);
-        report.generateFullReport();
     }
 }

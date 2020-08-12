@@ -251,5 +251,7 @@ class HyperBitBitTest {
     void main() throws FileNotFoundException {
         String[] args = new String[1];
         HyperBitBit.main(args);
+        args[0] = "true";
+        HyperBitBit.main(args);
     }
 }

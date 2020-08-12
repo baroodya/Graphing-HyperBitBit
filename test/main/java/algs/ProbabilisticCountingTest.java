@@ -373,5 +373,7 @@ class ProbabilisticCountingTest {
     void main() throws FileNotFoundException {
         String[] args = new String[1];
         ProbabilisticCounting.main(args);
+        args[0] = "true";
+        ProbabilisticCounting.main(args);
     }
 }

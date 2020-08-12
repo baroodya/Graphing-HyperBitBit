@@ -194,7 +194,7 @@ public class ExperimentLauncher {
     // returns an average estimate after each input is read
     public double[] getAvgEstimates() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(estimates, bigN, t);
+        return averageOverTrials(estimates);
     }
 
     // returns all absolute errors for every estimate in every trial
@@ -211,7 +211,7 @@ public class ExperimentLauncher {
     // returns an average absolute error after each input is read
     public double[] getAvgAbsoluteErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllAbsoluteErrors(), bigN, t);
+        return averageOverTrials(getAllAbsoluteErrors());
     }
 
     // returns all relative errors for every estimate in every trial
@@ -228,7 +228,7 @@ public class ExperimentLauncher {
     // returns an average relative error after each input is read
     public double[] getAvgRelativeErrors() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllRelativeErrors(), bigN, t);
+        return averageOverTrials(getAllRelativeErrors());
     }
 
     // returns a average normalized estimate of the cardinality after each new element is read
@@ -261,7 +261,7 @@ public class ExperimentLauncher {
     // returns an average estimate for the final cardinality for each value of m
     public double[] getAvgEstimatesVaryM() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(varyMEstimates, m, t);
+        return averageOverTrials(varyMEstimates);
     }
 
     // returns all absolute errors for every value of m in every trial
@@ -279,7 +279,7 @@ public class ExperimentLauncher {
     // returns an average absolute error for the final cardinality for each value of m
     public double[] getAvgAbsoluteErrorsVaryM() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllAbsoluteErrorsVaryM(), m, t);
+        return averageOverTrials(getAllAbsoluteErrorsVaryM());
     }
 
     // returns all relative errors for every value of m in every trial
@@ -298,7 +298,7 @@ public class ExperimentLauncher {
     // returns an average relative error for the final cardinality for each value of m
     public double[] getAvgRelativeErrorsVaryM() {
         // return the average of the trials for each element. This is a 1D array
-        return averageOverTrials(getAllRelativeErrorsVaryM(), m, t);
+        return averageOverTrials(getAllRelativeErrorsVaryM());
     }
 
     // returns a average normalized estimate of the cardinality after each new element is read
@@ -343,14 +343,16 @@ public class ExperimentLauncher {
     }
 
     // Helper method to average a 2D array vertically
-    protected double[] averageOverTrials(double[][] values, int arraySize, int trials) {
+    protected double[] averageOverTrials(double[][] values) {
+        int trials = values.length;
+        int arraySize = values[0].length;
         double[] returnThis = new double[arraySize];
 
         // for each element i, average the trials
         double sum = 0;
         for (int i = 0; i < arraySize; i++) {
-            for (int j = 0; j < trials; j++) {
-                sum += values[j][i];
+            for (double[] value : values) {
+                sum += value[i];
             }
             returnThis[i] = sum / trials;
             sum = 0;

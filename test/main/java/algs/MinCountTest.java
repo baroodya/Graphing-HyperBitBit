@@ -190,5 +190,7 @@ class MinCountTest {
     void main() throws FileNotFoundException {
         String[] args = new String[1];
         MinCount.main(args);
+        args[0] = "true";
+        MinCount.main(args);
     }
 }

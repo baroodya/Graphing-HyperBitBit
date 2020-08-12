@@ -40,7 +40,6 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         if (32 - binString.length() > 0) {
             binString += "0".repeat(32 - binString.length());
         }
-
         count(binString);
     }
 
@@ -139,6 +138,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
     public static void main(String[] args) throws FileNotFoundException {
         int size = 100000;
         int m = 64;
+        boolean synthetic = Boolean.parseBoolean(args[0]);
 
         ProbabilisticCounting counter = new ProbabilisticCounting(m, 0.77351);
 
@@ -146,30 +146,33 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
         StdOut.print("\n");
 
-        for (int i = 0; i < size; i++)
-            counter.readSyntheticElement(StdRandom.uniform());
+        // Read in the file
+        if (synthetic) {
+            for (int i = 0; i < size; i++)
+                counter.readSyntheticElement(StdRandom.uniform());
 
-        StdOut.println("Size = " + counter.getSize());
-        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.println(
-                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
-        StdOut.println(
-                "Rel. Error = "
-                        + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
+            StdOut.println("Size = " + counter.getSize());
+            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+            StdOut.println(
+                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
+            StdOut.println(
+                    "Rel. Error = "
+                            + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
+        } else {
+            String inputFile = "src/datasets/mobydick.txt";
+            int N = 100000;
+            StringStream stream = new StringStream(inputFile, N);
 
-        String inputFile = "src/datasets/mobydick.txt";
-        int N = 100000;
-        StringStream stream = new StringStream(inputFile, N);
+            for (String line : stream) counter.readElement(line);
 
-        for (String line : stream) counter.readElement(line);
-
-        int cardinality = Exact.count(stream);
-        StdOut.println("Size = " + counter.getSize());
-        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.println(
-                "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
-        StdOut.println(
-                "Rel. Error = "
-                        + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
+            int cardinality = Exact.count(stream);
+            StdOut.println("Size = " + counter.getSize());
+            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
+            StdOut.println(
+                    "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
+            StdOut.println(
+                    "Rel. Error = "
+                            + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
+        }
     }
 }

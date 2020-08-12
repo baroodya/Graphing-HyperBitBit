@@ -105,13 +105,18 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
         StringStream stream = new StringStream(fileName, N);
         int M = 64;
         double alpha = 0.5;
+        boolean synthetic = Boolean.parseBoolean(args[0]);
+
         HyperBitBit counter = new HyperBitBit(alpha, M);
 
         StdOut.println("Size = " + counter.getSize());
         StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
         StdOut.print("\n");
 
-        for (String x : stream) counter.readElement(x);
+        if (synthetic)
+            for (int i = 0; i < N; i++) counter.readSyntheticElement(StdRandom.uniform());
+        else
+            for (String x : stream) counter.readElement(x);
 
         int actualCardinality = Exact.count(stream);
         StdOut.println("Size = " + counter.getSize());

@@ -331,7 +331,7 @@ class ExperimentLauncherTest {
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.estimates);
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.estimates);
 
-        assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.varyMEstimates);
+        assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.varyMEstimates);
         assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.varyMEstimates);
     }
 
@@ -450,9 +450,9 @@ class ExperimentLauncherTest {
 
     @Test
     void averageOverTrials() {
-        assert Arrays.equals(oneHundredThousandZeros, launcher.averageOverTrials(oneHundredThousandXOneHundredZeros, 100000, 100));
-        assert Arrays.equals(oneHundredThousandInfinities, launcher.averageOverTrials(oneHundredThousandXOneHundredInfinities, 100000, 100));
-        assert Arrays.equals(tenAvgOfFiveRandomIntegers, launcher.averageOverTrials(fiveXTenRandomIntegers, 10, 5));
+        assert Arrays.equals(oneHundredThousandZeros, launcher.averageOverTrials(oneHundredThousandXOneHundredZeros));
+        assert Arrays.equals(oneHundredThousandInfinities, launcher.averageOverTrials(oneHundredThousandXOneHundredInfinities));
+        assert Arrays.equals(tenAvgOfFiveRandomIntegers, launcher.averageOverTrials(fiveXTenRandomIntegers));
     }
 
     @Test
