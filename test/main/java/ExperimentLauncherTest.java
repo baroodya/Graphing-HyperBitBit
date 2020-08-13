@@ -4,6 +4,7 @@ import main.java.helpers.Exact;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 
 class ExperimentLauncherTest {
@@ -469,5 +470,11 @@ class ExperimentLauncherTest {
 
         for (int i = 0; i < 5; i++)
             assert launcher.arithmeticMean(fiveXTenRandomIntegers[i]) == fiveAvgOfTenRandomIntegers[i];
+    }
+
+    @Test
+    void main() throws IOException {
+        String[] args = new String[1];
+        ExperimentLauncher.main(args);
     }
 }

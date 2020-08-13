@@ -10,7 +10,7 @@ import java.util.Arrays;
 class ComparisonLauncherTest {
     private final HyperBitBit newAlg = new HyperBitBit(0.5, 16);
     private ComparisonLauncher launcher = new ComparisonLauncher(newAlg, 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 100, "src/datasets/f0");
-    
+
     private final double[][] fiveXTenRandomIntegers;
     private final double[] tenAvgOfFiveRandomIntegers;
 
@@ -136,8 +136,6 @@ class ComparisonLauncherTest {
 
         oneThruSixteen = new double[16];
         for (int i = 0; i < 16; i++) oneThruSixteen[i] = i + 1;
-
-        launcher.runExperiments();
     }
 
     @Test
@@ -230,7 +228,9 @@ class ComparisonLauncherTest {
     }
 
     @Test
-    void runExperiments() {
+    void runExperiments() throws FileNotFoundException {
+        launcher.runExperiments();
+
         assert Arrays.equals(oneThruOneHundredThousand, launcher.sizes);
         assert Arrays.equals(oneThruSixteen, launcher.varyMs);
 
@@ -251,75 +251,78 @@ class ComparisonLauncherTest {
         assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.varyMHBBEstimates);
         assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.varyMNewAlgEstimates);
         assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.varyMNewAlgEstimates);
-    }
 
-    @Test
+
+        // Run the rest of the tests from here to save time
+        getAllMCRelativeErrors();
+        getAvgMCRelativeErrors();
+        getAllPCRelativeErrors();
+        getAvgPCRelativeErrors();
+        getAllHBBRelativeErrors();
+        getAvgHBBRelativeErrors();
+        getAllNewAlgRelativeErrors();
+        getAvgNewAlgRelativeErrors();
+        getAvgMCEstimatesVaryM();
+        getAvgPCEstimatesVaryM();
+        getAvgHBBEstimatesVaryM();
+        getAvgNewAlgEstimatesVaryM();
+    }
+    
     void getAllMCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllMCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllMCRelativeErrors());
     }
 
-    @Test
     void getAvgMCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgMCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgMCRelativeErrors());
     }
 
-    @Test
     void getAllPCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllPCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllPCRelativeErrors());
     }
 
-    @Test
     void getAvgPCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgPCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgPCRelativeErrors());
     }
 
-    @Test
     void getAllHBBRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
     }
 
-    @Test
     void getAvgHBBRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgHBBRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgHBBRelativeErrors());
     }
 
-    @Test
     void getAllNewAlgRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
     }
 
-    @Test
     void getAvgNewAlgRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgNewAlgRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgNewAlgRelativeErrors());
     }
 
-    @Test
     void getAvgMCEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgMCEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgMCEstimatesVaryM());
     }
 
-    @Test
     void getAvgPCEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgPCEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgPCEstimatesVaryM());
     }
 
-    @Test
     void getAvgHBBEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgHBBEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgHBBEstimatesVaryM());
     }
 
-    @Test
     void getAvgNewAlgEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgNewAlgEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgNewAlgRelativeErrors());

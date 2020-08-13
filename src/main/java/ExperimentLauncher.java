@@ -377,17 +377,17 @@ public class ExperimentLauncher {
         return sum / values.length;
     }
 
-    private static void readInputs() throws IOException {
+    protected static void readInputs(boolean isTest) throws IOException {
         Scanner keyboardInput = new Scanner(System.in);
 
         StdOut.print("Hello! Welcome to the Cardinality Estimation Algorithm Experiment Launcher! ");
         StdOut.println("The default values for each parameter are below.");
 
         String alg = "HBB";
-        String file = "f0";
+        String file = "normalized.txt";
         boolean synthetic = false;
 
-        int maxRead = 100000;
+        int maxRead = 1000000;
         int m = 64;
         int trials = 100;
         double alpha = 0.5;
@@ -408,17 +408,21 @@ public class ExperimentLauncher {
 
         StdOut.println("\n" + "Do you want to change these values?");
         boolean newValues;
-        String s = keyboardInput.nextLine();
-        switch (s) {
-            case "Y":
-            case "yes":
-            case "Yes":
-            case "YES":
-                newValues = true;
-                break;
-            default:
-                newValues = Boolean.parseBoolean(s);
-                break;
+        String s;
+        if (isTest) newValues = false;
+        else {
+            s = keyboardInput.nextLine();
+            switch (s) {
+                case "Y":
+                case "yes":
+                case "Yes":
+                case "YES":
+                    newValues = true;
+                    break;
+                default:
+                    newValues = Boolean.parseBoolean(s);
+                    break;
+            }
         }
 
         if (newValues) {
@@ -466,10 +470,10 @@ public class ExperimentLauncher {
 
         StdOut.println("\n" + "Running the Experiment with the following parameters:");
 
-        createOutput(alg, file, synthetic, maxRead, m, alpha, phi, trials, numberOfTrialsShown);
+        createOutput(alg, file, synthetic, maxRead, m, alpha, phi, trials, numberOfTrialsShown, isTest);
     }
 
-    private static void createOutput(String alg, String file, boolean synthetic, int maxRead, int m, double alpha, double phi, int trials, int numberOfTrialsShown) throws IOException {
+    private static void createOutput(String alg, String file, boolean synthetic, int maxRead, int m, double alpha, double phi, int trials, int numberOfTrialsShown, boolean isTest) throws IOException {
         int size;
         int[] cardinalities;
         String input;
@@ -523,10 +527,10 @@ public class ExperimentLauncher {
         StdOut.println("------------------------------------------------");
         StdOut.println();
 
-        runExperiments(alg, input, synthetic, size, m, cardinalities, alpha, phi, trials, numberOfTrialsShown);
+        runExperiments(alg, input, synthetic, size, m, cardinalities, alpha, phi, trials, numberOfTrialsShown, isTest);
     }
 
-    private static void runExperiments(String alg, String input, boolean synthetic, int size, int m, int[] cardinalities, double alpha, double phi, int trials, int numberOfTrialsShown) throws IOException {
+    private static void runExperiments(String alg, String input, boolean synthetic, int size, int m, int[] cardinalities, double alpha, double phi, int trials, int numberOfTrialsShown, boolean isTest) throws IOException {
         Stopwatch watch = new Stopwatch();
 
 
@@ -538,17 +542,17 @@ public class ExperimentLauncher {
         else
             launcher = new ExperimentLauncher(alg, size, m, cardinalities, alpha, phi, trials, input);
 
-        launcher.runExperiments();
+        if (!isTest) launcher.runExperiments();
         Toolkit.getDefaultToolkit().beep();
         StdOut.println("\rProducing Graphs. Almost done!");
 
         ReportGenerator report = new ReportGenerator(launcher, numberOfTrialsShown);
-        report.generateBasicReport();
+        if (!isTest) report.generateBasicReport();
 
         StdOut.println("\nThis experiment took " + TimingTracker.add(alg, "'" + input + "'", m, trials, watch.elapsedTime(), "src/timings.txt"));
     }
 
     public static void main(String[] args) throws IOException {
-        readInputs();
+        readInputs(Boolean.parseBoolean(args[0]));
     }
 }
