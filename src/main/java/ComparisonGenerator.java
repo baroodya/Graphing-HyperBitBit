@@ -35,7 +35,7 @@ public class ComparisonGenerator {
         data[2] = launcher.getAvgHBBRelativeErrors();
         data[3] = launcher.getAvgNewAlgRelativeErrors();
         // Pass the relevant data and Strings to CustomGrapher.java
-        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(xAxis, manageArray(xValues), manageArray(data)));
+        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(title, xAxis, manageArray(xValues), manageArray(data)));
     }
 
     // Shows the comparison of the change in accuracy of the new algorithm with the three old algorithms
@@ -51,7 +51,7 @@ public class ComparisonGenerator {
         data[2] = launcher.getAvgHBBEstimatesVaryM();
         data[3] = launcher.getAvgNewAlgEstimatesVaryM();
         // Pass the relevant data and Strings to CustomGrapher.java
-        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(xAxis, manageArray(xValues), manageArray(data)));
+        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(title, xAxis, manageArray(xValues), manageArray(data)));
     }
 
     // A helper method to get rid of data that messes with the display window

@@ -18,16 +18,16 @@ public class CustomGrapher {
     Line green = Line.builder().color("green").build();
 
     // Create a 2 column table with the headers xLabel and yLabel
-    public Table createTable(String xLabel, double[] xValues, String yLabel, double[] yValues1) {
+    public Table createTable(String title, String xLabel, double[] xValues, String yLabel, double[] yValues1) {
         DoubleColumn col1 = DoubleColumn.create(xLabel, xValues);
 
         DoubleColumn col2 = DoubleColumn.create(yLabel, yValues1);
 
-        return Table.create("Table of Values", col1, col2);
+        return Table.create(title, col1, col2);
     }
 
     // Create a table specifically built for the comparison tool
-    public Table createCompTable(String xLabel, double[] xValues, double[][] data) {
+    public Table createCompTable(String title, String xLabel, double[] xValues, double[][] data) {
         int size = data.length;
         DoubleColumn[] columns = new DoubleColumn[size + 1];
 
@@ -44,11 +44,11 @@ public class CustomGrapher {
             columns[i + 1] = DoubleColumn.create(names[i + 1], data[i]);
         }
 
-        return Table.create("Table of Values", columns);
+        return Table.create(title, columns);
     }
 
     // create Table with X columns, with the first being labeled xLabel and the rest labeled with headers
-    public Table createTable(String xLabel, double[] xValues, double[][] data, String[] headers) {
+    public Table createTable(String title, String xLabel, double[] xValues, double[][] data, String[] headers) {
         int size = data.length;
         DoubleColumn[] columns = new DoubleColumn[size + 1];
 
@@ -60,12 +60,12 @@ public class CustomGrapher {
             columns[i + 1] = DoubleColumn.create(name, data[i]);
         }
 
-        return Table.create("Table of Values", columns);
+        return Table.create(title, columns);
     }
 
     // Create a table with xValues, an average, and data columns
     // Meant for the background single trials and the foreground average
-    public Table createTable(String xLabel, double[] xValues, double[] avg, double[][] data) {
+    public Table createTable(String title, String xLabel, double[] xValues, double[] avg, double[][] data) {
         int size = data.length;
         DoubleColumn[] columns = new DoubleColumn[size + 2];
 
@@ -78,7 +78,7 @@ public class CustomGrapher {
             columns[i + 2] = DoubleColumn.create(name, data[i]);
         }
 
-        return Table.create("Table of Values", columns);
+        return Table.create(title, columns);
     }
 
     // Show a line plot with the data from table and the labels as specified
@@ -381,7 +381,7 @@ public class CustomGrapher {
                 if (temp > champ) champ = temp;
             }
 
-        Table table = createTable(title, xValues, heights, headers);
+        Table table = createTable(title, title, xValues, heights, headers);
         Axis xAxis = Axis.builder().range(0, 2 * trueCardinality).build();
         List<String> columns = table.columnNames();
         Trace[] traces = new Trace[columns.size()];
@@ -476,7 +476,7 @@ public class CustomGrapher {
                 if (temp > champ) champ = temp;
             }
 
-        Table table = createTable(title, xValues, heights, headers);
+        Table table = createTable(title, title, xValues, heights, headers);
         Axis xAxis = Axis.builder().range(0, 2 * trueCardinality).build();
         List<String> columns = table.columnNames();
         Trace[] traces = new Trace[columns.size()];

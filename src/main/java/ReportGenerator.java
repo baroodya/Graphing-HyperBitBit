@@ -58,7 +58,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         manageArray(xValues),
                         manageArray(launcher.getAvgEstimates()),
@@ -78,7 +78,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         manageArray(xValues),
                         manageArray(launcher.getAvgNormalizedEstimates()),
@@ -98,7 +98,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         manageArray(xValues),
                         manageArray(launcher.getAvgAbsoluteErrors()),
@@ -118,7 +118,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         manageArray(xValues),
                         manageArray(launcher.getAvgRelativeErrors()),
@@ -138,7 +138,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis, xValues, launcher.getAvgEstimatesVaryM(), launcher.varyMEstimates),
                 numShown);
     }
@@ -155,7 +155,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         xValues,
                         launcher.getAvgNormalizedEstimatesVaryM(),
@@ -175,7 +175,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         xValues,
                         launcher.getAvgAbsoluteErrorsVaryM(),
@@ -195,7 +195,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         xValues,
                         launcher.getAvgRelativeErrorsVaryM(),
@@ -214,7 +214,7 @@ public class ReportGenerator {
                 title,
                 xAxis,
                 yAxis,
-                grapher.createTable(
+                grapher.createTable(title,
                         xAxis,
                         manageArray(launcher.varyMs),
                         yAxis,

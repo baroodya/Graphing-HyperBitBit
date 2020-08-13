@@ -392,7 +392,7 @@ public class ExperimentLauncher {
         int trials = 100;
         double alpha = 0.5;
         double phi = 0.77351;
-        int numberOfTrialsShown = 100;
+        int numberOfTrialsShown = 50;
 
         StdOut.println("------------------------------------------------");
         StdOut.println("Algorithm: " + alg);
