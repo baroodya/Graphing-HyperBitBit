@@ -11,11 +11,17 @@ import tech.tablesaw.plotly.traces.Trace;
 import java.util.List;
 
 public class CustomGrapher {
-    Line grey = Line.builder().color("grey").build();
-    Line skyBlue = Line.builder().color("deepskyblue").build();
-    Line princetonOrange = Line.builder().color("darkorange").build();
-    Line purple = Line.builder().color("purple").build();
-    Line green = Line.builder().color("green").build();
+    private final Line grey = Line.builder().color("grey").build();
+    private final Line skyBlue = Line.builder().color("deepskyblue").build();
+    private final Line princetonOrange = Line.builder().color("darkorange").build();
+    private final Line purple = Line.builder().color("purple").build();
+    private final Line green = Line.builder().color("green").build();
+    protected List<String> columns;
+    protected int size;
+    protected Trace[] traces;
+    protected Axis xAxis;
+    protected Axis yAxis;
+    protected Layout layout;
 
     // Create a 2 column table with the headers xLabel and yLabel
     public Table createTable(String title, String xLabel, double[] xValues, String yLabel, double[] yValues1) {
@@ -83,12 +89,12 @@ public class CustomGrapher {
 
     // Show a line plot with the data from table and the labels as specified
     public void showLinePlot(String title, String xLabel, String yLabel, Table table) {
-        List<String> columns = table.columnNames();
-        int size = columns.size();
-        Trace[] traces = new Trace[size - 1];
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
 
-        Axis xAxis = Axis.builder().title(xLabel).build();
-        Axis yAxis = Axis.builder().title(yLabel).build();
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
 
         for (int i = 1; i < size; i++) {
             traces[i - 1] =
@@ -108,7 +114,7 @@ public class CustomGrapher {
                         .name(columns.get(1))
                         .build();
 
-        Layout layout =
+        layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
 
         Plot.show(new Figure(layout, traces));
@@ -119,12 +125,12 @@ public class CustomGrapher {
        in the foreground and 500 trials in the background. This method would show only
        numShown trials in the background, sampled evenly from the 500 */
     public void showLinePlot(String title, String xLabel, String yLabel, Table table, int numShown) {
-        List<String> columns = table.columnNames();
-        int size = columns.size();
-        Trace[] traces = new Trace[numShown + 1];
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[numShown + 1];
 
-        Axis xAxis = Axis.builder().title(xLabel).build();
-        Axis yAxis = Axis.builder().title(yLabel).build();
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
 
         int whichCol = 0;
         int separation = size / numShown;
@@ -147,19 +153,19 @@ public class CustomGrapher {
                         .name(columns.get(1))
                         .build();
 
-        Layout layout =
+        layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 
     // Show a scatter plot with the data from table and the labels as specified
     public void showScatterPlot(String title, String xLabel, String yLabel, Table table) {
-        List<String> columns = table.columnNames();
-        int size = columns.size();
-        Trace[] traces = new Trace[size - 1];
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
 
-        Axis xAxis = Axis.builder().title(xLabel).build();
-        Axis yAxis = Axis.builder().title(yLabel).build();
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
 
         for (int i = 1; i < size; i++) {
             traces[i - 1] =
@@ -179,7 +185,7 @@ public class CustomGrapher {
                         .name(columns.get(1))
                         .build();
 
-        Layout layout =
+        layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
         Plot.show(new Figure(layout, traces));
     }
@@ -189,12 +195,12 @@ public class CustomGrapher {
        in the foreground and 500 trials in the background. This method would show only
        numShown trials in the background, sampled evenly from the 500 */
     public void showScatterPlot(String title, String xLabel, String yLabel, Table table, int numShown) {
-        List<String> columns = table.columnNames();
-        int size = columns.size();
-        Trace[] traces = new Trace[numShown + 1];
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[numShown + 1];
 
-        Axis xAxis = Axis.builder().title(xLabel).build();
-        Axis yAxis = Axis.builder().title(yLabel).build();
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
 
         int whichCol = 0;
         int separation = size / numShown;
@@ -217,22 +223,22 @@ public class CustomGrapher {
                         .name(columns.get(1))
                         .build();
 
-        Layout layout =
+        layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 
     // Shows a line plot with the three established algorithms at 25% opacity and the new alg at 100% opacity
     public void showCompLinePlot(String title, String xLabel, String yLabel, Table table) {
-        List<String> columns = table.columnNames();
-        int size = columns.size();
-        Trace[] traces = new Trace[size - 1];
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
 
-        Axis xAxis = Axis.builder().title(xLabel).build();
-        Axis yAxis = Axis.builder().title(yLabel).build();
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
 
         for (int i = 1; i < size; i++) {
-            Line line;
+            Line line = grey;
             switch (i % 3) {
                 case 0:
                     line = purple;
@@ -243,8 +249,6 @@ public class CustomGrapher {
                 case 2:
                     line = green;
                     break;
-                default:
-                    line = grey;
             }
             traces[i - 1] =
                     ScatterTrace.builder(table.column(0), table.column(i))
@@ -264,22 +268,22 @@ public class CustomGrapher {
                         .name(columns.get(4))
                         .build();
 
-        Layout layout =
+        layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 
     // Shows a scatter plot with the three established algorithms at 25% opacity and the new alg at 100% opacity
     public void showCompScatterPlot(String title, String xLabel, String yLabel, Table table) {
-        List<String> columns = table.columnNames();
-        int size = columns.size();
-        Trace[] traces = new Trace[size - 1];
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
 
-        Axis xAxis = Axis.builder().title(xLabel).build();
-        Axis yAxis = Axis.builder().title(yLabel).build();
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
 
         for (int i = 1; i < size; i++) {
-            Line line;
+            Line line = grey;
             switch (i % 3) {
                 case 0:
                     line = purple;
@@ -290,8 +294,6 @@ public class CustomGrapher {
                 case 2:
                     line = green;
                     break;
-                default:
-                    line = grey;
             }
             traces[i - 1] =
                     ScatterTrace.builder(table.column(0), table.column(i))
@@ -311,18 +313,18 @@ public class CustomGrapher {
                         .name(columns.get(4))
                         .build();
 
-        Layout layout =
+        layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 
     // Shows a histogram of data
     public void showHistogram(String title, double[] data, int n, int maxRange) {
-        Axis xAxis = Axis.builder().fixedRange(true).range(n - maxRange, n + maxRange).build();
+        xAxis = Axis.builder().fixedRange(true).range(n - maxRange, n + maxRange).build();
         Marker princetonOrange = Marker.builder().color("darkorange").build();
         Trace trace =
                 HistogramTrace.builder(data).autoBinX(false).nBinsX(10).marker(princetonOrange).build();
-        Layout layout = Layout.builder().title(title).height(600).xAxis(xAxis).width(800).build();
+        layout = Layout.builder().title(title).height(600).xAxis(xAxis).width(800).build();
         Plot.show(new Figure(layout, trace));
     }
 
@@ -355,17 +357,16 @@ public class CustomGrapher {
                 heights[i][(int) temp]++;
             }
 
+            headers[i] = "m = " + m;
             switch (i) {
                 case 0:
                     headers[i] = "m = 2";
                     break;
                 case 1:
-                    if (m / 8 != 2)
+                    if ((m / 8) > 2)
                         headers[i] = "m = " + m / 8;
                     else headers[i] = "m = " + 4;
                     break;
-                default:
-                    headers[i] = "m = " + m;
             }
 
             for (int j = 0; j < bins; j++) {
@@ -382,9 +383,9 @@ public class CustomGrapher {
             }
 
         Table table = createTable(title, title, xValues, heights, headers);
-        Axis xAxis = Axis.builder().range(0, 2 * trueCardinality).build();
-        List<String> columns = table.columnNames();
-        Trace[] traces = new Trace[columns.size()];
+        xAxis = Axis.builder().range(0, 2 * trueCardinality).build();
+        columns = table.columnNames();
+        traces = new Trace[columns.size()];
 
         Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
 
@@ -418,7 +419,7 @@ public class CustomGrapher {
         DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, champ + 0.15);
         traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + trueCardinality).build();
 
-        Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
+        layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
 
@@ -477,9 +478,9 @@ public class CustomGrapher {
             }
 
         Table table = createTable(title, title, xValues, heights, headers);
-        Axis xAxis = Axis.builder().range(0, 2 * trueCardinality).build();
-        List<String> columns = table.columnNames();
-        Trace[] traces = new Trace[columns.size()];
+        xAxis = Axis.builder().range(0, 2 * trueCardinality).build();
+        columns = table.columnNames();
+        traces = new Trace[columns.size()];
 
         Line dashed = Line.builder().color("grey").dash(Line.Dash.DASH).build();
 
@@ -513,34 +514,7 @@ public class CustomGrapher {
         DoubleColumn dashColY = DoubleColumn.create("DashColX", 0, champ + 0.15);
         traces[traces.length - 1] = ScatterTrace.builder(dashColX, dashColY).mode(ScatterTrace.Mode.LINE).line(dashed).name("n = " + trueCardinality).build();
 
-        Layout layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
+        layout = Layout.builder().title(title).xAxis(xAxis).height(600).width(800).build();
         Plot.show(new Figure(layout, traces));
     }
-
-    public static void main(String[] args) {
-        double[] xValues = {0, 1, 2, 3, 4, 5};
-
-        double[][] yValues = {{0, 1, 2, 3, 4, 5}, {0, 1, 4, 9, 16, 25}};
-        double[][] yValues2 = {{1, 2, 3, 4, 5}, {1, 8, 27, 64, 125}};
-        double[] avg = {0, 1, 3, 6, 10, 15};
-        String[] headers = {"x", "x^2"};
-        CustomGrapher graph = new CustomGrapher();
-
-//        graph.showLinePlot("y = x", "x", "y", graph.createTable("x", xValues, avg, yValues));
-//        graph.showScatterPlot(
-//                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x2", xValues, yValues, headers));
-//        graph.showScatterPlot(
-//                "y = x; y = x^2", headers[0], headers[1], graph.createTable("x3", xValues, yValues, headers), 1);
-//        graph.showCompLinePlot("y = x; y = avg", headers[0], "avg", graph.createTable("x4", xValues, yValues, headers));
-//        graph.showCompScatterPlot("y = x; y = avg", headers[0], "avg", graph.createTable("x5", xValues, yValues, headers));
-//
-//        graph.showHistogram("y = x", xValues, 6, 10);
-//        graph.showLineDistributions("y = x^2", yValues, 5, 4, 6);
-//        graph.showScatterDistributions("y = x^2", yValues, 5, 4, 6);
-//        graph.showScatterDistributions("y = x^3", yValues2, 5, 4, 9);
-
-        double[][] data = {{22, 18, 0, 36, 31, 65, 40, 19, 62, 20}, {84, 54, 73, 55, 19, 95, 37, 97, 27, 93}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-        graph.showLineDistributions("Test", data, 5, 64, 10);
-    }
 }
-

@@ -388,11 +388,11 @@ public class ExperimentLauncher {
         boolean synthetic = false;
 
         int maxRead = 1000000;
-        int m = 64;
+        int m = 1024;
         int trials = 100;
         double alpha = 0.5;
         double phi = 0.77351;
-        int numberOfTrialsShown = 50;
+        int numberOfTrialsShown = 100;
 
         StdOut.println("------------------------------------------------");
         StdOut.println("Algorithm: " + alg);
