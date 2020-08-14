@@ -75,7 +75,7 @@ public class MinCount implements CardinalityEstimationAlgorithm {
     // Calculate a new estimate based on the addition of a new random double
     protected void count(double continuousRandom) {
         double random = m * continuousRandom;
-        int j = (int) random;
+        int j = (int) Math.floor(random);
 
         if (minSeen[j] > (random - j)) {
             minSeen[j] = random - j;
