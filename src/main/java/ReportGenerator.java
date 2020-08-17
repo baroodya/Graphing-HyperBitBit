@@ -1,5 +1,7 @@
 package main.java;
 
+import graphing.java.CustomGrapher;
+
 public class ReportGenerator {
     // variables for graphing
     protected final int numShown;

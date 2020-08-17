@@ -1,7 +1,7 @@
 package main.java;
 
-import main.java.algs.HyperBitBit;
-import main.java.helpers.Exact;
+import algs.java.HyperBitBit;
+import helpers.java.Exact;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -267,7 +267,7 @@ class ComparisonLauncherTest {
         getAvgHBBEstimatesVaryM();
         getAvgNewAlgEstimatesVaryM();
     }
-    
+
     void getAllMCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllMCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllMCRelativeErrors());

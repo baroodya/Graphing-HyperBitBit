@@ -1,15 +1,15 @@
 package main.java;
 
+import algs.java.CardinalityEstimationAlgorithm;
+import algs.java.HyperBitBit;
+import algs.java.MinCount;
+import algs.java.ProbabilisticCounting;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
-import main.java.algs.CardinalityEstimationAlgorithm;
-import main.java.algs.HyperBitBit;
-import main.java.algs.MinCount;
-import main.java.algs.ProbabilisticCounting;
-import main.java.helpers.Exact;
-import main.java.helpers.StringStream;
-import main.java.helpers.TimingTracker;
+import helpers.java.Exact;
+import helpers.java.StringStream;
+import helpers.java.TimingTracker;
 
 import java.awt.*;
 import java.io.FileNotFoundException;

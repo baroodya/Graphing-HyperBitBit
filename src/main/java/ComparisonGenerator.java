@@ -1,5 +1,7 @@
 package main.java;
 
+import graphing.java.CustomGrapher;
+
 public class ComparisonGenerator {
     protected String title; // Title of the graph (should be updated in each method)
     protected String xAxis; // Title of xAxis (see above)

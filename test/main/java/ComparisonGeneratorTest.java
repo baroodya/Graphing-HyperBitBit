@@ -1,7 +1,7 @@
 package main.java;
 
-import main.java.algs.HyperBitBit;
-import main.java.helpers.Exact;
+import algs.java.HyperBitBit;
+import helpers.java.Exact;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

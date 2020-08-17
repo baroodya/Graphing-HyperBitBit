@@ -1,13 +1,13 @@
 package main.java;
 
+import algs.java.CardinalityEstimationAlgorithm;
+import algs.java.HyperBitBit;
+import algs.java.MinCount;
+import algs.java.ProbabilisticCounting;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
-import main.java.algs.CardinalityEstimationAlgorithm;
-import main.java.algs.HyperBitBit;
-import main.java.algs.MinCount;
-import main.java.algs.ProbabilisticCounting;
-import main.java.helpers.Exact;
-import main.java.helpers.StringStream;
+import helpers.java.Exact;
+import helpers.java.StringStream;
 
 import java.io.FileNotFoundException;
 
@@ -339,7 +339,7 @@ public class ComparisonLauncher {
         }
 
         // This is what will change for the "client"'s algorithm
-        CardinalityEstimationAlgorithm alg = new main.java.algs.ProbabilisticCounting(m, phi);
+        CardinalityEstimationAlgorithm alg = new algs.java.ProbabilisticCounting(m, phi);
 
         ComparisonLauncher launcher = new ComparisonLauncher(alg, size, m, cardinalities, alpha, trials, input);
         launcher.runExperiments();

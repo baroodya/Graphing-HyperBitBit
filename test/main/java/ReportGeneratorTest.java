@@ -1,7 +1,7 @@
 package main.java;
 
 import edu.princeton.cs.algs4.StdOut;
-import main.java.helpers.Exact;
+import helpers.java.Exact;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +66,7 @@ class ReportGeneratorTest {
         assert !generator.xAxis.equals(xAxis);
         assert !generator.yAxis.equals(yAxis);
     }
- 
+
     @Test
     void generateBasicReport() {
         int numShownBefore = generator.numShown;

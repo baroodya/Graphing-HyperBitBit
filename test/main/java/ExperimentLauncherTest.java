@@ -1,6 +1,6 @@
 package main.java;
 
-import main.java.helpers.Exact;
+import helpers.java.Exact;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -430,7 +430,7 @@ class ExperimentLauncherTest {
 
         assert HelperMethods.withinFivePercent(launcher.getStdDev(tenRandomIntegers), 303766345.0);
 
-        assert HelperMethods.withinFivePercent(launcher.getStdDev(oneHundredRandomIntegers), 275761833.0);
+        assert main.java.HelperMethods.withinFivePercent(launcher.getStdDev(oneHundredRandomIntegers), 275761833.0);
     }
 
     @Test
