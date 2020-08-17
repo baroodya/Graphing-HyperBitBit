@@ -120,6 +120,39 @@ public class CustomGrapher {
         Plot.show(new Figure(layout, traces));
     }
 
+    // Show a line plot with the data from table and the labels as specified
+    public void showLinePlot(String title, String xLabel, String yLabel, Table table, Axis newYAxis) {
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
+
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
+
+        for (int i = 1; i < size; i++) {
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(i))
+                            .mode(ScatterTrace.Mode.LINE)
+                            .showLegend(false)
+                            .line(grey)
+                            .opacity(0.25)
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(1))
+                        .mode(ScatterTrace.Mode.LINE)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(1))
+                        .build();
+
+        layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(newYAxis).build();
+
+        Plot.show(new Figure(layout, traces));
+    }
+
     // Show a line plot like above, but only with numShown single trials
     /* I.e. if the example is run over 500 trials, the above method would show an average
        in the foreground and 500 trials in the background. This method would show only
@@ -158,6 +191,40 @@ public class CustomGrapher {
         Plot.show(new Figure(layout, traces));
     }
 
+    public void showLinePlot(String title, String xLabel, String yLabel, Table table, int numShown, Axis newYAxis) {
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[numShown + 1];
+
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
+
+        int whichCol = 0;
+        int separation = size / numShown;
+        for (int i = 1; i < numShown + 1; i++) {
+            whichCol += separation;
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(whichCol))
+                            .mode(ScatterTrace.Mode.LINE)
+                            .showLegend(false)
+                            .line(grey)
+                            .opacity(0.25)
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(1))
+                        .mode(ScatterTrace.Mode.LINE)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(1))
+                        .build();
+
+        layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(newYAxis).build();
+        Plot.show(new Figure(layout, traces));
+    }
+
     // Show a scatter plot with the data from table and the labels as specified
     public void showScatterPlot(String title, String xLabel, String yLabel, Table table) {
         columns = table.columnNames();
@@ -187,6 +254,37 @@ public class CustomGrapher {
 
         layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
+        Plot.show(new Figure(layout, traces));
+    }
+
+    public void showScatterPlot(String title, String xLabel, String yLabel, Table table, Axis newYAxis) {
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
+
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
+
+        for (int i = 1; i < size; i++) {
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(i))
+                            .mode(ScatterTrace.Mode.MARKERS)
+                            .showLegend(false)
+                            .line(grey)
+                            .opacity(0.25)
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(1))
+                        .mode(ScatterTrace.Mode.MARKERS)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(1))
+                        .build();
+
+        layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(newYAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 
@@ -225,6 +323,40 @@ public class CustomGrapher {
 
         layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
+        Plot.show(new Figure(layout, traces));
+    }
+
+    public void showScatterPlot(String title, String xLabel, String yLabel, Table table, int numShown, Axis newYAxis) {
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[numShown + 1];
+
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
+
+        int whichCol = 0;
+        int separation = size / numShown;
+        for (int i = 1; i < numShown + 1; i++) {
+            whichCol += separation;
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(whichCol))
+                            .mode(ScatterTrace.Mode.MARKERS)
+                            .showLegend(false)
+                            .line(grey)
+                            .opacity(0.25)
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(1))
+                        .mode(ScatterTrace.Mode.MARKERS)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(1))
+                        .build();
+
+        layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(newYAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 
@@ -273,6 +405,50 @@ public class CustomGrapher {
         Plot.show(new Figure(layout, traces));
     }
 
+    public void showCompLinePlot(String title, String xLabel, String yLabel, Table table, Axis newYAxis) {
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
+
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
+
+        for (int i = 1; i < size; i++) {
+            Line line = grey;
+            switch (i % 3) {
+                case 0:
+                    line = purple;
+                    break;
+                case 1:
+                    line = skyBlue;
+                    break;
+                case 2:
+                    line = green;
+                    break;
+            }
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(i))
+                            .mode(ScatterTrace.Mode.LINE)
+                            .showLegend(true)
+                            .line(line)
+                            .opacity(0.25)
+                            .name(columns.get(i))
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(4))
+                        .mode(ScatterTrace.Mode.LINE)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(4))
+                        .build();
+
+        layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(newYAxis).build();
+        Plot.show(new Figure(layout, traces));
+    }
+
     // Shows a scatter plot with the three established algorithms at 25% opacity and the new alg at 100% opacity
     public void showCompScatterPlot(String title, String xLabel, String yLabel, Table table) {
         columns = table.columnNames();
@@ -315,6 +491,50 @@ public class CustomGrapher {
 
         layout =
                 Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(yAxis).build();
+        Plot.show(new Figure(layout, traces));
+    }
+
+    public void showCompScatterPlot(String title, String xLabel, String yLabel, Table table, Axis newYAxis) {
+        columns = table.columnNames();
+        size = columns.size();
+        traces = new Trace[size - 1];
+
+        xAxis = Axis.builder().title(xLabel).build();
+        yAxis = Axis.builder().title(yLabel).build();
+
+        for (int i = 1; i < size; i++) {
+            Line line = grey;
+            switch (i % 3) {
+                case 0:
+                    line = purple;
+                    break;
+                case 1:
+                    line = skyBlue;
+                    break;
+                case 2:
+                    line = green;
+                    break;
+            }
+            traces[i - 1] =
+                    ScatterTrace.builder(table.column(0), table.column(i))
+                            .mode(ScatterTrace.Mode.MARKERS)
+                            .showLegend(true)
+                            .line(line)
+                            .opacity(0.25)
+                            .name(columns.get(i))
+                            .build();
+        }
+
+        traces[traces.length - 1] =
+                ScatterTrace.builder(table.column(0), table.column(4))
+                        .mode(ScatterTrace.Mode.MARKERS)
+                        .showLegend(true)
+                        .line(princetonOrange)
+                        .name(columns.get(4))
+                        .build();
+
+        layout =
+                Layout.builder().title(title).height(600).width(800).xAxis(xAxis).yAxis(newYAxis).build();
         Plot.show(new Figure(layout, traces));
     }
 

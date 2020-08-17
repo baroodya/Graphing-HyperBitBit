@@ -318,7 +318,7 @@ public class ComparisonLauncher {
         String file = "f0";
         boolean synthetic = Boolean.parseBoolean(args[0]);
 
-        int maxRead = 100000;
+        int maxRead = 1000;
         int m = 64;
         int trials = 100;
         double alpha = 0.5;

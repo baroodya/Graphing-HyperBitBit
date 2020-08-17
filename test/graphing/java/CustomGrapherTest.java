@@ -35,6 +35,8 @@ class CustomGrapherTest {
     private final String yAxisTitle;
     private final Axis someXAxis;
     private final Axis someYAxis;
+    private final Axis relativeErrorYAxis = Axis.builder().fixedRange(true).range(0, 1.5).build();
+    private final Axis normalizedYAxis = Axis.builder().fixedRange(true).range(-1.5, 1.5).build();
     private final Trace lineTraceOfSomeArray_SomeOtherArray;
     private final Trace scatterTraceOfSomeArray_SomeOtherArray;
     private final Trace lineTraceOfSomeOtherArray_SomeThirdArray;
@@ -42,6 +44,9 @@ class CustomGrapherTest {
     private final Trace[] lineTracesOfSomeCompTable_Size5X10;
     private final Trace[] scatterTracesOfSomeCompTable_Size5X10;
     private final Layout someLayout;
+    private final Layout someRelativeErrorLayout;
+    private final Layout someNormalizedLayout;
+
 
     private final int n;
     private final int maxRange;
@@ -258,6 +263,10 @@ class CustomGrapherTest {
 
 
         distributionLayout = Layout.builder().title(title).xAxis(distributionXAxis).height(600).width(800).build();
+
+        someRelativeErrorLayout = Layout.builder().title(title).xAxis(someXAxis).yAxis(relativeErrorYAxis).height(600).width(800).build();
+        someNormalizedLayout = Layout.builder().title(title).xAxis(someXAxis).yAxis(normalizedYAxis).height(600).width(800).build();
+
     }
 
     @Test
@@ -310,6 +319,32 @@ class CustomGrapherTest {
         assert grapher.xAxis.toString().equals(someXAxis.toString());
         assert grapher.yAxis.toString().equals(someYAxis.toString());
         assert grapher.layout.asJavascript().equals(someLayout.asJavascript());
+
+        grapher.showLinePlot(title, xAxisTitle, yAxisTitle, someTable_Size3X10, relativeErrorYAxis);
+
+        assert grapher.columns.equals(someTable_Size3X10.columnNames());
+        assert grapher.size == someTable_Size3X10.columnCount();
+
+        assert grapher.traces.length == 3;
+        assert grapher.traces[0].toString().equals(lineTraceOfSomeOtherArray_SomeThirdArray.toString());
+        assert grapher.traces[1].toString().equals(lineTraceOfSomeOtherArray_SomeThirdArray.toString());
+        assert grapher.traces[2].toString().equals(lineTraceOfSomeArray_SomeOtherArray.toString());
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someRelativeErrorLayout.asJavascript());
+
+        grapher.showLinePlot(title, xAxisTitle, yAxisTitle, someTable_Size3X10, 2, normalizedYAxis);
+
+        assert grapher.columns.equals(someTable_Size3X10.columnNames());
+        assert grapher.size == someTable_Size3X10.columnCount();
+
+        assert grapher.traces.length == 3;
+        assert grapher.traces[0].toString().equals(lineTraceOfSomeOtherArray_SomeThirdArray.toString());
+        assert grapher.traces[1].toString().equals(lineTraceOfSomeOtherArray_SomeThirdArray.toString());
+        assert grapher.traces[2].toString().equals(lineTraceOfSomeArray_SomeOtherArray.toString());
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someNormalizedLayout.asJavascript());
     }
 
     @Test
@@ -337,6 +372,30 @@ class CustomGrapherTest {
         assert grapher.xAxis.toString().equals(someXAxis.toString());
         assert grapher.yAxis.toString().equals(someYAxis.toString());
         assert grapher.layout.asJavascript().equals(someLayout.asJavascript());
+
+        grapher.showScatterPlot(title, xAxisTitle, yAxisTitle, someTable_Size2X10, normalizedYAxis);
+
+        assert grapher.columns.equals(someTable_Size2X10.columnNames());
+        assert grapher.size == someTable_Size2X10.columnCount();
+
+        assert grapher.traces.length == 1;
+        assert grapher.traces[0].toString().equals(scatterTraceOfSomeArray_SomeOtherArray.toString());
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someNormalizedLayout.asJavascript());
+
+        grapher.showScatterPlot(title, xAxisTitle, yAxisTitle, someTable_Size3X10, 2, relativeErrorYAxis);
+
+        assert grapher.columns.equals(someTable_Size3X10.columnNames());
+        assert grapher.size == someTable_Size3X10.columnCount();
+
+        assert grapher.traces.length == 3;
+        assert grapher.traces[0].toString().equals(scatterTraceOfSomeOtherArray_SomeThirdArray.toString());
+        assert grapher.traces[1].toString().equals(scatterTraceOfSomeOtherArray_SomeThirdArray.toString());
+        assert grapher.traces[2].toString().equals(scatterTraceOfSomeArray_SomeOtherArray.toString());
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someRelativeErrorLayout.asJavascript());
     }
 
     @Test
@@ -351,6 +410,28 @@ class CustomGrapherTest {
         assert grapher.xAxis.toString().equals(someXAxis.toString());
         assert grapher.yAxis.toString().equals(someYAxis.toString());
         assert grapher.layout.asJavascript().equals(someLayout.asJavascript());
+
+        grapher.showCompLinePlot(title, xAxisTitle, yAxisTitle, someCompTable_Size5X10, relativeErrorYAxis);
+
+        assert grapher.columns.equals(someCompTable_Size5X10.columnNames());
+        assert grapher.size == someCompTable_Size5X10.columnCount();
+
+        assert grapher.traces.length == 4;
+        assert Arrays.toString(grapher.traces).equals(Arrays.toString(lineTracesOfSomeCompTable_Size5X10));
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someRelativeErrorLayout.asJavascript());
+
+        grapher.showCompLinePlot(title, xAxisTitle, yAxisTitle, someCompTable_Size5X10, normalizedYAxis);
+
+        assert grapher.columns.equals(someCompTable_Size5X10.columnNames());
+        assert grapher.size == someCompTable_Size5X10.columnCount();
+
+        assert grapher.traces.length == 4;
+        assert Arrays.toString(grapher.traces).equals(Arrays.toString(lineTracesOfSomeCompTable_Size5X10));
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someNormalizedLayout.asJavascript());
     }
 
     @Test
@@ -365,6 +446,28 @@ class CustomGrapherTest {
         assert grapher.xAxis.toString().equals(someXAxis.toString());
         assert grapher.yAxis.toString().equals(someYAxis.toString());
         assert grapher.layout.asJavascript().equals(someLayout.asJavascript());
+
+        grapher.showCompScatterPlot(title, xAxisTitle, yAxisTitle, someCompTable_Size5X10, relativeErrorYAxis);
+
+        assert grapher.columns.equals(someCompTable_Size5X10.columnNames());
+        assert grapher.size == someCompTable_Size5X10.columnCount();
+
+        assert grapher.traces.length == 4;
+        assert Arrays.toString(grapher.traces).equals(Arrays.toString(scatterTracesOfSomeCompTable_Size5X10));
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someRelativeErrorLayout.asJavascript());
+
+        grapher.showCompScatterPlot(title, xAxisTitle, yAxisTitle, someCompTable_Size5X10, normalizedYAxis);
+
+        assert grapher.columns.equals(someCompTable_Size5X10.columnNames());
+        assert grapher.size == someCompTable_Size5X10.columnCount();
+
+        assert grapher.traces.length == 4;
+        assert Arrays.toString(grapher.traces).equals(Arrays.toString(scatterTracesOfSomeCompTable_Size5X10));
+        assert grapher.xAxis.toString().equals(someXAxis.toString());
+        assert grapher.yAxis.toString().equals(someYAxis.toString());
+        assert grapher.layout.asJavascript().equals(someNormalizedLayout.asJavascript());
     }
 
     @Test

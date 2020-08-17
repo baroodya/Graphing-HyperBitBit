@@ -1,6 +1,7 @@
 package main.java;
 
 import graphing.java.CustomGrapher;
+import tech.tablesaw.plotly.components.Axis;
 
 public class ReportGenerator {
     // variables for graphing
@@ -9,6 +10,8 @@ public class ReportGenerator {
     protected String title;
     protected String xAxis;
     protected String yAxis;
+    private final Axis relativeErrorYAxis = Axis.builder().fixedRange(true).range(0, 1.5).build();
+    private final Axis normalizedErrorYAxis = Axis.builder().fixedRange(true).range(-1.5, 1.5).build();
 
     // launcher and grapher classes for collecting and outputting data
     protected ExperimentLauncher launcher;
@@ -85,7 +88,7 @@ public class ReportGenerator {
                         manageArray(xValues),
                         manageArray(launcher.getAvgNormalizedEstimates()),
                         manageArray(launcher.getAllNormalizedEstimates())),
-                numShown);
+                numShown, normalizedErrorYAxis);
     }
 
     // Shows the absolute error graph
@@ -125,7 +128,7 @@ public class ReportGenerator {
                         manageArray(xValues),
                         manageArray(launcher.getAvgRelativeErrors()),
                         manageArray(launcher.getAllRelativeErrors())),
-                numShown);
+                numShown, relativeErrorYAxis);
     }
 
     // Shows the estimated cardinality graph for m = 1 thru m = m
@@ -162,7 +165,7 @@ public class ReportGenerator {
                         xValues,
                         launcher.getAvgNormalizedEstimatesVaryM(),
                         launcher.getAllNormalizedEstimatesVaryM()),
-                numShown);
+                numShown, normalizedErrorYAxis);
     }
 
     // Shows the absolute error graph for m = 1 thru m = m
@@ -202,7 +205,7 @@ public class ReportGenerator {
                         xValues,
                         launcher.getAvgRelativeErrorsVaryM(),
                         launcher.getAllRelativeErrorsVaryM()),
-                numShown);
+                numShown, relativeErrorYAxis);
     }
 
     // Shows the standard deviation of the trials as a function of m

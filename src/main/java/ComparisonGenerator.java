@@ -1,6 +1,7 @@
 package main.java;
 
 import graphing.java.CustomGrapher;
+import tech.tablesaw.plotly.components.Axis;
 
 public class ComparisonGenerator {
     protected String title; // Title of the graph (should be updated in each method)
@@ -11,6 +12,9 @@ public class ComparisonGenerator {
 
     protected final CustomGrapher grapher; // The class we will use to graph
     protected final ComparisonLauncher launcher; // The launcher we will get the data from
+
+    private final Axis relativeErrorYAxis = Axis.builder().fixedRange(true).range(0, 1.5).build();
+    private final Axis normalizedErrorYAxis = Axis.builder().fixedRange(true).range(-1.5, 1.5).build();
 
     // Constructor initializes everything we need to be initialized
     public ComparisonGenerator(ComparisonLauncher launcher) {
@@ -37,7 +41,7 @@ public class ComparisonGenerator {
         data[2] = launcher.getAvgHBBRelativeErrors();
         data[3] = launcher.getAvgNewAlgRelativeErrors();
         // Pass the relevant data and Strings to CustomGrapher.java
-        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(title, xAxis, manageArray(xValues), manageArray(data)));
+        grapher.showCompLinePlot(title, xAxis, yAxis, grapher.createCompTable(title, xAxis, manageArray(xValues), manageArray(data)), relativeErrorYAxis);
     }
 
     // Shows the comparison of the change in accuracy of the new algorithm with the three old algorithms

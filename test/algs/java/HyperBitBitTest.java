@@ -7,7 +7,7 @@ import randomhash.main.java.RandomHashFamily;
 
 import java.io.FileNotFoundException;
 
-class HyperBitBitTest {
+public class HyperBitBitTest {
     private final HyperBitBit algorithm = new HyperBitBit(0.5, 16);
 
     @Test
