@@ -77,6 +77,8 @@ public class MinCount implements CardinalityEstimationAlgorithm {
         double random = m * continuousRandom;
         int j = (int) Math.floor(random);
 
+        if (j > minSeen.length - 1)
+            j--;
         if (minSeen[j] > (random - j)) {
             minSeen[j] = random - j;
         }

@@ -184,6 +184,10 @@ class MinCountTest {
         assert HelperMethods.withinFivePercent(algorithm.minSeen[14], 0.4);
 
         assert HelperMethods.withinFivePercent(algorithm.getEstimateOfCardinality(), 17.91044776119);
+
+        double minSeenBefore = algorithm.minSeen[15];
+        algorithm.count(1);
+        assert algorithm.minSeen[15] == minSeenBefore;
     }
 
     @Test

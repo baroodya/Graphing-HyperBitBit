@@ -475,6 +475,7 @@ class ExperimentLauncherTest {
     @Test
     void main() throws IOException {
         String[] args = new String[1];
+        args[0] = "true";
         ExperimentLauncher.main(args);
     }
 }

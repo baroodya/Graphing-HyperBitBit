@@ -11,24 +11,26 @@ import tech.tablesaw.plotly.api.ScatterPlot;
 import java.util.List;
 
 public class BasicGrapher {
+    protected List<String> columns;
+
     // Create a 2 column table with the headers xLabel and yLabel1
-    public Table createTable(String xLabel, double[] xValues, String yLabel1, double[] yValues1) {
+    public Table createTable(String title, String xLabel, double[] xValues, String yLabel1, double[] yValues1) {
         DoubleColumn col1 = DoubleColumn.create(xLabel, xValues);
         DoubleColumn col2 = DoubleColumn.create(yLabel1, yValues1);
-        return Table.create("Table of Values", col1, col2);
+        return Table.create(title, col1, col2);
     }
 
     // Create a "3" column table with the headers xLabel and yLabel, and teh series titles yLabel1 and yLabel2
     // This table has 2 columns of data and one column of labels
     // The data columns are twice as long as the data sets: a weird quirk of tablesaw
-    public Table createTable(
-            String xLabel,
-            double[] xValues,
-            String yLabel,
-            String yLabel1,
-            double[] yValues1,
-            String yLabel2,
-            double[] yValues2) {
+    public Table createTable(String title,
+                             String xLabel,
+                             double[] xValues,
+                             String yLabel,
+                             String yLabel1,
+                             double[] yValues1,
+                             String yLabel2,
+                             double[] yValues2) {
         DoubleColumn col1 = DoubleColumn.create(xLabel, xValues);
         col1.append(col1);
 
@@ -44,12 +46,12 @@ public class BasicGrapher {
         }
 
         StringColumn series = StringColumn.create("Series Names", labels);
-        return Table.create("Table of Values", col1, col2, series);
+        return Table.create(title, col1, col2, series);
     }
 
     // Show a basic linePlot: works for 2 or 3 column tables
     public void showLinePlot(String title, Table table) {
-        List<String> columns = table.columnNames();
+        columns = table.columnNames();
         if (columns.size() > 2) {
             Plot.show(
                     LinePlot.create(
@@ -70,7 +72,7 @@ public class BasicGrapher {
 
     // Same as above, but for a scatterPlot
     public void showScatterPlot(String title, Table table) {
-        List<String> columns = table.columnNames();
+        columns = table.columnNames();
         if (columns.size() > 2) {
             Plot.show(
                     ScatterPlot.create(
@@ -92,20 +94,5 @@ public class BasicGrapher {
     // Same as Above, but for a histogram. This does not take a table as input, rather a 1D array
     public void showHistogram(String title, double[] data) {
         Plot.show(Histogram.create(title, data));
-    }
-
-    public static void main(String[] args) {
-        double[] xValues = {0, 1, 2, 3, 4, 5};
-        double[] yValues1 = {0, 1, 2, 3, 4, 5};
-        double[] yValues2 = {0, 1, 4, 9, 16, 25};
-
-        double[][] yValues = {{0, 1, 2, 3, 4, 5}, {0, 1, 4, 9, 16, 25}};
-        double[] avg = {0, 1, 3, 6, 10, 15};
-        BasicGrapher graph = new BasicGrapher();
-
-        graph.showLinePlot(
-                "y = x", graph.createTable("x", xValues, "y", yValues1));
-        graph.showScatterPlot(
-                "y = x; y = x^2", graph.createTable("x", xValues, "y", "x", yValues1, "x^2", yValues2));
     }
 }
