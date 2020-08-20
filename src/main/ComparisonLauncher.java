@@ -4,8 +4,6 @@ import algs.CardinalityEstimationAlgorithm;
 import algs.HyperBitBit;
 import algs.MinCount;
 import algs.ProbabilisticCounting;
-import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdRandom;
 import helpers.Exact;
 import helpers.StringStream;
 
@@ -95,13 +93,13 @@ public class ComparisonLauncher {
         percent = 0.0;
         denom = t * m * ((m + 3.0) / 2.0);
 
-        StdOut.println();
+        System.out.println();
     }
 
     // A helper method to read the appropriate type of data and pass it to each algorithm
     protected void readElement(String word) {
         if (syntheticData) {
-            double random = StdRandom.uniform();
+            double random = Math.random();
             MinCount.readSyntheticElement(random);
             ProbabilisticCounting.readSyntheticElement(random);
             HyperBitBit.readSyntheticElement(random);
@@ -127,9 +125,9 @@ public class ComparisonLauncher {
             // Run trials and update 2D arrays
             for (int i = 0; i < t; i++) {
                 percent = ((double) (counter + k) / (denom)) * 100;
-                StdOut.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + (i + 1) + "/" + t + ". (");
-                StdOut.printf("%.2f", percent);
-                StdOut.print("%)");
+                System.out.print("\r" + "Running Variable m = " + k + "/" + m + ". On trial " + (i + 1) + "/" + t + ". (");
+                System.out.printf("%.2f", percent);
+                System.out.print("%)");
 
                 int j = 0;
                 if (syntheticData) {

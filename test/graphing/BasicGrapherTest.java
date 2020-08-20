@@ -1,12 +1,11 @@
 package graphing;
 
-import edu.princeton.cs.algs4.StdRandom;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
-class BasicGrapherTest {
+public class BasicGrapherTest {
     private final BasicGrapher grapher = new BasicGrapher();
 
     private final double[] someArray_Size10;
@@ -18,16 +17,16 @@ class BasicGrapherTest {
     private final String title;
 
 
-    BasicGrapherTest() {
+    public BasicGrapherTest() {
         someArray_Size10 = new double[10];
         someOtherArray_Size10 = new double[10];
         someThirdArray_Size10 = new double[10];
         String[] someLabelArray = new String[20];
 
         for (int i = 0; i < 10; i++) {
-            someArray_Size10[i] = StdRandom.uniform();
-            someOtherArray_Size10[i] = StdRandom.uniform();
-            someThirdArray_Size10[i] = StdRandom.uniform();
+            someArray_Size10[i] = Math.random();
+            someOtherArray_Size10[i] = Math.random();
+            someThirdArray_Size10[i] = Math.random();
             someLabelArray[i] = "label";
             someLabelArray[i + 10] = "label";
         }
@@ -48,7 +47,7 @@ class BasicGrapherTest {
 
 
     @Test
-    void createTable() {
+    public void createTable() {
         Table output = grapher.createTable("someTable_Size2X10", "someArray_Size10", someArray_Size10, "someOtherArray_Size10", someOtherArray_Size10);
         assert output.toString().equals(someTable_Size2X10.toString());
 
@@ -57,19 +56,19 @@ class BasicGrapherTest {
     }
 
     @Test
-    void showLinePlot() {
+    public void showLinePlot() {
         grapher.showLinePlot(title, someTable_Size2X10);
         assert grapher.columns.equals(someTable_Size2X10.columnNames());
     }
 
     @Test
-    void showScatterPlot() {
+    public void showScatterPlot() {
         grapher.showScatterPlot(title, someTable_Size2X10);
         assert grapher.columns.equals(someTable_Size2X10.columnNames());
     }
 
     @Test
-    void showHistogram() {
+    public void showHistogram() {
         grapher.showHistogram(title, someArray_Size10);
     }
 }

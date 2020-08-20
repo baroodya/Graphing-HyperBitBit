@@ -1,7 +1,5 @@
 package randomhash;
 
-import randomhash.main.java.RandomHashFamily;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

@@ -1,16 +1,15 @@
 package algs;
 
-import edu.princeton.cs.algs4.StdRandom;
 import main.HelperMethods;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 
-class MinCountTest {
+public class MinCountTest {
     private final MinCount algorithm = new MinCount(16);
 
     @Test
-    void readElement() {
+    public void readElement() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -58,7 +57,7 @@ class MinCountTest {
     }
 
     @Test
-    void readSyntheticElement() {
+    public void readSyntheticElement() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -106,7 +105,7 @@ class MinCountTest {
     }
 
     @Test
-    void getSize() {
+    public void getSize() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -145,18 +144,18 @@ class MinCountTest {
     }
 
     @Test
-    void resetAlgorithm() {
+    public void resetAlgorithm() {
         algorithm.resetAlgorithm(16);
         assert algorithm.getSize() == 0;
 
         double random;
-        for (int i = 0; i < 24536789; i++) {
-            random = StdRandom.uniform();
+        for (int i = 0; i < 24589; i++) {
+            random = Math.random();
             algorithm.readElement(Double.toString(random));
         }
-        assert algorithm.getSize() == 24536789;
+        assert algorithm.getSize() == 24589;
         assert algorithm.m == 16;
-        assert algorithm.size == 24536789;
+        assert algorithm.size == 24589;
         assert algorithm.minSeen.length == 16;
         for (double value : algorithm.minSeen) assert value <= 1.0;
 
@@ -169,7 +168,7 @@ class MinCountTest {
     }
 
     @Test
-    void count() {
+    public void count() {
         algorithm.resetAlgorithm(16);
         assert algorithm.getSize() == 0;
         for (double value : algorithm.minSeen) assert value == 1.0;
@@ -191,7 +190,7 @@ class MinCountTest {
     }
 
     @Test
-    void main() throws FileNotFoundException {
+    public void main() throws FileNotFoundException {
         String[] args = new String[1];
         MinCount.main(args);
         args[0] = "true";

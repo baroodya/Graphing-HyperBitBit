@@ -1,17 +1,21 @@
 package algs;
 
-import edu.princeton.cs.algs4.StdRandom;
 import main.HelperMethods;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import randomhash.RandomHashFamily;
 
 import java.io.FileNotFoundException;
 
 public class HyperBitBitTest {
+    @Test
+    public void method() {
+        assert true;
+    }
+
     private final HyperBitBit algorithm = new HyperBitBit(0.5, 16);
 
     @Test
-    void readElement() {
+    public void readElement() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -59,7 +63,7 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void readSyntheticElement() {
+    public void readSyntheticElement() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -107,7 +111,7 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void getSize() {
+    public void getSize() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -146,20 +150,20 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void resetAlgorithm() {
+    public void resetAlgorithm() {
         algorithm.resetAlgorithm(16);
         RandomHashFamily hasherBefore = algorithm.hasher;
         assert algorithm.getSize() == 0;
 
         double random;
-        for (int i = 0; i < 24536789; i++) {
-            random = StdRandom.uniform();
+        for (int i = 0; i < 24589; i++) {
+            random = Math.random();
             algorithm.readElement(Double.toString(random));
         }
-        assert algorithm.getSize() == 24536789;
+        assert algorithm.getSize() == 24589;
         assert algorithm.m == 16;
-        assert algorithm.cnt == 24536789;
-        assert HelperMethods.withinFivePercent(algorithm.hset.size(), 24526789);
+        assert algorithm.cnt == 24589;
+        assert HelperMethods.withinFivePercent(algorithm.hset.size(), 24589);
         assert algorithm.hasher == hasherBefore;
 
         algorithm.resetAlgorithm(64);
@@ -174,7 +178,7 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void count() {
+    public void count() {
         algorithm.resetAlgorithm(16);
         assert algorithm.getSize() == 0;
         assert algorithm.hset.size() == 0;
@@ -225,7 +229,7 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void estimate() {
+    public void estimate() {
         algorithm.resetAlgorithm(16);
 
         assert HelperMethods.withinFivePercent(algorithm.estimate(), 7.393569926);
@@ -236,7 +240,7 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void getEstimateOfCardinality() {
+    public void getEstimateOfCardinality() {
         algorithm.resetAlgorithm(16);
 
         assert HelperMethods.withinFivePercent(algorithm.getEstimateOfCardinality(), 7.393569926);
@@ -248,7 +252,7 @@ public class HyperBitBitTest {
     }
 
     @Test
-    void main() throws FileNotFoundException {
+    public void main() throws FileNotFoundException {
         String[] args = new String[1];
         HyperBitBit.main(args);
         args[0] = "true";

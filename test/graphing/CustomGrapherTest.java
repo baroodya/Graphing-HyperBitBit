@@ -1,7 +1,6 @@
 package graphing;
 
-import edu.princeton.cs.algs4.StdRandom;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
@@ -12,7 +11,7 @@ import tech.tablesaw.plotly.traces.Trace;
 
 import java.util.Arrays;
 
-class CustomGrapherTest {
+public class CustomGrapherTest {
     private final CustomGrapher grapher = new CustomGrapher();
     private final double[] someArray_Size10;
     private final double[] someOtherArray_Size10;
@@ -64,15 +63,15 @@ class CustomGrapherTest {
     private final Layout distributionLayout;
 
 
-    CustomGrapherTest() {
+    public CustomGrapherTest() {
         someArray_Size10 = new double[10];
         someOtherArray_Size10 = new double[10];
         double[] someThirdArray_Size10 = new double[10];
 
         for (int i = 0; i < 10; i++) {
-            someArray_Size10[i] = StdRandom.uniform();
-            someOtherArray_Size10[i] = StdRandom.uniform();
-            someThirdArray_Size10[i] = StdRandom.uniform();
+            someArray_Size10[i] = Math.random();
+            someOtherArray_Size10[i] = Math.random();
+            someThirdArray_Size10[i] = Math.random();
         }
 
         someOtherArray_someThirdArray = new double[][]{someOtherArray_Size10, someThirdArray_Size10};
@@ -98,10 +97,8 @@ class CustomGrapherTest {
         someCompArray_size4X10 = new double[4][10];
         DoubleColumn[] someColArray_Size5 = new DoubleColumn[5];
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 10; j++) {
-                StdRandom.uniform();
-                someCompArray_size4X10[i][j] = StdRandom.uniform();
-            }
+            for (int j = 0; j < 10; j++)
+                someCompArray_size4X10[i][j] = Math.random();
             someColArray_Size5[i + 1] = DoubleColumn.create(names[i + 1], someCompArray_size4X10[i]);
         }
         someColArray_Size5[0] = someColumn_Size10;
@@ -270,7 +267,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void createTable() {
+    public void createTable() {
         Table output = grapher.createTable("someTable_Size2X10", "someArray_Size10", someArray_Size10, "someOtherArray_Size10", someOtherArray_Size10);
         assert output.toString().equals(someTable_Size2X10.toString());
 
@@ -289,13 +286,13 @@ class CustomGrapherTest {
     }
 
     @Test
-    void createCompTable() {
+    public void createCompTable() {
         Table output = grapher.createCompTable("someCompTable_Size5X10", "someArray_Size10", someArray_Size10, someCompArray_size4X10);
         assert output.toString().equals(someCompTable_Size5X10.toString());
     }
 
     @Test
-    void showLinePlot() {
+    public void showLinePlot() {
         grapher.showLinePlot(title, xAxisTitle, yAxisTitle, someTable_Size2X10);
 
         assert grapher.columns.equals(someTable_Size2X10.columnNames());
@@ -348,7 +345,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void showScatterPlot() {
+    public void showScatterPlot() {
         grapher.showScatterPlot(title, xAxisTitle, yAxisTitle, someTable_Size2X10);
 
         assert grapher.columns.equals(someTable_Size2X10.columnNames());
@@ -399,7 +396,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void showCompLinePlot() {
+    public void showCompLinePlot() {
         grapher.showCompLinePlot(title, xAxisTitle, yAxisTitle, someCompTable_Size5X10);
 
         assert grapher.columns.equals(someCompTable_Size5X10.columnNames());
@@ -435,7 +432,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void showCompScatterPlot() {
+    public void showCompScatterPlot() {
         grapher.showCompScatterPlot(title, xAxisTitle, yAxisTitle, someCompTable_Size5X10);
 
         assert grapher.columns.equals(someCompTable_Size5X10.columnNames());
@@ -471,7 +468,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void showHistogram() {
+    public void showHistogram() {
         grapher.showHistogram(title, someArray_Size10, n, maxRange);
 
         assert grapher.xAxis.toString().equals(histogramXAxis.toString());
@@ -479,7 +476,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void showLineDistributions() {
+    public void showLineDistributions() {
         grapher.showLineDistributions(title, someOtherArray_someThirdArray, 10, 64, cardinality);
 
         assert grapher.xAxis.asJavascript().equals(distributionXAxis.asJavascript());
@@ -496,7 +493,7 @@ class CustomGrapherTest {
     }
 
     @Test
-    void showScatterDistributions() {
+    public void showScatterDistributions() {
         grapher.showScatterDistributions(title, someOtherArray_someThirdArray, 10, 64, cardinality);
 
         assert grapher.xAxis.asJavascript().equals(distributionXAxis.asJavascript());

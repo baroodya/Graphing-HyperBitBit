@@ -1,6 +1,5 @@
 package algs;
 
-import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import helpers.Bits;
 import helpers.Exact;
@@ -109,22 +108,22 @@ public class HyperBitBit implements CardinalityEstimationAlgorithm {
 
         HyperBitBit counter = new HyperBitBit(alpha, M);
 
-        StdOut.println("Size = " + counter.getSize());
-        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.print("\n");
+        System.out.println("Size = " + counter.getSize());
+        System.out.println("Cardinality = " + counter.getEstimateOfCardinality());
+        System.out.print("\n");
 
         if (synthetic)
-            for (int i = 0; i < N; i++) counter.readSyntheticElement(StdRandom.uniform());
+            for (int i = 0; i < N; i++) counter.readSyntheticElement(Math.random());
         else
             for (String x : stream) counter.readElement(x);
 
         int actualCardinality = Exact.count(stream);
-        StdOut.println("Size = " + counter.getSize());
-        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.println("Actual Cardinality = " + actualCardinality);
-        StdOut.println(
+        System.out.println("Size = " + counter.getSize());
+        System.out.println("Cardinality = " + counter.getEstimateOfCardinality());
+        System.out.println("Actual Cardinality = " + actualCardinality);
+        System.out.println(
                 "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - actualCardinality));
-        StdOut.println(
+        System.out.println(
                 "Rel. Error = "
                         + (Math.abs(counter.getEstimateOfCardinality() - actualCardinality)
                         / actualCardinality));

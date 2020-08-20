@@ -2,13 +2,13 @@ package main;
 
 import algs.HyperBitBit;
 import helpers.Exact;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-class ComparisonGeneratorTest {
+public class ComparisonGeneratorTest {
     private final HyperBitBit newAlg = new HyperBitBit(0.5, 16);
     private final ComparisonLauncher launcher = new ComparisonLauncher(newAlg, 100, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 100, "src/datasets/f0");
     private ComparisonGenerator generator = new ComparisonGenerator(launcher);
@@ -28,7 +28,7 @@ class ComparisonGeneratorTest {
     private final double[] oneThruSixteen = new double[16];
     private final double[] oneThruOneHundred = new double[100];
 
-    ComparisonGeneratorTest() throws FileNotFoundException {
+    public ComparisonGeneratorTest() throws FileNotFoundException {
         for (int i = 0; i < 10; i++) arrayOfTenRandomDoubles[i] = Math.random();
         for (int i = 0; i < 100; i++) arrayOfOneHundredRandomDoubles[i] = Math.random();
 
@@ -46,13 +46,13 @@ class ComparisonGeneratorTest {
         launcher.runExperiments();
     }
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         generator = new ComparisonGenerator(launcher);
     }
 
     @Test
-    void generateFullReport() {
+    public void generateFullReport() {
         double[] xValuesBefore = generator.xValues;
         String title = generator.title;
         String xAxis = generator.xAxis;
@@ -67,7 +67,7 @@ class ComparisonGeneratorTest {
     }
 
     @Test
-    void showErrorComparison() {
+    public void showErrorComparison() {
         generator.showErrorComparison();
 
         assert generator.title.equals("Comparison of the error of your Algorithm with PC, MC, and HBB");
@@ -77,7 +77,7 @@ class ComparisonGeneratorTest {
     }
 
     @Test
-    void showVaryMComparison() {
+    public void showVaryMComparison() {
         generator.showVaryMComparison();
 
         assert generator.title.equals("Comparison of the accuracy of your Algorithm with PC, MC, and HBB");
@@ -87,7 +87,7 @@ class ComparisonGeneratorTest {
     }
 
     @Test
-    void manageArray() {
+    public void manageArray() {
         double[] trimmed = generator.manageArray(arrayOfTenZeros);
         assert trimmed.length == 10;
 

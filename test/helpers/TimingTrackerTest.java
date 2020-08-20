@@ -1,14 +1,14 @@
 package helpers;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-class TimingTrackerTest {
+public class TimingTrackerTest {
     private File file;
     private String someAlg = "HBB";
     private String someFile = "src/testTimings.txt";
@@ -16,19 +16,19 @@ class TimingTrackerTest {
     private int someT = 100;
     private double someTime = 3000.0;
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @Before
+    public void setUp() throws IOException {
         file = new File("src/testTimings.txt");
         assert file.createNewFile();
     }
 
-    @AfterEach
-    void tearDown() {
+    @After
+    public void tearDown() {
         assert file.delete();
     }
 
     @Test
-    void add() throws IOException {
+    public void add() throws IOException {
         someAlg = "HBB";
         someFile = "src/testTimings.txt";
         someM = 64;
@@ -65,7 +65,7 @@ class TimingTrackerTest {
     }
 
     @Test
-    void timing() throws IOException {
+    public void timing() throws IOException {
         String output = TimingTracker.timing(someAlg, "'" + someFile + "'", someM, someT, someFile);
         assert output.equals("This specific experiment has not been run before. I'm too lazy to give you an estimate.");
 

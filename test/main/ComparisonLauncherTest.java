@@ -2,12 +2,12 @@ package main;
 
 import algs.HyperBitBit;
 import helpers.Exact;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-class ComparisonLauncherTest {
+public class ComparisonLauncherTest {
     private final HyperBitBit newAlg = new HyperBitBit(0.5, 16);
     private ComparisonLauncher launcher = new ComparisonLauncher(newAlg, 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 100, "src/datasets/f0");
 
@@ -25,7 +25,7 @@ class ComparisonLauncherTest {
     private final double[] oneThruOneHundredThousand;
     private final double[] oneThruSixteen;
 
-    ComparisonLauncherTest() throws FileNotFoundException {
+    public ComparisonLauncherTest() throws FileNotFoundException {
         fiveXTenRandomIntegers = new double[][]
                 {
                         {
@@ -139,7 +139,7 @@ class ComparisonLauncherTest {
     }
 
     @Test
-    void readElement() throws FileNotFoundException {
+    public void readElement() throws FileNotFoundException {
         launcher.syntheticData = false;
 
         assert launcher.MinCount.getSize() == 0;
@@ -228,7 +228,7 @@ class ComparisonLauncherTest {
     }
 
     @Test
-    void runExperiments() throws FileNotFoundException {
+    public void runExperiments() throws FileNotFoundException {
         launcher.runExperiments();
 
         assert Arrays.equals(oneThruOneHundredThousand, launcher.sizes);
@@ -268,75 +268,75 @@ class ComparisonLauncherTest {
         getAvgNewAlgEstimatesVaryM();
     }
 
-    void getAllMCRelativeErrors() {
+    public void getAllMCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllMCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllMCRelativeErrors());
     }
 
-    void getAvgMCRelativeErrors() {
+    public void getAvgMCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgMCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgMCRelativeErrors());
     }
 
-    void getAllPCRelativeErrors() {
+    public void getAllPCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllPCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllPCRelativeErrors());
     }
 
-    void getAvgPCRelativeErrors() {
+    public void getAvgPCRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgPCRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgPCRelativeErrors());
     }
 
-    void getAllHBBRelativeErrors() {
+    public void getAllHBBRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
     }
 
-    void getAvgHBBRelativeErrors() {
+    public void getAvgHBBRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgHBBRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgHBBRelativeErrors());
     }
 
-    void getAllNewAlgRelativeErrors() {
+    public void getAllNewAlgRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
         assert !Arrays.equals(oneHundredThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
     }
 
-    void getAvgNewAlgRelativeErrors() {
+    public void getAvgNewAlgRelativeErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgNewAlgRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgNewAlgRelativeErrors());
     }
 
-    void getAvgMCEstimatesVaryM() {
+    public void getAvgMCEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgMCEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgMCEstimatesVaryM());
     }
 
-    void getAvgPCEstimatesVaryM() {
+    public void getAvgPCEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgPCEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgPCEstimatesVaryM());
     }
 
-    void getAvgHBBEstimatesVaryM() {
+    public void getAvgHBBEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgHBBEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgHBBEstimatesVaryM());
     }
 
-    void getAvgNewAlgEstimatesVaryM() {
+    public void getAvgNewAlgEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgNewAlgEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgNewAlgRelativeErrors());
     }
 
     @Test
-    void averageOverTrials() {
+    public void averageOverTrials() {
         assert Arrays.equals(oneHundredThousandZeros, launcher.averageOverTrials(oneHundredThousandXOneHundredZeros));
         assert Arrays.equals(oneHundredThousandInfinities, launcher.averageOverTrials(oneHundredThousandXOneHundredInfinities));
         assert Arrays.equals(tenAvgOfFiveRandomIntegers, launcher.averageOverTrials(fiveXTenRandomIntegers));
     }
 
 //    @Test
-//    void main() throws FileNotFoundException {
+//    public void main() throws FileNotFoundException {
 //        String[] args = new String[]{"false"};
 //        ComparisonLauncher.main(args);
 //        args[0] = "true";

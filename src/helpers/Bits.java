@@ -1,7 +1,5 @@
 package helpers;
 
-import edu.princeton.cs.algs4.StdOut;
-
 public class Bits {
     public static long hash(String s) {
         long x = s.hashCode();
@@ -10,7 +8,7 @@ public class Bits {
 
     public static int hash2(String s, int M) {
         long x = s.hashCode();
-        StdOut.println("Bits Binary: " + Long.toBinaryString(x));
+        System.out.println("Bits Binary: " + Long.toBinaryString(x));
         return (int) ((x >> 22) & 0x3FFL) % M;
     }
 
@@ -51,11 +49,11 @@ public class Bits {
 
     public static void main(String[] args) {
         for (int t = 0; t < 32; t++)
-            StdOut.println(t + " " + r(t) + " " + R(t) + " " + p(t));
-        StdOut.println(toString(65, 16));
-        StdOut.println(toString(100000000, 32));
-        StdOut.println(toString(10000000000000000L, 64));
+            System.out.println(t + " " + r(t) + " " + R(t) + " " + p(t));
+        System.out.println(toString(65, 16));
+        System.out.println(toString(100000000, 32));
+        System.out.println(toString(10000000000000000L, 64));
         long t = 10000000000000000L;
-        StdOut.println(t + " " + r(t) + " " + R(t) + " " + p(t));
+        System.out.println(t + " " + r(t) + " " + R(t) + " " + p(t));
     }
 }

@@ -1,11 +1,11 @@
 package helpers;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class BitsTest {
+public class BitsTest {
 
     @Test
-    void hash() {
+    public void hash() {
         assert Bits.hash("") == 0;
         assert Bits.hash(" ") == (long) 137438953504.0;
         assert Bits.hash("a") == (long) 416611827809.0;
@@ -17,7 +17,7 @@ class BitsTest {
     }
 
     @Test
-    void hash2() {
+    public void hash2() {
         assert Bits.hash2("", 16) == 0;
         assert Bits.hash2(" ", 16) == 0;
         assert Bits.hash2("a", 16) == 0;
@@ -29,7 +29,7 @@ class BitsTest {
     }
 
     @Test
-    void R() {
+    public void R() {
         assert Bits.R(0) == 1;
         assert Bits.R(1) == 2;
         assert Bits.R(2) == 1;
@@ -43,7 +43,7 @@ class BitsTest {
     }
 
     @Test
-    void r() {
+    public void r() {
         assert Bits.r(0) == 0;
         assert Bits.r(1) == 1;
         assert Bits.r(2) == 0;
@@ -57,7 +57,7 @@ class BitsTest {
     }
 
     @Test
-    void p() {
+    public void p() {
         assert Bits.p(0) == 0;
         assert Bits.p(1) == 1;
         assert Bits.p(2) == 1;
@@ -71,7 +71,7 @@ class BitsTest {
     }
 
     @Test
-    void testToString() {
+    public void testToString() {
         assert Bits.toString(65, 16).equals("0000000001000001");
         assert Bits.toString(100000000, 32).equals("00000101111101011110000100000000");
         assert Bits.toString(10000000000000000L, 64).equals("0000000000100011100001101111001001101111110000010000000000000000");
@@ -79,7 +79,7 @@ class BitsTest {
     }
 
     @Test
-    void main() {
+    public void main() {
         String[] args = new String[1];
         Bits.main(args);
     }

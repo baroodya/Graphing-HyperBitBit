@@ -1,14 +1,13 @@
 package main;
 
-import edu.princeton.cs.algs4.StdOut;
 import helpers.Exact;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-class ReportGeneratorTest {
+public class ReportGeneratorTest {
     private final ExperimentLauncher launcher = new ExperimentLauncher("MC", 100, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 0.77351, 100, "src/datasets/f0");
     private ReportGenerator generator = new ReportGenerator(launcher, 100);
 
@@ -27,7 +26,7 @@ class ReportGeneratorTest {
     private final double[] oneThruSixteen = new double[16];
     private final double[] oneThruOneHundred = new double[100];
 
-    ReportGeneratorTest() throws FileNotFoundException {
+    public ReportGeneratorTest() throws FileNotFoundException {
         for (int i = 0; i < 10; i++) arrayOfTenRandomDoubles[i] = Math.random();
         for (int i = 0; i < 100; i++) arrayOfOneHundredRandomDoubles[i] = Math.random();
 
@@ -45,13 +44,13 @@ class ReportGeneratorTest {
         launcher.runExperiments();
     }
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         generator = new ReportGenerator(launcher, 100);
     }
 
     @Test
-    void generateFullReport() {
+    public void generateFullReport() {
         int numShownBefore = generator.numShown;
         double[] xValuesBefore = generator.xValues;
         String title = generator.title;
@@ -68,7 +67,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void generateBasicReport() {
+    public void generateBasicReport() {
         int numShownBefore = generator.numShown;
         double[] xValuesBefore = generator.xValues;
         String title = generator.title;
@@ -85,7 +84,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showEstCardinality() {
+    public void showEstCardinality() {
         generator.showEstCardinality();
 
         assert generator.title.equals("Average Estimated Cardinality of Data Stream");
@@ -95,18 +94,18 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showNormEstCardinality() {
+    public void showNormEstCardinality() {
         generator.showNormEstCardinality();
 
         assert generator.title.equals("Average Normalized Estimated Cardinality of Data Stream");
         assert generator.xAxis.equals("Number of Inputs Seen (N)");
         assert generator.yAxis.equals("Normalized Estimated Cardinality ((Z_n / n) - 1)");
-        for (int i = 0; i < 100; i++) StdOut.println(generator.xValues[i]);
+        for (int i = 0; i < 100; i++) System.out.println(generator.xValues[i]);
         assert Arrays.equals(generator.xValues, oneThruOneHundred);
     }
 
     @Test
-    void showAbsError() {
+    public void showAbsError() {
         generator.showAbsError();
 
         assert generator.title.equals("Average Absolute Error");
@@ -116,7 +115,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showRelError() {
+    public void showRelError() {
         generator.showRelError();
 
         assert generator.title.equals("Average Relative Error");
@@ -126,7 +125,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showMEstCardinality() {
+    public void showMEstCardinality() {
         generator.showMEstCardinality();
 
         assert generator.title.equals("Average Estimated Cardinality of Data Stream");
@@ -136,7 +135,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showMNormEstCardinality() {
+    public void showMNormEstCardinality() {
         generator.showMNormEstCardinality();
 
         assert generator.title.equals("Average Normalized Estimated Cardinality of Data Stream");
@@ -146,7 +145,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showMAbsError() {
+    public void showMAbsError() {
         generator.showMAbsError();
 
         assert generator.title.equals("Average Absolute Error");
@@ -156,7 +155,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showMRelError() {
+    public void showMRelError() {
         generator.showMRelError();
 
         assert generator.title.equals("Average Relative Error");
@@ -166,7 +165,7 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showStdDev() {
+    public void showStdDev() {
         generator.showStdDev();
 
         assert generator.title.equals("Standard Deviation of Estimates");
@@ -176,14 +175,14 @@ class ReportGeneratorTest {
     }
 
     @Test
-    void showDistributions() {
+    public void showDistributions() {
         generator.showDistributions();
 
         assert generator.title.equals("Distribution of Estimates");
     }
 
     @Test
-    void manageArray() {
+    public void manageArray() {
         double[] trimmed = generator.manageArray(arrayOfTenZeros);
         assert trimmed.length == 10;
 

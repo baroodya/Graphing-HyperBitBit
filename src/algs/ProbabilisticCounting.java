@@ -1,7 +1,5 @@
 package algs;
 
-import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdRandom;
 import helpers.Exact;
 import helpers.StringStream;
 import randomhash.RandomHashFamily;
@@ -49,7 +47,7 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
         StringBuilder newElement = new StringBuilder();
         for (int i = 0; i < bitmapLength; i++)
-            if (StdRandom.bernoulli())
+            if (Math.random() > 0.5)
                 newElement.append('1');
             else
                 newElement.append('0');
@@ -142,20 +140,20 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
 
         ProbabilisticCounting counter = new ProbabilisticCounting(m, 0.77351);
 
-        StdOut.println("Size = " + counter.getSize());
-        StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-        StdOut.print("\n");
+        System.out.println("Size = " + counter.getSize());
+        System.out.println("Cardinality = " + counter.getEstimateOfCardinality());
+        System.out.print("\n");
 
         // Read in the file
         if (synthetic) {
             for (int i = 0; i < size; i++)
-                counter.readSyntheticElement(StdRandom.uniform());
+                counter.readSyntheticElement(Math.random());
 
-            StdOut.println("Size = " + counter.getSize());
-            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-            StdOut.println(
+            System.out.println("Size = " + counter.getSize());
+            System.out.println("Cardinality = " + counter.getEstimateOfCardinality());
+            System.out.println(
                     "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - counter.getSize()));
-            StdOut.println(
+            System.out.println(
                     "Rel. Error = "
                             + (Math.abs(counter.getEstimateOfCardinality() - counter.getSize()) / counter.getSize()));
         } else {
@@ -166,11 +164,11 @@ public class ProbabilisticCounting implements CardinalityEstimationAlgorithm {
             for (String line : stream) counter.readElement(line);
 
             int cardinality = Exact.count(stream);
-            StdOut.println("Size = " + counter.getSize());
-            StdOut.println("Cardinality = " + counter.getEstimateOfCardinality());
-            StdOut.println(
+            System.out.println("Size = " + counter.getSize());
+            System.out.println("Cardinality = " + counter.getEstimateOfCardinality());
+            System.out.println(
                     "Abs. Error = " + Math.abs(counter.getEstimateOfCardinality() - cardinality));
-            StdOut.println(
+            System.out.println(
                     "Rel. Error = "
                             + (Math.abs(counter.getEstimateOfCardinality() - cardinality) / cardinality));
         }

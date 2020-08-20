@@ -1,12 +1,13 @@
 package main;
 
 import helpers.Exact;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 
-class ExperimentLauncherTest {
+public class ExperimentLauncherTest {
     private ExperimentLauncher launcher = new ExperimentLauncher("MC", 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 0.77351, 100, "src/datasets/f0");
     private final double[] oneHundredEqualValues;
     private final double[] tenThousandEqualValues;
@@ -28,7 +29,7 @@ class ExperimentLauncherTest {
     private final double[] oneThruOneHundredThousand;
     private final double[] oneThruSixteen;
 
-    ExperimentLauncherTest() throws FileNotFoundException {
+    public ExperimentLauncherTest() throws FileNotFoundException {
         oneHundredEqualValues = new double[100];
         for (int i = 0; i < 100; i++) oneHundredEqualValues[i] = 4;
 
@@ -276,7 +277,7 @@ class ExperimentLauncherTest {
     }
 
     @Test
-    void readElement() throws FileNotFoundException {
+    public void readElement() throws FileNotFoundException {
         launcher = new ExperimentLauncher("MC", 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 0.77351, 100, "src/datasets/f0");
         launcher.syntheticData = false;
 
@@ -324,7 +325,7 @@ class ExperimentLauncherTest {
     }
 
     @Test
-    void runExperiments() {
+    public void runExperiments() {
         assert Arrays.equals(oneThruOneHundredThousand, launcher.getSizes());
         assert Arrays.equals(oneThruSixteen, launcher.varyMs);
 
@@ -336,91 +337,91 @@ class ExperimentLauncherTest {
     }
 
     @Test
-    void getAvgEstimates() {
+    public void getAvgEstimates() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgEstimates());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgEstimates());
     }
 
     @Test
-    void getAvgAbsErrors() {
+    public void getAvgAbsErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgAbsoluteErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgAbsoluteErrors());
     }
 
     @Test
-    void getAvgRelErrors() {
+    public void getAvgRelErrors() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgRelativeErrors());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgRelativeErrors());
     }
 
     @Test
-    void getAvgNormalizedEstimates() {
+    public void getAvgNormalizedEstimates() {
         assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgNormalizedEstimates());
         assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgNormalizedEstimates());
     }
 
     @Test
-    void getAllAbsoluteErrors() {
+    public void getAllAbsoluteErrors() {
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.getAllAbsoluteErrors());
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.getAllAbsoluteErrors());
     }
 
     @Test
-    void getAllRelativeErrors() {
+    public void getAllRelativeErrors() {
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.getAllRelativeErrors());
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.getAllRelativeErrors());
     }
 
     @Test
-    void getAllNormalizedEstimates() {
+    public void getAllNormalizedEstimates() {
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.getAllNormalizedEstimates());
         assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.getAllNormalizedEstimates());
     }
 
     @Test
-    void getAvgEstimatesVaryM() {
+    public void getAvgEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgEstimatesVaryM());
     }
 
     @Test
-    void getAvgAbsoluteErrorsVaryM() {
+    public void getAvgAbsoluteErrorsVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgAbsoluteErrorsVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgAbsoluteErrorsVaryM());
     }
 
     @Test
-    void getAvgRelativeErrorsVaryM() {
+    public void getAvgRelativeErrorsVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgRelativeErrorsVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgRelativeErrorsVaryM());
     }
 
     @Test
-    void getAvgNormalizedEstimatesVaryM() {
+    public void getAvgNormalizedEstimatesVaryM() {
         assert !Arrays.equals(sixteenZeros, launcher.getAvgNormalizedEstimatesVaryM());
         assert !Arrays.equals(sixteenInfinities, launcher.getAvgNormalizedEstimatesVaryM());
     }
 
     @Test
-    void getAllAbsoluteErrorsVaryM() {
+    public void getAllAbsoluteErrorsVaryM() {
         assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.getAllAbsoluteErrorsVaryM());
         assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.getAllAbsoluteErrorsVaryM());
     }
 
     @Test
-    void getAllRelativeErrorsVaryM() {
+    public void getAllRelativeErrorsVaryM() {
         assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.getAllRelativeErrorsVaryM());
         assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.getAllRelativeErrorsVaryM());
     }
 
     @Test
-    void getAllNormalizedEstimatesVaryM() {
+    public void getAllNormalizedEstimatesVaryM() {
         assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.getAllNormalizedEstimatesVaryM());
         assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.getAllNormalizedEstimatesVaryM());
     }
 
     @Test
-    void getStdDev() {
+    public void getStdDev() {
         assert launcher.getStdDev(oneHundredEqualValues) == 0;
 
         assert launcher.getStdDev(tenThousandEqualValues) == 0;
@@ -433,7 +434,7 @@ class ExperimentLauncherTest {
     }
 
     @Test
-    void getStdDevOfAllTrials() {
+    public void getStdDevOfAllTrials() {
         double[] allTrials = launcher.getStdDevOfAllTrials();
         double[][] transverseEstimates = new double[launcher.varyMEstimates[0].length][launcher.varyMEstimates.length];
 
@@ -449,14 +450,14 @@ class ExperimentLauncherTest {
     }
 
     @Test
-    void averageOverTrials() {
+    public void averageOverTrials() {
         assert Arrays.equals(oneHundredThousandZeros, launcher.averageOverTrials(oneHundredThousandXOneHundredZeros));
         assert Arrays.equals(oneHundredThousandInfinities, launcher.averageOverTrials(oneHundredThousandXOneHundredInfinities));
         assert Arrays.equals(tenAvgOfFiveRandomIntegers, launcher.averageOverTrials(fiveXTenRandomIntegers));
     }
 
     @Test
-    void arithmeticMean() {
+    public void arithmeticMean() {
         assert launcher.arithmeticMean(oneHundredEqualValues) == 4;
 
         assert launcher.arithmeticMean(tenThousandEqualValues) == 99574.0;
@@ -471,11 +472,11 @@ class ExperimentLauncherTest {
             assert launcher.arithmeticMean(fiveXTenRandomIntegers[i]) == fiveAvgOfTenRandomIntegers[i];
     }
 
-//    @Test
-//    void main() throws IOException {
-//        String[] args = new String[1];
-//        ExperimentLauncher.main(args);
-//        args[0] = "true";
-//        ExperimentLauncher.main(args);
-//    }
+    @Test
+    public void main() throws IOException {
+        String[] args = new String[1];
+        ExperimentLauncher.main(args);
+        args[0] = "true";
+        ExperimentLauncher.main(args);
+    }
 }

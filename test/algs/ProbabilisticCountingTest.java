@@ -1,16 +1,15 @@
 package algs;
 
-import edu.princeton.cs.algs4.StdRandom;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
-class ProbabilisticCountingTest {
+public class ProbabilisticCountingTest {
     private final ProbabilisticCounting algorithm = new ProbabilisticCounting(16, 0.77351);
 
     @Test
-    void readElement() {
+    public void readElement() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -58,7 +57,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void readSyntheticElement() {
+    public void readSyntheticElement() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -106,7 +105,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void getSize() {
+    public void getSize() {
         algorithm.resetAlgorithm(16);
 
         assert algorithm.getSize() == 0;
@@ -145,19 +144,19 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void resetAlgorithm() {
+    public void resetAlgorithm() {
         algorithm.resetAlgorithm(16);
         assert algorithm.getSize() == 0;
 
         double random;
-        for (int i = 0; i < 24536789; i++) {
-            random = StdRandom.uniform();
+        for (int i = 0; i < 24589; i++) {
+            random = Math.random();
             algorithm.readElement(Double.toString(random));
         }
-        assert algorithm.getSize() == 24536789;
+        assert algorithm.getSize() == 24589;
         assert algorithm.m == 16;
         assert algorithm.lgM == 4;
-        assert algorithm.size == 24536789;
+        assert algorithm.size == 24589;
         assert algorithm.bitmaps.length == 16;
         assert algorithm.bitmaps[0].length == 124;
 
@@ -171,7 +170,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void count() {
+    public void count() {
         algorithm.resetAlgorithm(16);
 
         boolean[][] zeros = new boolean[16][124];
@@ -187,7 +186,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void rho1() {
+    public void rho1() {
         assert algorithm.rho("0000", 0) == 0;
         assert algorithm.rho("0001", 0) == 0;
         assert algorithm.rho("0010", 0) == 0;
@@ -236,7 +235,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void rho2() {
+    public void rho2() {
         algorithm.resetAlgorithm(16);
 
         int[] zeros = new int[16];
@@ -252,7 +251,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void arithmeticMean() {
+    public void arithmeticMean() {
         double[] values = new double[300];
         assert algorithm.arithmeticMean(values) == 0;
 
@@ -370,7 +369,7 @@ class ProbabilisticCountingTest {
     }
 
     @Test
-    void main() throws FileNotFoundException {
+    public void main() throws FileNotFoundException {
         String[] args = new String[1];
         ProbabilisticCounting.main(args);
         args[0] = "true";
