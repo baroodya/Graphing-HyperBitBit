@@ -27,15 +27,15 @@ public class ExperimentLauncherTest {
   private final double[] tenAvgOfFiveRandomIntegers;
   private final double[] fiveAvgOfTenRandomIntegers;
 
-  private final double[] oneHundredThousandZeros;
-  private final double[][] oneHundredThousandXOneHundredZeros;
-  private final double[] oneHundredThousandInfinities;
-  private final double[][] oneHundredThousandXOneHundredInfinities;
+  private final double[] oneThousandZeros;
+  private final double[][] oneThousandXOneHundredZeros;
+  private final double[] oneThousandInfinities;
+  private final double[][] oneThousandXOneHundredInfinities;
   private final double[] sixteenZeros;
   private final double[] sixteenInfinities;
   private final double[][] sixteenXOneHundredZeros;
   private final double[][] sixteenXOneHundredInfinities;
-  private final double[] oneThruOneHundredThousand;
+  private final double[] oneThruOneThousand;
   private final double[] oneThruSixteen;
 
   public ExperimentLauncherTest() throws FileNotFoundException {
@@ -150,20 +150,20 @@ public class ExperimentLauncherTest {
     fiveAvgOfTenRandomIntegers =
         new double[] {-117319891, 4080523, -73128335, 73985226, 25834493.5};
 
-    oneHundredThousandZeros = new double[100000];
-    for (int i = 0; i < 100000; i++) oneHundredThousandZeros[i] = 0;
+    oneThousandZeros = new double[1000];
+    for (int i = 0; i < 1000; i++) oneThousandZeros[i] = 0;
 
-    oneHundredThousandXOneHundredZeros = new double[100][100000];
+    oneThousandXOneHundredZeros = new double[100][1000];
     for (int i = 0; i < 100; i++)
-      for (int j = 0; j < 100000; j++) oneHundredThousandXOneHundredZeros[i][j] = 0;
+      for (int j = 0; j < 1000; j++) oneThousandXOneHundredZeros[i][j] = 0;
 
-    oneHundredThousandInfinities = new double[100000];
-    for (int i = 0; i < 100000; i++) oneHundredThousandInfinities[i] = Double.POSITIVE_INFINITY;
+    oneThousandInfinities = new double[1000];
+    for (int i = 0; i < 1000; i++) oneThousandInfinities[i] = Double.POSITIVE_INFINITY;
 
-    oneHundredThousandXOneHundredInfinities = new double[100][100000];
+    oneThousandXOneHundredInfinities = new double[100][1000];
     for (int i = 0; i < 100; i++)
-      for (int j = 0; j < 100000; j++)
-        oneHundredThousandXOneHundredInfinities[i][j] = Double.POSITIVE_INFINITY;
+      for (int j = 0; j < 1000; j++)
+        oneThousandXOneHundredInfinities[i][j] = Double.POSITIVE_INFINITY;
 
     sixteenZeros = new double[16];
     for (int i = 0; i < 16; i++) sixteenZeros[i] = 0;
@@ -178,8 +178,8 @@ public class ExperimentLauncherTest {
     for (int i = 0; i < 16; i++)
       for (int j = 0; j < 100; j++) sixteenXOneHundredInfinities[i][j] = Double.POSITIVE_INFINITY;
 
-    oneThruOneHundredThousand = new double[100000];
-    for (int i = 0; i < 100000; i++) oneThruOneHundredThousand[i] = i + 1;
+    oneThruOneThousand = new double[1000];
+    for (int i = 0; i < 1000; i++) oneThruOneThousand[i] = i + 1;
 
     oneThruSixteen = new double[16];
     for (int i = 0; i < 16; i++) oneThruSixteen[i] = i + 1;
@@ -192,9 +192,9 @@ public class ExperimentLauncherTest {
     ExperimentLauncher newLauncher =
         new ExperimentLauncher(
             "AAA",
-            100000,
+            1000,
             16,
-            Exact.countArray("src/datasets/f0", 100000),
+            Exact.countArray("src/datasets/f0", 1000),
             0.5,
             0.77351,
             100,
@@ -206,7 +206,7 @@ public class ExperimentLauncherTest {
   public void synthConstructor() throws FileNotFoundException {
     ExperimentLauncher newLauncher =
         new ExperimentLauncher(
-            "AAA", 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 0.77351, 100);
+            "AAA", 1000, 16, Exact.countArray("src/datasets/f0", 1000), 0.5, 0.77351, 100);
     System.out.println(newLauncher.toString());
   }
 
@@ -215,9 +215,9 @@ public class ExperimentLauncherTest {
     launcher =
         new ExperimentLauncher(
             "MC",
-            100000,
+            1000,
             16,
-            Exact.countArray("src/datasets/f0", 100000),
+            Exact.countArray("src/datasets/f0", 1000),
             0.5,
             0.77351,
             100,
@@ -246,7 +246,7 @@ public class ExperimentLauncherTest {
 
     launcher =
         new ExperimentLauncher(
-            "MC", 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 0.77351, 100);
+            "MC", 1000, 16, Exact.countArray("src/datasets/f0", 1000), 0.5, 0.77351, 100);
 
     assert launcher.algorithm.getSize() == 0;
 
@@ -271,11 +271,11 @@ public class ExperimentLauncherTest {
 
   @Test
   public void runExperiments() {
-    assert Arrays.equals(oneThruOneHundredThousand, launcher.getSizes());
+    assert Arrays.equals(oneThruOneThousand, launcher.getSizes());
     assert Arrays.equals(oneThruSixteen, launcher.varyMs);
 
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.estimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.estimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.estimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.estimates);
 
     assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.varyMEstimates);
     assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.varyMEstimates);
@@ -283,48 +283,45 @@ public class ExperimentLauncherTest {
 
   @Test
   public void getAvgEstimates() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgEstimates());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgEstimates());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgEstimates());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgEstimates());
   }
 
   @Test
   public void getAvgAbsErrors() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgAbsoluteErrors());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgAbsoluteErrors());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgAbsoluteErrors());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgAbsoluteErrors());
   }
 
   @Test
   public void getAvgRelErrors() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgRelativeErrors());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgRelativeErrors());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgRelativeErrors());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgRelativeErrors());
   }
 
   @Test
   public void getAvgNormalizedEstimates() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgNormalizedEstimates());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgNormalizedEstimates());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgNormalizedEstimates());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgNormalizedEstimates());
   }
 
   @Test
   public void getAllAbsoluteErrors() {
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.getAllAbsoluteErrors());
-    assert !Arrays.deepEquals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllAbsoluteErrors());
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.getAllAbsoluteErrors());
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.getAllAbsoluteErrors());
   }
 
   @Test
   public void getAllRelativeErrors() {
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.getAllRelativeErrors());
-    assert !Arrays.deepEquals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllRelativeErrors());
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.getAllRelativeErrors());
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.getAllRelativeErrors());
   }
 
   @Test
   public void getAllNormalizedEstimates() {
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.getAllNormalizedEstimates());
     assert !Arrays.deepEquals(
-        oneHundredThousandXOneHundredZeros, launcher.getAllNormalizedEstimates());
-    assert !Arrays.deepEquals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllNormalizedEstimates());
+        oneThousandXOneHundredInfinities, launcher.getAllNormalizedEstimates());
   }
 
   @Test
@@ -403,11 +400,9 @@ public class ExperimentLauncherTest {
 
   @Test
   public void averageOverTrials() {
+    assert Arrays.equals(oneThousandZeros, launcher.averageOverTrials(oneThousandXOneHundredZeros));
     assert Arrays.equals(
-        oneHundredThousandZeros, launcher.averageOverTrials(oneHundredThousandXOneHundredZeros));
-    assert Arrays.equals(
-        oneHundredThousandInfinities,
-        launcher.averageOverTrials(oneHundredThousandXOneHundredInfinities));
+        oneThousandInfinities, launcher.averageOverTrials(oneThousandXOneHundredInfinities));
     assert Arrays.equals(
         tenAvgOfFiveRandomIntegers, launcher.averageOverTrials(fiveXTenRandomIntegers));
   }
