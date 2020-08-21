@@ -22,15 +22,15 @@ public class ComparisonLauncherTest {
   private final double[][] fiveXTenRandomIntegers;
   private final double[] tenAvgOfFiveRandomIntegers;
 
-  private final double[] oneHundredThousandZeros;
-  private final double[][] oneHundredThousandXOneHundredZeros;
-  private final double[] oneHundredThousandInfinities;
-  private final double[][] oneHundredThousandXOneHundredInfinities;
+  private final double[] oneThousandZeros;
+  private final double[][] oneThousandXOneHundredZeros;
+  private final double[] oneThousandInfinities;
+  private final double[][] oneThousandXOneHundredInfinities;
   private final double[] sixteenZeros;
   private final double[] sixteenInfinities;
   private final double[][] sixteenXOneHundredZeros;
   private final double[][] sixteenXOneHundredInfinities;
-  private final double[] oneThruOneHundredThousand;
+  private final double[] oneThruOneThousand;
   private final double[] oneThruSixteen;
 
   public ComparisonLauncherTest() throws FileNotFoundException {
@@ -111,20 +111,20 @@ public class ComparisonLauncherTest {
           824400120
         };
 
-    oneHundredThousandZeros = new double[100000];
-    for (int i = 0; i < 100000; i++) oneHundredThousandZeros[i] = 0;
+    oneThousandZeros = new double[1000];
+    for (int i = 0; i < 1000; i++) oneThousandZeros[i] = 0;
 
-    oneHundredThousandXOneHundredZeros = new double[100][100000];
+    oneThousandXOneHundredZeros = new double[100][1000];
     for (int i = 0; i < 100; i++)
-      for (int j = 0; j < 100000; j++) oneHundredThousandXOneHundredZeros[i][j] = 0;
+      for (int j = 0; j < 1000; j++) oneThousandXOneHundredZeros[i][j] = 0;
 
-    oneHundredThousandInfinities = new double[100000];
-    for (int i = 0; i < 100000; i++) oneHundredThousandInfinities[i] = Double.POSITIVE_INFINITY;
+    oneThousandInfinities = new double[1000];
+    for (int i = 0; i < 1000; i++) oneThousandInfinities[i] = Double.POSITIVE_INFINITY;
 
-    oneHundredThousandXOneHundredInfinities = new double[100][100000];
+    oneThousandXOneHundredInfinities = new double[100][1000];
     for (int i = 0; i < 100; i++)
-      for (int j = 0; j < 100000; j++)
-        oneHundredThousandXOneHundredInfinities[i][j] = Double.POSITIVE_INFINITY;
+      for (int j = 0; j < 1000; j++)
+        oneThousandXOneHundredInfinities[i][j] = Double.POSITIVE_INFINITY;
 
     sixteenZeros = new double[16];
     for (int i = 0; i < 16; i++) sixteenZeros[i] = 0;
@@ -139,8 +139,8 @@ public class ComparisonLauncherTest {
     for (int i = 0; i < 16; i++)
       for (int j = 0; j < 100; j++) sixteenXOneHundredInfinities[i][j] = Double.POSITIVE_INFINITY;
 
-    oneThruOneHundredThousand = new double[100000];
-    for (int i = 0; i < 100000; i++) oneThruOneHundredThousand[i] = i + 1;
+    oneThruOneThousand = new double[1000];
+    for (int i = 0; i < 1000; i++) oneThruOneThousand[i] = i + 1;
 
     oneThruSixteen = new double[16];
     for (int i = 0; i < 16; i++) oneThruSixteen[i] = i + 1;
@@ -193,7 +193,7 @@ public class ComparisonLauncherTest {
 
     launcher =
         new ComparisonLauncher(
-            newAlg, 100000, 16, Exact.countArray("src/datasets/f0", 100000), 0.5, 100, "synthetic");
+            newAlg, 1000, 16, Exact.countArray("src/datasets/f0", 1000), 0.5, 100, "synthetic");
 
     assert launcher.MinCount.getSize() == 0;
     assert launcher.ProbabilisticCounting.getSize() == 0;
@@ -241,17 +241,17 @@ public class ComparisonLauncherTest {
   public void runExperiments() throws FileNotFoundException {
     launcher.runExperiments();
 
-    assert Arrays.equals(oneThruOneHundredThousand, launcher.sizes);
+    assert Arrays.equals(oneThruOneThousand, launcher.sizes);
     assert Arrays.equals(oneThruSixteen, launcher.varyMs);
 
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.MCEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.MCEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.PCEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.PCEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.HBBEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.HBBEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredZeros, launcher.newAlgEstimates);
-    assert !Arrays.deepEquals(oneHundredThousandXOneHundredInfinities, launcher.newAlgEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.MCEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.MCEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.PCEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.PCEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.HBBEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.HBBEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredZeros, launcher.newAlgEstimates);
+    assert !Arrays.deepEquals(oneThousandXOneHundredInfinities, launcher.newAlgEstimates);
 
     assert !Arrays.deepEquals(sixteenXOneHundredZeros, launcher.varyMMCEstimates);
     assert !Arrays.deepEquals(sixteenXOneHundredInfinities, launcher.varyMMCEstimates);
@@ -278,47 +278,43 @@ public class ComparisonLauncherTest {
   }
 
   public void getAllMCRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllMCRelativeErrors());
-    assert !Arrays.equals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllMCRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredZeros, launcher.getAllMCRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredInfinities, launcher.getAllMCRelativeErrors());
   }
 
   public void getAvgMCRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgMCRelativeErrors());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgMCRelativeErrors());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgMCRelativeErrors());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgMCRelativeErrors());
   }
 
   public void getAllPCRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllPCRelativeErrors());
-    assert !Arrays.equals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllPCRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredZeros, launcher.getAllPCRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredInfinities, launcher.getAllPCRelativeErrors());
   }
 
   public void getAvgPCRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgPCRelativeErrors());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgPCRelativeErrors());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgPCRelativeErrors());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgPCRelativeErrors());
   }
 
   public void getAllHBBRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
-    assert !Arrays.equals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
   }
 
   public void getAvgHBBRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgHBBRelativeErrors());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgHBBRelativeErrors());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgHBBRelativeErrors());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgHBBRelativeErrors());
   }
 
   public void getAllNewAlgRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
-    assert !Arrays.equals(
-        oneHundredThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredZeros, launcher.getAllHBBRelativeErrors());
+    assert !Arrays.equals(oneThousandXOneHundredInfinities, launcher.getAllHBBRelativeErrors());
   }
 
   public void getAvgNewAlgRelativeErrors() {
-    assert !Arrays.equals(oneHundredThousandZeros, launcher.getAvgNewAlgRelativeErrors());
-    assert !Arrays.equals(oneHundredThousandInfinities, launcher.getAvgNewAlgRelativeErrors());
+    assert !Arrays.equals(oneThousandZeros, launcher.getAvgNewAlgRelativeErrors());
+    assert !Arrays.equals(oneThousandInfinities, launcher.getAvgNewAlgRelativeErrors());
   }
 
   public void getAvgMCEstimatesVaryM() {
@@ -343,11 +339,9 @@ public class ComparisonLauncherTest {
 
   @Test
   public void averageOverTrials() {
+    assert Arrays.equals(oneThousandZeros, launcher.averageOverTrials(oneThousandXOneHundredZeros));
     assert Arrays.equals(
-        oneHundredThousandZeros, launcher.averageOverTrials(oneHundredThousandXOneHundredZeros));
-    assert Arrays.equals(
-        oneHundredThousandInfinities,
-        launcher.averageOverTrials(oneHundredThousandXOneHundredInfinities));
+        oneThousandInfinities, launcher.averageOverTrials(oneThousandXOneHundredInfinities));
     assert Arrays.equals(
         tenAvgOfFiveRandomIntegers, launcher.averageOverTrials(fiveXTenRandomIntegers));
   }
